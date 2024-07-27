@@ -30,6 +30,7 @@ class User extends Authenticatable
         'username',
         'email',
         'password',
+        'panel',
     ];
 
     /**
@@ -64,5 +65,14 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function getRedirectRoute(): string
+    {
+        return match((string)$this->panel) {
+            'admin' => 'admin',
+            'jhp' => 'jhp',
+            // ...
+        };
     }
 }
