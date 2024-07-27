@@ -15,9 +15,15 @@
         <form method="POST" action="{{ route('login') }}">
             @csrf
 
-            <div>
+            {{-- <div>
                 <x-label for="email" value="{{ __('Email') }}" />
                 <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required
+                    autofocus autocomplete="username" />
+            </div> --}}
+
+            <div>
+                <x-label for="auth" value="{{ __('Username') }}" />
+                <x-input id="auth" class="block mt-1 w-full" type="text" name="auth" :value="old('auth')" required
                     autofocus autocomplete="username" />
             </div>
 
@@ -46,12 +52,12 @@
                     {{ __('Log in') }}
                 </x-button>
             </div>
-            <div class="flex items-center justify-end mt-4">
+            {{-- <div class="flex items-center justify-end mt-4">
                 <a href="{{ route('register') }}"
                     class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20]">
                     Register
                 </a>
-            </div>
+            </div> --}}
         </form>
     </x-authentication-card>
 </x-guest-layout>
