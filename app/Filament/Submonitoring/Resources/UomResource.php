@@ -2,6 +2,7 @@
 
 namespace App\Filament\Submonitoring\Resources;
 
+use App\Filament\Exports\UomExporter;
 use App\Filament\Submonitoring\Clusters\General;
 use App\Filament\Submonitoring\Resources\UomResource\Pages;
 use App\Filament\Submonitoring\Resources\UomResource\RelationManagers;
@@ -12,6 +13,7 @@ use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\ExportBulkAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Filters\QueryBuilder;
@@ -179,6 +181,9 @@ class UomResource extends Resource
                 // Tables\Actions\BulkActionGroup::make([
                 //     Tables\Actions\DeleteBulkAction::make(),
                 // ]),
+
+                ExportBulkAction::make()
+                    ->exporter(UomExporter::class)
             ]);
     }
 

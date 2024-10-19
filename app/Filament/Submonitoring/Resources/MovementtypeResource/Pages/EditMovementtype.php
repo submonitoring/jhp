@@ -4,6 +4,7 @@ namespace App\Filament\Submonitoring\Resources\MovementtypeResource\Pages;
 
 use App\Filament\Submonitoring\Resources\MovementtypeResource;
 use Filament\Actions;
+use Filament\Actions\Action;
 use Filament\Resources\Pages\EditRecord;
 
 class EditMovementtype extends EditRecord
@@ -15,6 +16,8 @@ class EditMovementtype extends EditRecord
         return [
             Actions\ViewAction::make(),
             Actions\DeleteAction::make(),
+            Action::make('Back to List')
+                ->url($this->getResource()::getUrl('index')),
         ];
     }
 }

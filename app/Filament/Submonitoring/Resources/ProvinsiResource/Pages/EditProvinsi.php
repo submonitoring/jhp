@@ -4,6 +4,7 @@ namespace App\Filament\Submonitoring\Resources\ProvinsiResource\Pages;
 
 use App\Filament\Submonitoring\Resources\ProvinsiResource;
 use Filament\Actions;
+use Filament\Actions\Action;
 use Filament\Resources\Pages\EditRecord;
 
 class EditProvinsi extends EditRecord
@@ -15,6 +16,8 @@ class EditProvinsi extends EditRecord
         return [
             Actions\ViewAction::make(),
             // Actions\DeleteAction::make(),
+            Action::make('Back to List')
+                ->url($this->getResource()::getUrl('index')),
         ];
     }
 }

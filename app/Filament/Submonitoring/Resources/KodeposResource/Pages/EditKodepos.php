@@ -4,6 +4,7 @@ namespace App\Filament\Submonitoring\Resources\KodeposResource\Pages;
 
 use App\Filament\Submonitoring\Resources\KodeposResource;
 use Filament\Actions;
+use Filament\Actions\Action;
 use Filament\Resources\Pages\EditRecord;
 
 class EditKodepos extends EditRecord
@@ -15,6 +16,8 @@ class EditKodepos extends EditRecord
         return [
             Actions\ViewAction::make(),
             // Actions\DeleteAction::make(),
+            Action::make('Back to List')
+                ->url($this->getResource()::getUrl('index')),
         ];
     }
 }

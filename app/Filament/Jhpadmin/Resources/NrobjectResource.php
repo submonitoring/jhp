@@ -25,6 +25,11 @@ class NrobjectResource extends Resource
         return auth()->user()->id == 1;
     }
 
+    // public static function shouldRegisterNavigation(): bool
+    // {
+    //     return false;
+    // }
+
     protected static ?string $modelLabel = 'NR Object';
 
     protected static ?string $pluralModelLabel = 'NR Object';

@@ -9,6 +9,7 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Pages\ManageRelatedRecords;
 use Filament\Tables;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Filters\QueryBuilder;
@@ -27,6 +28,11 @@ class ManagePlant extends ManageRelatedRecords
     // protected static ?string $inverseRelationship = 'numberrange';
 
     protected static ?string $navigationIcon = 'heroicon-o-arrow-right-end-on-rectangle';
+
+    public function getTitle(): string
+    {
+        return __($this->getOwnerRecord()->company_code . ' Plant Assignment');
+    }
 
     public static function getNavigationLabel(): string
     {
@@ -130,13 +136,28 @@ class ManagePlant extends ManageRelatedRecords
             ], layout: Tables\Enums\FiltersLayout::AboveContentCollapsible)
             ->deferFilters()
             ->headerActions([
-                Tables\Actions\CreateAction::make(),
-                Tables\Actions\AssociateAction::make(),
+                Tables\Actions\CreateAction::make()
+                    ->label('Create & Assign Plant')
+                    ->modalCloseButton(false)
+                    ->modalHeading(' ')
+                    ->modalWidth('full')
+                    ->button()
+                    ->closeModalByClickingAway(false),
+                Tables\Actions\AssociateAction::make()
+                    ->recordSelectOptionsQuery(fn(Builder $query) => $query->where('companycode_id', null)),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DissociateAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                ActionGroup::make([
+                    Tables\Actions\EditAction::make()
+                        ->label('Edit')
+                        ->modalCloseButton(false)
+                        ->modalHeading(' ')
+                        ->modalWidth('full')
+                        ->button()
+                        ->closeModalByClickingAway(false),
+                    Tables\Actions\DissociateAction::make(),
+                    Tables\Actions\DeleteAction::make(),
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

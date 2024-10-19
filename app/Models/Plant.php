@@ -20,6 +20,16 @@ class Plant extends Model
         return $this->hasMany(Storagelocation::class);
     }
 
+    public function materialplants()
+    {
+        return $this->hasMany(Materialplant::class);
+    }
+
+    public function materialstoragelocations()
+    {
+        return $this->hasMany(Materialstoragelocation::class);
+    }
+
     public function cyclecountings()
     {
         return $this->belongsToMany(Cyclecounting::class);

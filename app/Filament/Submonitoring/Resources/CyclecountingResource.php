@@ -92,16 +92,6 @@ class CyclecountingResource extends Resource
         return $table
             ->columns([
 
-                TextColumn::make('plants.plant')
-                    ->label('Plant')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
-
                 TextColumn::make('cycle_counting')
                     ->label('Cycle Counting')
                     ->searchable(isIndividual: true, isGlobal: false)

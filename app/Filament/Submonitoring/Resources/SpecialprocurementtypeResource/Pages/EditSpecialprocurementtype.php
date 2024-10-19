@@ -4,6 +4,7 @@ namespace App\Filament\Submonitoring\Resources\SpecialprocurementtypeResource\Pa
 
 use App\Filament\Submonitoring\Resources\SpecialprocurementtypeResource;
 use Filament\Actions;
+use Filament\Actions\Action;
 use Filament\Resources\Pages\EditRecord;
 
 class EditSpecialprocurementtype extends EditRecord
@@ -15,6 +16,8 @@ class EditSpecialprocurementtype extends EditRecord
         return [
             Actions\ViewAction::make(),
             Actions\DeleteAction::make(),
+            Action::make('Back to List')
+                ->url($this->getResource()::getUrl('index')),
         ];
     }
 }

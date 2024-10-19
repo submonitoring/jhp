@@ -21,7 +21,10 @@ use Filament\Forms\Set;
 use Filament\Pages\Page;
 use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
+use Filament\Support\Enums\ActionSize;
 use Filament\Tables;
+use Filament\Tables\Actions\Action;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Filters\QueryBuilder;
@@ -175,9 +178,31 @@ class PlantResource extends Resource
                     ->constraintPickerColumns(2),
             ], layout: Tables\Enums\FiltersLayout::AboveContentCollapsible)
             ->deferFilters()
+            ->headerActions([
+                Tables\Actions\CreateAction::make(),
+            ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+                ActionGroup::make([
+                    Tables\Actions\ViewAction::make(),
+                    Tables\Actions\EditAction::make(),
+                ]),
+                ActionGroup::make([
+                    Action::make('AssignSLoc')
+                        ->label('Assign S.Loc')
+                        ->icon('heroicon-m-arrow-right-end-on-rectangle')
+                        ->url(fn(Plant $record): string => route('filament.submonitoring.organizational-structures.resources.plants.managestoragelocation', $record)),
+
+                    Action::make('AssignCycleCounting')
+                        ->label('Assign Cycle Counting')
+                        ->icon('heroicon-m-arrow-right-end-on-rectangle')
+                        ->url(fn(Plant $record): string => route('filament.submonitoring.organizational-structures.resources.plants.managecyclecounting', $record)),
+                ])
+                    ->label('Assignment')
+                    ->icon('heroicon-m-arrow-right-end-on-rectangle')
+                    ->size(ActionSize::Small)
+                    ->outlined()
+                    ->button(),
+
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -210,9 +235,10 @@ class PlantResource extends Resource
         return $page->generateNavigationItems([
             ViewPlant::class,
             EditPlant::class,
+            ManageStoragelocation::class,
             ManageCyclecounting::class,
         ]);
     }
 
-    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Start;
+    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 }

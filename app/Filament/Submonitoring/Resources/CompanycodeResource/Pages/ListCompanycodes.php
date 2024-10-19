@@ -10,10 +10,12 @@ class ListCompanycodes extends ListRecords
 {
     protected static string $resource = CompanycodeResource::class;
 
+    protected static ?string $navigationLabel = 'Company Code';
+
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            // Actions\CreateAction::make(),
         ];
     }
 }

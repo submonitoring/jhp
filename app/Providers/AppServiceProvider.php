@@ -9,6 +9,13 @@ use Filament\Http\Responses\Auth\Contracts\LogoutResponse as LogoutResponseContr
 use Illuminate\Database\Eloquent\Model;
 use BezhanSalleh\PanelSwitch\PanelSwitch;
 use Carbon\Carbon;
+use Filament\Pages\SubNavigationPosition;
+use Filament\Tables\Actions\Action;
+use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Actions\HeaderActionsPosition;
+use Filament\Tables\Enums\ActionsPosition;
+use Filament\Tables\Enums\FiltersLayout;
+use Filament\Tables\Table;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -38,6 +45,23 @@ class AppServiceProvider extends ServiceProvider
         });
 
         date_default_timezone_set('Asia/Jakarta');
+
+        Table::configureUsing(function (Table $table): void {
+            $table
+                ->headerActions([], position: HeaderActionsPosition::Bottom)
+                ->actions([], position: ActionsPosition::BeforeCells)
+                ->filters([], layout: FiltersLayout::AboveContentCollapsible)
+                ->deferFilters()
+                ->filtersTriggerAction(
+                    fn(Action $action) => $action
+                        ->button()
+                        ->label('Filter'),
+                )
+                ->emptyStateHeading('Belum ada data')
+                ->emptyStateDescription('.')
+                ->deferLoading()
+                ->extremePaginationLinks();
+        });
 
         // config(['app.locale' => 'id']);
         // Carbon::setLocale('id');

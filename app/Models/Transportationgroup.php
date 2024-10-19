@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string|null $transportation_group
@@ -33,6 +33,11 @@ use Illuminate\Database\Eloquent\Model;
 class Transportationgroup extends Model
 {
     use HasFactory;
+
+    public function materialplants()
+    {
+        return $this->hasMany(Materialplant::class);
+    }
 
     public static function boot()
     {

@@ -4,6 +4,7 @@ namespace App\Filament\Submonitoring\Resources\PlantResource\Pages;
 
 use App\Filament\Submonitoring\Resources\PlantResource;
 use Filament\Actions;
+use Filament\Actions\Action;
 use Filament\Resources\Pages\EditRecord;
 
 class EditPlant extends EditRecord
@@ -15,6 +16,8 @@ class EditPlant extends EditRecord
         return [
             Actions\ViewAction::make(),
             Actions\DeleteAction::make(),
+            Action::make('Back to List')
+                ->url($this->getResource()::getUrl('index')),
         ];
     }
 }

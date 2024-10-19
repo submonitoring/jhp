@@ -10,6 +10,10 @@ class Materialmaster extends Model
 {
     use HasFactory;
 
+    protected $casts = [
+        'class' => 'array',
+    ];
+
     public function numberrange()
     {
         return $this->belongsTo(Numberrange::class);
@@ -32,7 +36,10 @@ class Materialmaster extends Model
 
     public function genitemcategorygroup()
     {
-        return $this->belongsTo(Itemcategorygroup::class, 'itemcategorygroup_id');
+        return $this->belongsTo(
+            Itemcategorygroup::class,
+            'itemcategorygroup_id'
+        );
     }
 
     public function base_uom()
@@ -43,6 +50,29 @@ class Materialmaster extends Model
     public function weight_unit()
     {
         return $this->belongsTo(Uom::class, 'weight_unit');
+    }
+
+    public function materialplant()
+    {
+        return $this->hasMany(Materialplant::class);
+    }
+
+    public function materialstoragelocation()
+    {
+        return $this->hasMany(Materialstoragelocation::class);
+    }
+
+    public function materialplants()
+    {
+        return $this->morphedByMany(Materialplant::class, 'materialmasterable');
+    }
+
+    public function materialstoragelocations()
+    {
+        return $this->morphedByMany(
+            Materialstoragelocation::class,
+            'materialmasterable'
+        );
     }
 
     public static function boot()

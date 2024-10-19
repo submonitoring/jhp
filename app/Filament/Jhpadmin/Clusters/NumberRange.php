@@ -11,4 +11,9 @@ class NumberRange extends Cluster
     protected static ?int $navigationSort = 700;
 
     protected static ?string $navigationGroup = 'Customizing';
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return false;
+    }
 }

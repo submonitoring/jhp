@@ -2,6 +2,8 @@
 
 namespace App\Filament\Submonitoring\Resources;
 
+use App\Filament\Exports\CurrencyExporter;
+use App\Filament\Imports\CurrencyImporter;
 use App\Filament\Submonitoring\Clusters\General;
 use App\Filament\Submonitoring\Resources\CurrencyResource\Pages;
 use App\Filament\Submonitoring\Resources\CurrencyResource\RelationManagers;
@@ -12,6 +14,8 @@ use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\ExportBulkAction;
+use Filament\Tables\Actions\ImportAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Filters\QueryBuilder;
@@ -213,6 +217,11 @@ class CurrencyResource extends Resource
                     ->constraintPickerColumns(2),
             ], layout: Tables\Enums\FiltersLayout::AboveContentCollapsible)
             ->deferFilters()
+            ->headerActions([
+                ImportAction::make()
+                ->label('Import')
+                ->importer(CurrencyImporter::class),
+            ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
@@ -221,6 +230,8 @@ class CurrencyResource extends Resource
                 // Tables\Actions\BulkActionGroup::make([
                 //     Tables\Actions\DeleteBulkAction::make(),
                 // ]),
+                ExportBulkAction::make()
+                    ->exporter(CurrencyExporter::class)
             ]);
     }
 

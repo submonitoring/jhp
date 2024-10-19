@@ -2,6 +2,7 @@
 
 namespace App\Filament\Submonitoring\Resources;
 
+use App\Filament\Exports\NrobjectExporter;
 use App\Filament\Submonitoring\Clusters\NumberRange;
 use App\Filament\Submonitoring\Resources\NrobjectResource\Pages;
 use App\Filament\Submonitoring\Resources\NrobjectResource\Pages\EditNrobject;
@@ -17,7 +18,11 @@ use Filament\Forms\Form;
 use Filament\Pages\Page;
 use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
+use Filament\Support\Enums\ActionSize;
 use Filament\Tables;
+use Filament\Tables\Actions\Action;
+use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Actions\ExportBulkAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Filters\QueryBuilder;
@@ -163,14 +168,32 @@ class NrobjectResource extends Resource
                     ->constraintPickerColumns(2),
             ], layout: Tables\Enums\FiltersLayout::AboveContentCollapsible)
             ->deferFilters()
+            ->headerActions([
+                Tables\Actions\CreateAction::make(),
+            ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+                ActionGroup::make([
+                    Tables\Actions\ViewAction::make(),
+                    Tables\Actions\EditAction::make(),
+                ]),
+                ActionGroup::make([
+                    Action::make('Assign')
+                        ->label('Assign Number Range')
+                        ->icon('heroicon-m-arrow-right-end-on-rectangle')
+                        ->url(fn(Nrobject $record): string => route('filament.submonitoring.number-range.resources.nrobjects.managenumberranges', $record)),
+                ])
+                    ->label('Assignment')
+                    ->icon('heroicon-m-arrow-right-end-on-rectangle')
+                    ->size(ActionSize::Small)
+                    ->outlined()
+                    ->button(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
+                ExportBulkAction::make()
+                    ->exporter(NrobjectExporter::class)
             ]);
     }
 

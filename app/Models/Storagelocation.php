@@ -15,6 +15,11 @@ class Storagelocation extends Model
         return $this->belongsTo(Plant::class);
     }
 
+    public function materialstoragelocations()
+    {
+        return $this->hasMany(Materialstoragelocation::class);
+    }
+
     public static function boot()
     {
         parent::boot();

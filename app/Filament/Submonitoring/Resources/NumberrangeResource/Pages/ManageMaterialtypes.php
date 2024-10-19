@@ -135,7 +135,8 @@ class ManageMaterialtypes extends ManageRelatedRecords
             ->deferFilters()
             ->headerActions([
                 Tables\Actions\CreateAction::make(),
-                Tables\Actions\AssociateAction::make(),
+                Tables\Actions\AssociateAction::make()
+                    ->recordSelectOptionsQuery(fn(Builder $query) => $query->where('numberrange_id', null)),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

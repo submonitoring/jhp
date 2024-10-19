@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string|null $period_indicator
@@ -33,6 +33,11 @@ use Illuminate\Database\Eloquent\Model;
 class Periodindicator extends Model
 {
     use HasFactory;
+
+    public function materialplants()
+    {
+        return $this->hasMany(Materialplant::class);
+    }
 
     public static function boot()
     {

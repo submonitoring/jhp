@@ -2,6 +2,7 @@
 
 namespace App\Filament\Submonitoring\Resources\NrobjectResource\Pages;
 
+use App\Filament\Exports\NrobjectExporter;
 use App\Filament\Imports\NrobjectImporter;
 use App\Filament\Submonitoring\Resources\NrobjectResource;
 use Filament\Actions;
@@ -15,10 +16,11 @@ class ListNrobjects extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
-            ImportAction::make()
-                ->label('Import NR Objects')
-                ->importer(NrobjectImporter::class)
+            // Actions\CreateAction::make(),
+
+            // ImportAction::make()
+            //     ->label('Import')
+            //     ->importer(NrobjectImporter::class),
         ];
     }
 }

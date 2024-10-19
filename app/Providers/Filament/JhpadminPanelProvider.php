@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Jhpadmin\Widgets\Menu;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
@@ -40,6 +41,7 @@ class JhpadminPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/Jhpadmin/Widgets'), for: 'App\\Filament\\Jhpadmin\\Widgets')
             ->widgets([
                 Widgets\AccountWidget::class,
+                Menu::class,
                 // Widgets\FilamentInfoWidget::class,
             ])
             ->middleware([

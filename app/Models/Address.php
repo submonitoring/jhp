@@ -161,6 +161,11 @@ class Address extends Model
         return $this->morphedByMany(Plant::class, 'addressable');
     }
 
+    public function businesspartners()
+    {
+        return $this->morphedByMany(Businesspartner::class, 'addressable');
+    }
+
     public static function boot()
     {
         parent::boot();

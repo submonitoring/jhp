@@ -10,6 +10,11 @@ class Cyclecounting extends Model
 {
     use HasFactory;
 
+    public function materialplants()
+    {
+        return $this->hasMany(Materialplant::class);
+    }
+
     public function plants()
     {
         return $this->belongsToMany(Plant::class);

@@ -4,6 +4,7 @@ namespace App\Filament\Submonitoring\Resources\CompanycodeResource\Pages;
 
 use App\Filament\Submonitoring\Resources\CompanycodeResource;
 use Filament\Actions;
+use Filament\Actions\Action;
 use Filament\Resources\Pages\ViewRecord;
 
 class ViewCompanycode extends ViewRecord
@@ -14,6 +15,8 @@ class ViewCompanycode extends ViewRecord
     {
         return [
             Actions\EditAction::make(),
+            Action::make('Back to List')
+                ->url($this->getResource()::getUrl('index')),
         ];
     }
 }

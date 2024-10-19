@@ -117,6 +117,8 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Address whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Address whereUpdatedBy($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Businesspartner> $businesspartners
+ * @property-read int|null $businesspartners_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Companycode> $companycodes
  * @property-read int|null $companycodes_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Plant> $plants
@@ -124,6 +126,82 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Address whereKodepos($value)
  */
 	class Address extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
+ * @property string|null $bpcategory
+ * @property string|null $bpcategory_desc
+ * @property int|null $is_active
+ * @property string|null $created_by
+ * @property string|null $updated_by
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Businesspartner> $businesspartners
+ * @property-read int|null $businesspartners_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Title> $titles
+ * @property-read int|null $titles_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Bpcategory newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Bpcategory newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Bpcategory query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Bpcategory whereBpcategory($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Bpcategory whereBpcategoryDesc($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Bpcategory whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Bpcategory whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Bpcategory whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Bpcategory whereIsActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Bpcategory whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Bpcategory whereUpdatedBy($value)
+ */
+	class Bpcategory extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
+ * @property string|null $bprole
+ * @property string|null $bprole_desc
+ * @property int|null $is_active
+ * @property string|null $created_by
+ * @property string|null $updated_by
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Businesspartner> $businesspartners
+ * @property-read int|null $businesspartners_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Bprole newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Bprole newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Bprole query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Bprole whereBprole($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Bprole whereBproleDesc($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Bprole whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Bprole whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Bprole whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Bprole whereIsActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Bprole whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Bprole whereUpdatedBy($value)
+ */
+	class Bprole extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
+ * @property-read int|null $addresses_count
+ * @property-read \App\Models\Bpcategory|null $bpcategory
+ * @property-read \App\Models\Bprole|null $bprole
+ * @property-read \App\Models\Numberrange|null $numberrange
+ * @method static \Illuminate\Database\Eloquent\Builder|Businesspartner newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Businesspartner newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Businesspartner query()
+ */
+	class Businesspartner extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -261,6 +339,8 @@ namespace App\Models{
  * @property string|null $updated_by
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Materialplant> $materialplants
+ * @property-read int|null $materialplants_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Plant> $plants
  * @property-read int|null $plants_count
  * @method static \Illuminate\Database\Eloquent\Builder|Cyclecounting newModelQuery()
@@ -579,8 +659,21 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Loadinggroup whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Loadinggroup whereUpdatedBy($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Materialplant> $materialplants
+ * @property-read int|null $materialplants_count
  */
 	class Loadinggroup extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|Materialdocumentheader newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Materialdocumentheader newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Materialdocumentheader query()
+ */
+	class Materialdocumentheader extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -623,6 +716,7 @@ namespace App\Models{
  * @property string|null $material_desc
  * @property string|null $old_material_number
  * @property int|null $materialtype_id
+ * @property array|null $class
  * @property int|null $industrysector_id
  * @property int|null $materialgroup_id
  * @property int|null $itemcategorygroup_id
@@ -636,15 +730,25 @@ namespace App\Models{
  * @property string|null $updated_by
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int|null $is_external
  * @property-read \App\Models\Itemcategorygroup|null $genitemcategorygroup
  * @property-read \App\Models\Industrysector|null $industrysector
  * @property-read \App\Models\Materialgroup|null $materialgroup
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Materialplant> $materialplant
+ * @property-read int|null $materialplant_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Materialplant> $materialplants
+ * @property-read int|null $materialplants_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Materialstoragelocation> $materialstoragelocation
+ * @property-read int|null $materialstoragelocation_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Materialstoragelocation> $materialstoragelocations
+ * @property-read int|null $materialstoragelocations_count
  * @property-read \App\Models\Materialtype|null $materialtype
  * @property-read \App\Models\Numberrange|null $numberrange
  * @method static \Illuminate\Database\Eloquent\Builder|Materialmaster newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Materialmaster newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Materialmaster query()
  * @method static \Illuminate\Database\Eloquent\Builder|Materialmaster whereBaseUom($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Materialmaster whereClass($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Materialmaster whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Materialmaster whereCreatedBy($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Materialmaster whereDeletionFlag($value)
@@ -652,6 +756,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Materialmaster whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Materialmaster whereIndustrysectorId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Materialmaster whereIsActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Materialmaster whereIsExternal($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Materialmaster whereItemcategorygroupId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Materialmaster whereMaterialDesc($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Materialmaster whereMaterialNumber($value)
@@ -665,6 +770,105 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Materialmaster whereWeightUnit($value)
  */
 	class Materialmaster extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
+ * @property int|null $materialmaster_id
+ * @property int|null $plant_id
+ * @property int|null $loadinggroup_id
+ * @property int|null $transportationgroup_id
+ * @property int|null $periodindicator_id
+ * @property int|null $procurementtype_id
+ * @property int|null $specialprocurementtype_id
+ * @property string|null $safety_stock
+ * @property string|null $minimal_safety_stock
+ * @property string|null $slug
+ * @property int|null $is_batch
+ * @property int|null $is_active
+ * @property string|null $created_by
+ * @property string|null $updated_by
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Cyclecounting|null $cyclecounting
+ * @property-read \App\Models\Loadinggroup|null $loadinggroup
+ * @property-read \App\Models\Materialmaster|null $materialmaster
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Materialmaster> $materialmasters
+ * @property-read int|null $materialmasters_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Materialstoragelocation> $materialstoragelocations
+ * @property-read int|null $materialstoragelocations_count
+ * @property-read \App\Models\Periodindicator|null $periodindicator
+ * @property-read \App\Models\Plant|null $plant
+ * @property-read \App\Models\Procurementtype|null $procurementtype
+ * @property-read \App\Models\Specialprocurementtype|null $specialprocurementtype
+ * @property-read \App\Models\Transportationgroup|null $transportationgroup
+ * @method static \Illuminate\Database\Eloquent\Builder|Materialplant newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Materialplant newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Materialplant query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Materialplant whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Materialplant whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Materialplant whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Materialplant whereIsActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Materialplant whereIsBatch($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Materialplant whereLoadinggroupId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Materialplant whereMaterialmasterId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Materialplant whereMinimalSafetyStock($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Materialplant wherePeriodindicatorId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Materialplant wherePlantId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Materialplant whereProcurementtypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Materialplant whereSafetyStock($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Materialplant whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Materialplant whereSpecialprocurementtypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Materialplant whereTransportationgroupId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Materialplant whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Materialplant whereUpdatedBy($value)
+ */
+	class Materialplant extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
+ * @property int|null $materialmaster_id
+ * @property int|null $plant_id
+ * @property int|null $storagelocation_id
+ * @property int|null $storagecondition_id
+ * @property int|null $temperaturecondition_id
+ * @property string|null $slug
+ * @property int|null $is_active
+ * @property string|null $created_by
+ * @property string|null $updated_by
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Materialmaster|null $materialmaster
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Materialplant> $materialplants
+ * @property-read int|null $materialplants_count
+ * @property-read \App\Models\Plant|null $plant
+ * @property-read \App\Models\Storagecondition|null $storagecondition
+ * @property-read \App\Models\Storagelocation|null $storagelocation
+ * @property-read \App\Models\Temperaturecondition|null $temperaturecondition
+ * @method static \Illuminate\Database\Eloquent\Builder|Materialstoragelocation newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Materialstoragelocation newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Materialstoragelocation query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Materialstoragelocation whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Materialstoragelocation whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Materialstoragelocation whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Materialstoragelocation whereIsActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Materialstoragelocation whereMaterialmasterId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Materialstoragelocation wherePlantId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Materialstoragelocation whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Materialstoragelocation whereStorageconditionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Materialstoragelocation whereStoragelocationId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Materialstoragelocation whereTemperatureconditionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Materialstoragelocation whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Materialstoragelocation whereUpdatedBy($value)
+ */
+	class Materialstoragelocation extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -864,6 +1068,8 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Periodindicator whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Periodindicator whereUpdatedBy($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Materialplant> $materialplants
+ * @property-read int|null $materialplants_count
  */
 	class Periodindicator extends \Eloquent {}
 }
@@ -886,6 +1092,10 @@ namespace App\Models{
  * @property-read \App\Models\Companycode|null $companycode
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Cyclecounting> $cyclecountings
  * @property-read int|null $cyclecountings_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Materialplant> $materialplants
+ * @property-read int|null $materialplants_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Materialstoragelocation> $materialstoragelocations
+ * @property-read int|null $materialstoragelocations_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Storagelocation> $storagelocations
  * @property-read int|null $storagelocations_count
  * @method static \Illuminate\Database\Eloquent\Builder|Plant newModelQuery()
@@ -928,6 +1138,8 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Procurementtype whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Procurementtype whereUpdatedBy($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Materialplant> $materialplants
+ * @property-read int|null $materialplants_count
  */
 	class Procurementtype extends \Eloquent {}
 }
@@ -1053,6 +1265,8 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Specialprocurementtype whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Specialprocurementtype whereUpdatedBy($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Materialplant> $materialplants
+ * @property-read int|null $materialplants_count
  */
 	class Specialprocurementtype extends \Eloquent {}
 }
@@ -1109,6 +1323,8 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Storagecondition whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Storagecondition whereUpdatedBy($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Materialstoragelocation> $materialstoragelocations
+ * @property-read int|null $materialstoragelocations_count
  */
 	class Storagecondition extends \Eloquent {}
 }
@@ -1126,6 +1342,8 @@ namespace App\Models{
  * @property string|null $updated_by
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Materialstoragelocation> $materialstoragelocations
+ * @property-read int|null $materialstoragelocations_count
  * @property-read \App\Models\Plant|null $plant
  * @method static \Illuminate\Database\Eloquent\Builder|Storagelocation newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Storagelocation newQuery()
@@ -1141,6 +1359,49 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Storagelocation whereUpdatedBy($value)
  */
 	class Storagelocation extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
+ * @property string|null $1
+ * @property string|null $2
+ * @property string|null $3
+ * @property string|null $4
+ * @property string|null $5
+ * @property string|null $6
+ * @property string|null $7
+ * @property string|null $8
+ * @property string|null $9
+ * @property string|null $link
+ * @property int|null $is_active
+ * @property string|null $created_by
+ * @property string|null $updated_by
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|Sysobject newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Sysobject newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Sysobject query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Sysobject where1($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Sysobject where2($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Sysobject where3($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Sysobject where4($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Sysobject where5($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Sysobject where6($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Sysobject where7($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Sysobject where8($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Sysobject where9($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Sysobject whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Sysobject whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Sysobject whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Sysobject whereIsActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Sysobject whereLink($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Sysobject whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Sysobject whereUpdatedBy($value)
+ */
+	class Sysobject extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -1223,8 +1484,39 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Temperaturecondition whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Temperaturecondition whereUpdatedBy($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Materialstoragelocation> $materialstoragelocations
+ * @property-read int|null $materialstoragelocations_count
  */
 	class Temperaturecondition extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
+ * @property string|null $title
+ * @property string|null $title_desc
+ * @property int|null $is_active
+ * @property string|null $created_by
+ * @property string|null $updated_by
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Bpcategory> $bpcategories
+ * @property-read int|null $bpcategories_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Title newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Title newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Title query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Title whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Title whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Title whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Title whereIsActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Title whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Title whereTitleDesc($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Title whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Title whereUpdatedBy($value)
+ */
+	class Title extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -1307,6 +1599,8 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Transportationgroup whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Transportationgroup whereUpdatedBy($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Materialplant> $materialplants
+ * @property-read int|null $materialplants_count
  */
 	class Transportationgroup extends \Eloquent {}
 }

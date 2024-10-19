@@ -2,8 +2,10 @@
 
 namespace App\Filament\Submonitoring\Resources\CurrencyResource\Pages;
 
+use App\Filament\Imports\CurrencyImporter;
 use App\Filament\Submonitoring\Resources\CurrencyResource;
 use Filament\Actions;
+use Filament\Actions\ImportAction;
 use Filament\Resources\Pages\ListRecords;
 
 class ListCurrencies extends ListRecords
@@ -13,7 +15,11 @@ class ListCurrencies extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            // Actions\CreateAction::make(),
+
+            // ImportAction::make()
+            //     ->label('Import')
+            //     ->importer(CurrencyImporter::class),
         ];
     }
 }

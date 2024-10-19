@@ -197,4 +197,6 @@ class StoragelocationResource extends Resource
             'edit' => Pages\EditStoragelocation::route('/{record}/edit'),
         ];
     }
+
+    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 }

@@ -6,11 +6,20 @@ use App\Filament\Submonitoring\Resources\MaterialmasterResource;
 use App\Models\Materialtype;
 use App\Models\Numberrange;
 use Filament\Actions;
+use Filament\Actions\Action;
 use Filament\Resources\Pages\CreateRecord;
 
 class CreateMaterialmaster extends CreateRecord
 {
     protected static string $resource = MaterialmasterResource::class;
+
+    protected function getHeaderActions(): array
+    {
+        return [
+            Action::make('Back to List')
+                ->url($this->getResource()::getUrl('index')),
+        ];
+    }
 
     protected function getRedirectUrl(): string
     {

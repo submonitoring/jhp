@@ -35,7 +35,7 @@ class SubmonitoringPanelProvider extends PanelProvider
                 'danger' => Color::Rose,
                 'gray' => Color::Gray,
                 'info' => Color::Blue,
-                'primary' => Color::Indigo,
+                'primary' => Color::Red,
                 'success' => Color::Emerald,
                 'warning' => Color::Orange,
             ])
@@ -67,6 +67,11 @@ class SubmonitoringPanelProvider extends PanelProvider
             ->navigationGroups([
 
                 NavigationGroup::make()
+                    ->label('Material Document')
+                    ->icon('heroicon-o-document')
+                    ->collapsed(),
+
+                NavigationGroup::make()
                     ->label('Master Data')
                     ->icon('heroicon-o-circle-stack')
                     ->collapsed(),
@@ -78,7 +83,7 @@ class SubmonitoringPanelProvider extends PanelProvider
 
                 NavigationGroup::make()
                     ->label('Address')
-                    ->icon('heroicon-o-home')
+                    ->icon('heroicon-o-map-pin')
                     ->collapsed(),
 
                 NavigationGroup::make()

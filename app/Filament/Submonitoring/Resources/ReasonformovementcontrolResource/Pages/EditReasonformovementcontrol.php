@@ -4,6 +4,7 @@ namespace App\Filament\Submonitoring\Resources\ReasonformovementcontrolResource\
 
 use App\Filament\Submonitoring\Resources\ReasonformovementcontrolResource;
 use Filament\Actions;
+use Filament\Actions\Action;
 use Filament\Resources\Pages\EditRecord;
 
 class EditReasonformovementcontrol extends EditRecord
@@ -15,6 +16,8 @@ class EditReasonformovementcontrol extends EditRecord
         return [
             Actions\ViewAction::make(),
             Actions\DeleteAction::make(),
+            Action::make('Back to List')
+                ->url($this->getResource()::getUrl('index')),
         ];
     }
 }

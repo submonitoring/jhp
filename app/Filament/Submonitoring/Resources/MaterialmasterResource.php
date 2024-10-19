@@ -3,8 +3,12 @@
 namespace App\Filament\Submonitoring\Resources;
 
 use App\Filament\Submonitoring\Clusters\MasterData;
+use App\Filament\Submonitoring\Clusters\MaterialMasterData;
 use App\Filament\Submonitoring\Resources\MaterialmasterResource\Pages;
+use App\Filament\Submonitoring\Resources\MaterialmasterResource\Pages\ManageMaterialplant;
+use App\Filament\Submonitoring\Resources\MaterialmasterResource\Pages\ManageMaterialstoragelocation;
 use App\Filament\Submonitoring\Resources\MaterialmasterResource\RelationManagers;
+use App\Filament\Submonitoring\Resources\MaterialmasterResource\RelationManagers\MaterialplantsRelationManager;
 use App\Models\Industrysector;
 use App\Models\Itemcategorygroup;
 use App\Models\Materialgroup;
@@ -15,8 +19,11 @@ use App\Models\Uom;
 use Filament\Forms;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Hidden;
+use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Tabs;
+use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
@@ -24,10 +31,16 @@ use Filament\Forms\Set;
 use Filament\Pages\Page;
 use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
+use Filament\Support\Enums\ActionSize;
 use Filament\Tables;
+use Filament\Tables\Actions\Action;
+use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Actions\CreateAction;
+use Filament\Tables\Actions\HeaderActionsPosition;
 use Filament\Tables\Actions\ReplicateAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
+use Filament\Tables\Enums\ActionsPosition;
 use Filament\Tables\Filters\QueryBuilder;
 use Filament\Tables\Filters\QueryBuilder\Constraints\BooleanConstraint;
 use Filament\Tables\Filters\QueryBuilder\Constraints\TextConstraint;
@@ -52,9 +65,9 @@ class MaterialmasterResource extends Resource
 
     protected static ?string $navigationLabel = 'Material Master';
 
-    protected static ?int $navigationSort = 700000050;
+    protected static ?int $navigationSort = 710000050;
 
-    protected static ?string $cluster = MasterData::class;
+    protected static ?string $cluster = MaterialMasterData::class;
 
     // protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -197,7 +210,7 @@ class MaterialmasterResource extends Resource
                                 ->default(false),
 
                             Toggle::make('is_active')
-                                ->label('Status')
+                                ->label('Active')
                                 ->default(true),
 
                         ]),
@@ -389,37 +402,60 @@ class MaterialmasterResource extends Resource
                     ->constraintPickerColumns(2),
             ], layout: Tables\Enums\FiltersLayout::AboveContentCollapsible)
             ->deferFilters()
+            ->headerActions([
+                Tables\Actions\CreateAction::make(),
+            ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
-                ReplicateAction::make()
-                    ->form([
+                ActionGroup::make([
+                    ActionGroup::make([
+                        Tables\Actions\ViewAction::make(),
+                        Tables\Actions\EditAction::make(),
+                    ])->dropdown(false),
+                    ReplicateAction::make()
+                        ->form([
 
-                        TextInput::make('material_number')
-                            ->hidden(fn(Get $get) => $get('is_external') === 0),
-                    ])
-                    ->beforeReplicaSaved(function (Model $replica): void {
+                            TextInput::make('material_number')
+                                ->hidden(fn(Get $get) => $get('is_external') === 0),
+                        ])
+                        ->beforeReplicaSaved(function (Model $replica): void {
 
-                        $getmaterialtype = $replica->materialtype_id;
+                            $getmaterialtype = $replica->materialtype_id;
 
-                        $getnriid = Materialtype::whereId($getmaterialtype)->first();
+                            $getnriid = Materialtype::whereId($getmaterialtype)->first();
 
-                        $getisexternal = Numberrange::whereId($getnriid->numberrange_id)->first();
+                            $getisexternal = Numberrange::whereId($getnriid->numberrange_id)->first();
 
-                        if ($getisexternal->is_external === 1) {
-                            return;
-                        } else {
+                            if ($getisexternal->is_external === 1) {
+                                return;
+                            } else {
 
-                            $getcurrentnr = Numberrange::whereId($getnriid->numberrange_id)->first();
+                                $getcurrentnr = Numberrange::whereId($getnriid->numberrange_id)->first();
 
-                            $replica->material_number = $getcurrentnr->current_number + 1;
+                                $replica->material_number = $getcurrentnr->current_number + 1;
 
-                            $updatecurrentnumber = Numberrange::whereId($getnriid->numberrange_id)->first();
-                            $updatecurrentnumber->current_number = $replica->material_number;
-                            $updatecurrentnumber->save();
-                        }
-                    })
-                    ->successRedirectUrl(fn(Model $replica): string => route('filament.submonitoring.master-data.resources.materialmasters.edit', $replica)),
+                                $updatecurrentnumber = Numberrange::whereId($getnriid->numberrange_id)->first();
+                                $updatecurrentnumber->current_number = $replica->material_number;
+                                $updatecurrentnumber->save();
+                            }
+                        })
+                        ->successRedirectUrl(fn(Model $replica): string => route('filament.submonitoring.material-master-data.resources.materialmasters.edit', $replica)),
+
+
+                ]),
+
+                ActionGroup::make([
+                    Action::make('Extend')
+                        ->label('Extend to Plant')
+                        ->icon('heroicon-m-arrow-right-start-on-rectangle')
+                        ->url(fn(Materialmaster $record): string => route('filament.submonitoring.material-master-data.resources.materialmasters.managematerialplant', $record)),
+                ])
+                    ->label('Extend')
+                    ->icon('heroicon-m-arrow-right-start-on-rectangle')
+                    ->size(ActionSize::Small)
+                    ->outlined()
+                    ->button(),
+
+
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -442,6 +478,16 @@ class MaterialmasterResource extends Resource
             'create' => Pages\CreateMaterialmaster::route('/create'),
             'view' => Pages\ViewMaterialmaster::route('/{record}'),
             'edit' => Pages\EditMaterialmaster::route('/{record}/edit'),
+            'managematerialplant' => Pages\ManageMaterialplant::route('/{record}/materialplant'),
         ];
     }
+
+    public static function getRecordSubNavigation(Page $page): array
+    {
+        return $page->generateNavigationItems([
+            ManageMaterialplant::class,
+        ]);
+    }
+
+    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Start;
 }

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string|null $storage_condition
@@ -33,6 +33,11 @@ use Illuminate\Database\Eloquent\Model;
 class Storagecondition extends Model
 {
     use HasFactory;
+
+    public function materialstoragelocations()
+    {
+        return $this->hasMany(Materialstoragelocation::class);
+    }
 
     public static function boot()
     {

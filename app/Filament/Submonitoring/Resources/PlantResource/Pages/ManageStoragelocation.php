@@ -131,7 +131,8 @@ class ManageStoragelocation extends ManageRelatedRecords
             ->deferFilters()
             ->headerActions([
                 Tables\Actions\CreateAction::make(),
-                Tables\Actions\AssociateAction::make(),
+                Tables\Actions\AssociateAction::make()
+                ->recordSelectOptionsQuery(fn(Builder $query) => $query->where('plant_id', null)),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

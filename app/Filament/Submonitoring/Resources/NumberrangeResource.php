@@ -2,6 +2,7 @@
 
 namespace App\Filament\Submonitoring\Resources;
 
+use App\Filament\Exports\NumberrangeExporter;
 use App\Filament\Submonitoring\Clusters\NumberRange as ClustersNumberRange;
 use App\Filament\Submonitoring\Resources\NrobjectResource\Pages\EditNrobject;
 use App\Filament\Submonitoring\Resources\NumberrangeResource\Pages;
@@ -20,6 +21,7 @@ use Filament\Pages\Page;
 use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\ExportBulkAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Filters\QueryBuilder;
@@ -222,6 +224,8 @@ class NumberrangeResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
+                ExportBulkAction::make()
+                    ->exporter(NumberrangeExporter::class)
             ]);
     }
 
