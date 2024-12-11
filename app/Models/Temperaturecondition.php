@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- *
+ * 
  *
  * @property int $id
  * @property string|null $temperature_condition
@@ -28,6 +28,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Temperaturecondition whereTemperatureConditionDesc($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Temperaturecondition whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Temperaturecondition whereUpdatedBy($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Materialstoragelocation> $materialstoragelocations
+ * @property-read int|null $materialstoragelocations_count
  * @mixin \Eloquent
  */
 class Temperaturecondition extends Model

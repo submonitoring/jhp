@@ -81,19 +81,23 @@ class BpcategoryResource extends Resource
                                 ->maxLength(1)
                                 ->unique(Bpcategory::class, ignoreRecord: true),
 
+                        ]),
+
+                    Grid::make(4)
+                        ->schema([
+
                             TextInput::make('bpcategory_desc')
                                 ->label('Description')
                                 ->required(),
 
                         ]),
 
-                ])->collapsible()
-                ->compact(),
+                ])->compact(),
 
             Section::make('Status')
                 ->schema([
 
-                    Grid::make(4)
+                    Grid::make(2)
                         ->schema([
 
                             ToggleButtons::make('is_active')

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string|null $transaction_type
@@ -33,6 +33,11 @@ use Illuminate\Database\Eloquent\Model;
 class Transactiontype extends Model
 {
     use HasFactory;
+
+    public function materialdocumentheaders()
+    {
+        return $this->hasMany(Materialdocumentheader::class);
+    }
 
     public static function boot()
     {

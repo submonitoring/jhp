@@ -25,6 +25,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Tabs;
 use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\ToggleButtons;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
@@ -38,16 +39,20 @@ use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\HeaderActionsPosition;
 use Filament\Tables\Actions\ReplicateAction;
+use Filament\Tables\Columns\ColumnGroup;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Enums\ActionsPosition;
 use Filament\Tables\Filters\QueryBuilder;
 use Filament\Tables\Filters\QueryBuilder\Constraints\BooleanConstraint;
+use Filament\Tables\Filters\QueryBuilder\Constraints\DateConstraint;
 use Filament\Tables\Filters\QueryBuilder\Constraints\TextConstraint;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Validation\Rules\Unique;
 use Schmeits\FilamentCharacterCounter\Forms\Components\TextInput;
 
 class MaterialmasterResource extends Resource
@@ -126,6 +131,10 @@ class MaterialmasterResource extends Resource
 
                             TextInput::make('material_number')
                                 ->label('Material Number')
+                                ->unique(Materialmaster::class, modifyRuleUsing: function (Unique $rule) {
+
+                                    return $rule->where('is_external', true);
+                                }, ignoreRecord: true)
                                 ->disabled(fn(Get $get) => $get('is_external') === 0),
 
                             TextInput::make('old_material_number')
@@ -150,6 +159,11 @@ class MaterialmasterResource extends Resource
                                 ->label('Material Group')
                                 ->required()
                                 ->options(Materialgroup::whereIsActive(1)->pluck('material_group_desc', 'id')),
+
+                        ]),
+
+                    Grid::make(4)
+                        ->schema([
 
                             Select::make('itemcategorygroup_id')
                                 ->label('General Item Category Group')
@@ -205,16 +219,21 @@ class MaterialmasterResource extends Resource
                     Grid::make(4)
                         ->schema([
 
-                            Toggle::make('deletion_flag')
+                            ToggleButtons::make('deletion_flag')
                                 ->label('Deletion Flag')
-                                ->default(false),
+                                ->boolean()
+                                ->grouped()
+                                ->default(true),
 
-                            Toggle::make('is_active')
-                                ->label('Active')
+                            ToggleButtons::make('is_active')
+                                ->label('Active?')
+                                ->boolean()
+                                ->grouped()
                                 ->default(true),
 
                         ]),
-                ]),
+                ])->collapsible()
+                ->compact(),
 
         ];
     }
@@ -224,168 +243,194 @@ class MaterialmasterResource extends Resource
         return $table
             ->columns([
 
-                TextColumn::make('material_number')
-                    ->label('Material Number')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
+                ColumnGroup::make('Material Master Data', [
 
-                TextColumn::make('old_material_number')
-                    ->label('Old Material Number')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
+                    TextColumn::make('material_number')
+                        ->label('Material Number')
+                        ->searchable(isIndividual: true, isGlobal: false)
+                        ->copyable()
+                        ->copyableState(function ($state) {
+                            return ($state);
+                        })
+                        ->copyMessage('Tersalin')
+                        ->sortable(),
 
-                TextColumn::make('material_desc')
-                    ->label('Material Description')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
+                    TextColumn::make('old_material_number')
+                        ->label('Old Material Number')
+                        ->searchable(isIndividual: true, isGlobal: false)
+                        ->copyable()
+                        ->copyableState(function ($state) {
+                            return ($state);
+                        })
+                        ->copyMessage('Tersalin')
+                        ->sortable(),
 
-                TextColumn::make('materialtype.material_type')
-                    ->label('Material Type')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
+                    TextColumn::make('material_desc')
+                        ->label('Material Description')
+                        ->searchable(isIndividual: true, isGlobal: false)
+                        ->copyable()
+                        ->copyableState(function ($state) {
+                            return ($state);
+                        })
+                        ->copyMessage('Tersalin')
+                        ->sortable(),
 
-                TextColumn::make('materialtype.material_type_desc')
-                    ->label('Material Type Desc')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
+                ]),
 
-                TextColumn::make('industrysector.industry_sector')
-                    ->label('Industry Sector')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
+                ColumnGroup::make('Material Data', [
 
-                TextColumn::make('materialgroup.material_group')
-                    ->label('Material Group')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
+                    TextColumn::make('materialtype.material_type')
+                        ->label('Material Type')
+                        ->searchable(isIndividual: true, isGlobal: false)
+                        ->copyable()
+                        ->copyableState(function ($state) {
+                            return ($state);
+                        })
+                        ->copyMessage('Tersalin')
+                        ->sortable(),
 
-                TextColumn::make('genitemcategorygroup.item_category_group')
-                    ->label('General Item Category Group')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
+                    TextColumn::make('materialtype.material_type_desc')
+                        ->label('Material Type Desc')
+                        ->searchable(isIndividual: true, isGlobal: false)
+                        ->copyable()
+                        ->copyableState(function ($state) {
+                            return ($state);
+                        })
+                        ->copyMessage('Tersalin')
+                        ->sortable(),
 
-                TextColumn::make('base_uom')
-                    ->label('Base UoM')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
+                    TextColumn::make('industrysector.industry_sector')
+                        ->label('Industry Sector')
+                        ->searchable(isIndividual: true, isGlobal: false)
+                        ->copyable()
+                        ->copyableState(function ($state) {
+                            return ($state);
+                        })
+                        ->copyMessage('Tersalin')
+                        ->sortable(),
 
-                TextColumn::make('weight_unit')
-                    ->label('Weight Unit')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
+                    TextColumn::make('materialgroup.material_group')
+                        ->label('Material Group')
+                        ->searchable(isIndividual: true, isGlobal: false)
+                        ->copyable()
+                        ->copyableState(function ($state) {
+                            return ($state);
+                        })
+                        ->copyMessage('Tersalin')
+                        ->sortable(),
 
-                TextColumn::make('gross_weight')
-                    ->label('Gross Weight')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
+                    TextColumn::make('genitemcategorygroup.item_category_group')
+                        ->label('General Item Category Group')
+                        ->searchable(isIndividual: true, isGlobal: false)
+                        ->copyable()
+                        ->copyableState(function ($state) {
+                            return ($state);
+                        })
+                        ->copyMessage('Tersalin')
+                        ->sortable(),
 
-                TextColumn::make('net_weight')
-                    ->label('Net Weight')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
+                ]),
 
-                ToggleColumn::make('deletion_flag')
-                    ->label('Deletion Flag')
-                    ->sortable(),
+                ColumnGroup::make('Dimension', [
 
-                ToggleColumn::make('is_active')
-                    ->label('Status')
-                    ->sortable(),
+                    TextColumn::make('base_uom')
+                        ->label('Base UoM')
+                        ->searchable(isIndividual: true, isGlobal: false)
+                        ->copyable()
+                        ->copyableState(function ($state) {
+                            return ($state);
+                        })
+                        ->copyMessage('Tersalin')
+                        ->sortable(),
 
-                TextColumn::make('created_by')
-                    ->label('Created by')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
+                    TextColumn::make('weight_unit')
+                        ->label('Weight Unit')
+                        ->searchable(isIndividual: true, isGlobal: false)
+                        ->copyable()
+                        ->copyableState(function ($state) {
+                            return ($state);
+                        })
+                        ->copyMessage('Tersalin')
+                        ->sortable(),
 
-                TextColumn::make('updated_by')
-                    ->label('Updated by')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
+                    TextColumn::make('gross_weight')
+                        ->label('Gross Weight')
+                        ->searchable(isIndividual: true, isGlobal: false)
+                        ->copyable()
+                        ->copyableState(function ($state) {
+                            return ($state);
+                        })
+                        ->copyMessage('Tersalin')
+                        ->sortable(),
 
-                TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    TextColumn::make('net_weight')
+                        ->label('Net Weight')
+                        ->searchable(isIndividual: true, isGlobal: false)
+                        ->copyable()
+                        ->copyableState(function ($state) {
+                            return ($state);
+                        })
+                        ->copyMessage('Tersalin')
+                        ->sortable(),
 
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                ]),
+
+                ColumnGroup::make('Deletion Flag', [
+
+                    IconColumn::make('deletion_flag')
+                        ->label('Deletion Flag')
+                        ->boolean()
+                        ->sortable(),
+
+                ]),
+
+                ColumnGroup::make('Status', [
+
+                    IconColumn::make('is_active')
+                        ->label('Status')
+                        ->boolean()
+                        ->sortable(),
+
+                ]),
+
+                ColumnGroup::make('Logs', [
+
+                    TextColumn::make('created_by')
+                        ->label('Created by')
+                        ->copyable()
+                        ->copyableState(function ($state) {
+                            return ($state);
+                        })
+                        ->copyMessage('Tersalin')
+                        ->sortable(),
+
+                    TextColumn::make('updated_by')
+                        ->label('Updated by')
+                        ->copyable()
+                        ->copyableState(function ($state) {
+                            return ($state);
+                        })
+                        ->copyMessage('Tersalin')
+                        ->sortable(),
+
+                    TextColumn::make('created_at')
+                        ->dateTime()
+                        ->sortable()
+                        ->toggleable(isToggledHiddenByDefault: true),
+
+                    TextColumn::make('updated_at')
+                        ->dateTime()
+                        ->sortable()
+                        ->toggleable(isToggledHiddenByDefault: true),
+
+                ]),
+
             ])
             ->recordUrl(null)
             ->searchOnBlur()
             ->filters([
                 QueryBuilder::make()
+                    ->constraintPickerColumns(1)
                     ->constraints([
 
                         TextConstraint::make('material_master')
@@ -396,12 +441,36 @@ class MaterialmasterResource extends Resource
                             ->label('Description')
                             ->nullable(),
 
-                        BooleanConstraint::make('is_active'),
+                        BooleanConstraint::make('deletion_flag')
+                            ->label('Deletion Flag')
+                            ->icon(false)
+                            ->nullable(),
 
-                    ])
-                    ->constraintPickerColumns(2),
-            ], layout: Tables\Enums\FiltersLayout::AboveContentCollapsible)
-            ->deferFilters()
+                        BooleanConstraint::make('is_active')
+                            ->label('Status')
+                            ->icon(false)
+                            ->nullable(),
+
+                        TextConstraint::make('created_by')
+                            ->label('Created by')
+                            ->icon(false)
+                            ->nullable(),
+
+                        TextConstraint::make('updated_by')
+                            ->label('Updated by')
+                            ->icon(false)
+                            ->nullable(),
+
+                        DateConstraint::make('created_at')
+                            ->icon(false)
+                            ->nullable(),
+
+                        DateConstraint::make('updated_at')
+                            ->icon(false)
+                            ->nullable(),
+
+                    ]),
+            ])
             ->headerActions([
                 Tables\Actions\CreateAction::make(),
             ])
@@ -415,6 +484,10 @@ class MaterialmasterResource extends Resource
                         ->form([
 
                             TextInput::make('material_number')
+                                ->unique(Materialmaster::class, modifyRuleUsing: function (Unique $rule) {
+
+                                    return $rule->where('is_external', true);
+                                })
                                 ->hidden(fn(Get $get) => $get('is_external') === 0),
                         ])
                         ->beforeReplicaSaved(function (Model $replica): void {

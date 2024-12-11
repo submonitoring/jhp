@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- *
+ * 
  *
  * @property int $id
  * @property string|null $storage_condition
@@ -28,6 +28,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Storagecondition whereStorageConditionDesc($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Storagecondition whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Storagecondition whereUpdatedBy($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Materialstoragelocation> $materialstoragelocations
+ * @property-read int|null $materialstoragelocations_count
  * @mixin \Eloquent
  */
 class Storagecondition extends Model

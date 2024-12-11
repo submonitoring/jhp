@@ -9,6 +9,8 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Pages\ManageRelatedRecords;
 use Filament\Tables;
+use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Actions\DetachBulkAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Filters\QueryBuilder;
@@ -17,6 +19,7 @@ use Filament\Tables\Filters\QueryBuilder\Constraints\TextConstraint;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Session;
 
 class ManageDocumenttype extends ManageRelatedRecords
 {
@@ -28,9 +31,14 @@ class ManageDocumenttype extends ManageRelatedRecords
 
     protected static ?string $navigationIcon = 'heroicon-o-arrow-right-end-on-rectangle';
 
+    public function getTitle(): string
+    {
+        return __('Assignment ' . $this->getOwnerRecord()->nr_interval . ' ' . $this->getOwnerRecord()->nr_name . ' to ' . $this->getNavigationLabel());
+    }
+
     public static function getNavigationLabel(): string
     {
-        return 'Document Types -> Number Range';
+        return 'Document Types';
     }
 
     public function form(Form $form): Form
@@ -150,19 +158,46 @@ class ManageDocumenttype extends ManageRelatedRecords
             ], layout: Tables\Enums\FiltersLayout::AboveContentCollapsible)
             ->deferFilters()
             ->headerActions([
-                Tables\Actions\CreateAction::make(),
+                // Tables\Actions\CreateAction::make()
+                //     ->label('Back to ' . $this->PrevLabel())
+                //     // ->url(function (){
+                //     //     dd($this->getOwnerRecord());
+                //     // }),
+                //     ->url(fn(): string => route('filament.submonitoring.number-range.resources.nrobjects.managenumberranges', $this->getOwnerRecord()->nrobject_id)),
+
+                // Tables\Actions\CreateAction::make()
+                // ->label(dd($this->getResource()::getUrl('edit', [$this->getOwnerRecord()->id]))),
+
+                Tables\Actions\CreateAction::make()
+                    ->label('New Document Type')
+                    ->modalCloseButton(false)
+                    ->modalHeading(' ')
+                    ->modalWidth('full')
+                    ->button()
+                    ->closeModalByClickingAway(false),
                 Tables\Actions\AssociateAction::make()
-                    ->recordSelectOptionsQuery(fn(Builder $query) => $query->where('numberrange_id', null)),
+                    ->recordSelectOptionsQuery(fn(Builder $query) => $query->where('is_active', true)->where('numberrange_id', null))
+                    ->preloadRecordSelect()
+                    ->multiple(),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DissociateAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                ActionGroup::make([
+                    Tables\Actions\EditAction::make()
+                        ->label('Edit')
+                        ->modalCloseButton(false)
+                        ->modalHeading(' ')
+                        ->modalWidth('full')
+                        // ->button()
+                        ->closeModalByClickingAway(false),
+                    Tables\Actions\DissociateAction::make(),
+                    Tables\Actions\DeleteAction::make(),
+                ]),
+
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DissociateBulkAction::make(),
                     Tables\Actions\DeleteBulkAction::make(),
+                    DetachBulkAction::make(),
                 ]),
             ]);
     }

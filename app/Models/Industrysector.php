@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- *
+ * 
  *
  * @property int $id
  * @property string|null $industry_sector
@@ -28,6 +28,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Industrysector whereIsActive($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Industrysector whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Industrysector whereUpdatedBy($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Materialmaster> $materialmasters
+ * @property-read int|null $materialmasters_count
  * @mixin \Eloquent
  */
 class Industrysector extends Model

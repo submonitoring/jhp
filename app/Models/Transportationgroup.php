@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- *
+ * 
  *
  * @property int $id
  * @property string|null $transportation_group
@@ -28,6 +28,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Transportationgroup whereTransportationGroupDesc($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Transportationgroup whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Transportationgroup whereUpdatedBy($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Materialplant> $materialplants
+ * @property-read int|null $materialplants_count
  * @mixin \Eloquent
  */
 class Transportationgroup extends Model

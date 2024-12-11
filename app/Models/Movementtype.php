@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string|null $movement_type
@@ -52,6 +52,16 @@ class Movementtype extends Model
     public function reasonformovementcontrol()
     {
         return $this->belongsTo(Reasonformovementcontrol::class);
+    }
+
+    public function materialdocumentitems()
+    {
+        return $this->hasMany(Materialdocumentitem::class);
+    }
+
+    public function stocktype()
+    {
+        return $this->belongsTo(Stocktype::class);
     }
 
     public function reasonformovements()

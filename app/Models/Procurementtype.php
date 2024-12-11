@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- *
+ * 
  *
  * @property int $id
  * @property string|null $procurement_type
@@ -28,6 +28,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Procurementtype whereProcurementTypeDesc($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Procurementtype whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Procurementtype whereUpdatedBy($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Materialplant> $materialplants
+ * @property-read int|null $materialplants_count
  * @mixin \Eloquent
  */
 class Procurementtype extends Model

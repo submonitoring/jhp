@@ -20,6 +20,14 @@ return new class extends Migration
             $table->string('address_number', 10)
                 ->nullable()
                 ->unique();
+            $table->foreignId('bpcategory_id')->nullable()
+                ->constrained()
+                ->cascadeOnUpdate()
+                ->nullOnDelete();
+            $table->foreignId('title_id')->nullable()
+                ->constrained()
+                ->cascadeOnUpdate()
+                ->nullOnDelete();
             $table->foreignId('country_id')->nullable()
                 ->constrained()
                 ->cascadeOnUpdate()

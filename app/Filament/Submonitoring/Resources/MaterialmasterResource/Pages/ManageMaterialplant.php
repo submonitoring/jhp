@@ -2,7 +2,9 @@
 
 namespace App\Filament\Submonitoring\Resources\MaterialmasterResource\Pages;
 
+use App\Filament\Submonitoring\Clusters\MaterialMasterData;
 use App\Filament\Submonitoring\Resources\MaterialmasterResource;
+use App\Models\Currency;
 use App\Models\Cyclecounting;
 use App\Models\Loadinggroup;
 use App\Models\Materialplant;
@@ -12,6 +14,7 @@ use App\Models\Procurementtype;
 use App\Models\Specialprocurementtype;
 use App\Models\Transportationgroup;
 use Filament\Actions;
+use Filament\Actions\Action;
 use Filament\Forms;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Grid;
@@ -20,11 +23,14 @@ use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\ToggleButtons;
 use Filament\Forms\Form;
 use Filament\Forms\Set;
 use Filament\Resources\Pages\ManageRelatedRecords;
+use Filament\Support\Enums\ActionSize;
 use Filament\Tables;
 use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Actions\AttachAction;
 use Filament\Tables\Columns\ColumnGroup;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
@@ -36,6 +42,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\HtmlString;
+use League\Csv\Serializer\CastToArray;
 use Schmeits\FilamentCharacterCounter\Forms\Components\TextInput;
 
 class ManageMaterialplant extends ManageRelatedRecords
@@ -48,9 +55,11 @@ class ManageMaterialplant extends ManageRelatedRecords
 
     protected static ?string $navigationIcon = 'heroicon-o-arrow-right-end-on-rectangle';
 
+    protected static ?string $cluster = MaterialMasterData::class;
+
     public function getTitle(): string
     {
-        return __('Extend ' . $this->getOwnerRecord()->material_number);
+        return __('Extend ' . $this->getOwnerRecord()->material_number . ' to Plant');
     }
 
     public static function getNavigationLabel(): string
@@ -104,27 +113,33 @@ class ManageMaterialplant extends ManageRelatedRecords
                                     ->required()
                                     ->inlineLabel()
                                     ->live()
-                                    ->options(Plant::whereIsActive(1)->pluck('plant', 'id'))
                                     ->disabledOn('edit')
-                                    ->afterStateUpdated(function (Set $set, $state) {
+                                    ->options(function () {
 
-                                        $materialnumber = $this->getOwnerRecord()->material_number;
+                                        $materialmaster = $this->getOwnerRecord()->id;
 
-                                        $plant = Plant::whereId($state)->first();
+                                        $querytomaterialplant = Materialplant::where('materialmaster_id', $materialmaster)->pluck('plant_id')->toArray();
 
-                                        if ($state === null) {
+
+                                        if ($querytomaterialplant == null) {
+                                            return (Plant::whereIsActive(1)->pluck('plant', 'id'));
+                                        } elseif ($querytomaterialplant != null) {
+
+                                            return (Plant::whereIsActive(1)
+                                                ->whereNotIn('id', $querytomaterialplant)->pluck('plant', 'id'));
+                                        }
+                                    })
+                                    ->helperText(function ($state) {
+
+                                        $plantname = Plant::whereId($state)->first();
+
+                                        if ($plantname == null) {
                                             return;
-                                        } else {
+                                        } elseif ($plantname != null) {
 
-                                            $set('slug', 'Extend ' . $materialnumber . ' to Plant: ' . $plant->plant);
+                                            return ($plantname->plant . ' - ' . $plantname->plant_name);
                                         }
                                     }),
-
-                                TextInput::make('slug')
-                                    ->label('Extend Status')
-                                    ->unique(Materialplant::class, ignoreRecord: true)
-                                    ->disabled()
-                                    ->dehydrated(),
 
                             ]),
                     ])
@@ -222,16 +237,18 @@ class ManageMaterialplant extends ManageRelatedRecords
 
                 Section::make('Status')
                     ->schema([
+
                         Grid::make(4)
                             ->schema([
 
-                                Toggle::make('is_active')
-                                    ->label('Status')
+                                ToggleButtons::make('is_active')
+                                    ->label('Active?')
+                                    ->boolean()
+                                    ->grouped()
                                     ->default(true),
 
                             ]),
-
-                    ])
+                    ])->collapsible()
                     ->compact(),
 
 
@@ -485,7 +502,7 @@ class ManageMaterialplant extends ManageRelatedRecords
                     ->modalWidth('full')
                     ->button()
                     ->closeModalByClickingAway(false),
-                // Tables\Actions\AttachAction::make(),
+
             ])
             ->actions([
                 ActionGroup::make([
@@ -497,7 +514,22 @@ class ManageMaterialplant extends ManageRelatedRecords
                         ->closeModalByClickingAway(false),
                     // Tables\Actions\DetachAction::make(),
                     // Tables\Actions\DeleteAction::make(),
+                ]),
+
+                ActionGroup::make([
+                    Action::make('Extend')
+                        ->label('Extend to S.Loc')
+                        ->icon('heroicon-m-arrow-right-start-on-rectangle')
+                        ->url(fn(Materialplant $record): string => route('filament.submonitoring.material-master-data.resources.materialplants.managematerialstoragelocation', $record)),
                 ])
+                    ->label('Extend')
+                    ->icon('heroicon-m-arrow-right-start-on-rectangle')
+                    ->size(ActionSize::Small)
+                    ->outlined()
+                    ->button(),
+
+
+
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- *
+ * 
  *
  * @property int $id
  * @property string|null $item_category_group
@@ -28,6 +28,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Itemcategorygroup whereItemCategoryGroupDesc($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Itemcategorygroup whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Itemcategorygroup whereUpdatedBy($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Materialmaster> $materialmasters
+ * @property-read int|null $materialmasters_count
  * @mixin \Eloquent
  */
 class Itemcategorygroup extends Model

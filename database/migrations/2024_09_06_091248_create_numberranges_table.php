@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('nr_interval', 4)
                 ->nullable()
                 ->unique();
+            $table->string('nr_name')->nullable();
             $table->string('con')
                 ->nullable()
                 ->unique();

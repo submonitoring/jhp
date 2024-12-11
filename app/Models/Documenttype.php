@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property int|null $numberrange_id
@@ -55,6 +55,11 @@ class Documenttype extends Model
     public function documenttypes()
     {
         return $this->hasMany(Documenttype::class);
+    }
+
+    public function materialdocumentheaders()
+    {
+        return $this->hasMany(Materialdocumentheader::class);
     }
 
     public static function boot()

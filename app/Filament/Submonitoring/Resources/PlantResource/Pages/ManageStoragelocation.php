@@ -9,6 +9,7 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Pages\ManageRelatedRecords;
 use Filament\Tables;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Filters\QueryBuilder;
@@ -28,9 +29,14 @@ class ManageStoragelocation extends ManageRelatedRecords
 
     protected static ?string $navigationIcon = 'heroicon-o-arrow-right-end-on-rectangle';
 
+    public function getTitle(): string
+    {
+        return __('Assignment ' . $this->getOwnerRecord()->plant . ' to ' . $this->getNavigationLabel());
+    }
+
     public static function getNavigationLabel(): string
     {
-        return 'Storage Location -> Plant';
+        return 'Storage Location';
     }
 
     public function form(Form $form): Form
@@ -40,104 +46,29 @@ class ManageStoragelocation extends ManageRelatedRecords
 
     public function table(Table $table): Table
     {
-        return $table
+        return StoragelocationResource::table($table)
             ->recordTitleAttribute('storage_location')
             ->inverseRelationship('plant')
-            ->columns([
-
-                TextColumn::make('plant.plant')
-                    ->label('Plant')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
-
-                TextColumn::make('storage_location')
-                    ->label('Storage Location')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
-
-                TextColumn::make('storage_location_name')
-                    ->label('Name')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
-
-                ToggleColumn::make('is_active')
-                    ->label('Status')
-                    ->sortable(),
-
-                TextColumn::make('created_by')
-                    ->label('Created by')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
-
-                TextColumn::make('updated_by')
-                    ->label('Updated by')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
-
-                TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-            ])
-            ->recordUrl(null)
-            ->searchOnBlur()
-            ->filters([
-                QueryBuilder::make()
-                    ->constraints([
-
-                        TextConstraint::make('storage_location')
-                            ->label('Storage Locaton')
-                            ->nullable(),
-
-                        TextConstraint::make('storage_location_name')
-                            ->label('Name')
-                            ->nullable(),
-
-                        BooleanConstraint::make('is_active'),
-
-                    ])
-                    ->constraintPickerColumns(2),
-            ], layout: Tables\Enums\FiltersLayout::AboveContentCollapsible)
-            ->deferFilters()
             ->headerActions([
-                Tables\Actions\CreateAction::make(),
+                Tables\Actions\CreateAction::make()
+                    ->label('New ' . $this->getNavigationLabel())
+                    ->modalCloseButton(false)
+                    ->modalHeading(' ')
+                    ->modalWidth('full')
+                    ->button()
+                    ->closeModalByClickingAway(false),
                 Tables\Actions\AssociateAction::make()
-                ->recordSelectOptionsQuery(fn(Builder $query) => $query->where('plant_id', null)),
+                    ->recordSelectOptionsQuery(fn(Builder $query) => $query->where('is_active', true)->where('plant_id', null))
+                    ->preloadRecordSelect()
+                    ->multiple(),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DissociateAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                ActionGroup::make([
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\DissociateAction::make(),
+                    Tables\Actions\DeleteAction::make(),
+                ]),
+
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

@@ -10,6 +10,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Pages\ManageRelatedRecords;
 use Filament\Tables;
 use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Actions\DetachBulkAction;
 use Filament\Tables\Columns\ColumnGroup;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
@@ -34,12 +35,12 @@ class ManageTitles extends ManageRelatedRecords
 
     public function getTitle(): string
     {
-        return __($this->getOwnerRecord()->bpcategory_desc . ' Title Assignment');
+        return __('Assignment ' . $this->getOwnerRecord()->bpcategory_desc . ' to ' . $this->getNavigationLabel());
     }
 
     public static function getNavigationLabel(): string
     {
-        return 'Title -> Business Partner Category';
+        return 'Title';
     }
 
     public function form(Form $form): Form
@@ -51,9 +52,10 @@ class ManageTitles extends ManageRelatedRecords
     {
         return TitleResource::table($table)
             ->recordTitleAttribute('title')
+            ->inverseRelationship('bpcategories')
             ->headerActions([
                 Tables\Actions\CreateAction::make()
-                    ->label('Create & Assign Title')
+                    ->label('New ' . $this->getNavigationLabel())
                     ->modalCloseButton(false)
                     ->modalHeading(' ')
                     ->modalWidth('full')
@@ -71,11 +73,16 @@ class ManageTitles extends ManageRelatedRecords
                         ->modalCloseButton(false)
                         ->modalHeading(' ')
                         ->modalWidth('full')
-                        // ->button()
                         ->closeModalByClickingAway(false),
                     Tables\Actions\DetachAction::make(),
                     Tables\Actions\DeleteAction::make(),
                 ])
+            ])
+            ->bulkActions([
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DissociateBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make(),
+                ]),
             ]);
     }
 }

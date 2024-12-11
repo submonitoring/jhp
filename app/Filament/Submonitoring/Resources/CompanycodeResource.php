@@ -19,6 +19,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Tabs;
 use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\ToggleButtons;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
@@ -98,9 +99,7 @@ class CompanycodeResource extends Resource
 
                         ]),
 
-
-
-                ])->collapsible()
+                ])
                 ->compact(),
 
             Section::make('Data')
@@ -125,17 +124,19 @@ class CompanycodeResource extends Resource
 
                         ]),
 
-                ])->collapsible()
+                ])
                 ->compact(),
 
             Section::make('Status')
                 ->schema([
 
-                    Grid::make(4)
+                    Grid::make(2)
                         ->schema([
 
-                            Toggle::make('is_active')
-                                ->label('Is Active?')
+                            ToggleButtons::make('is_active')
+                                ->label('Active?')
+                                ->boolean()
+                                ->grouped()
                                 ->default(true),
 
                         ]),
@@ -350,7 +351,6 @@ class CompanycodeResource extends Resource
     public static function getRecordSubNavigation(Page $page): array
     {
         return $page->generateNavigationItems([
-            ListCompanycodes::class,
             ManagePlant::class,
         ]);
     }

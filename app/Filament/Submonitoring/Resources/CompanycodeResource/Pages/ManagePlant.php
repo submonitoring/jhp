@@ -4,11 +4,14 @@ namespace App\Filament\Submonitoring\Resources\CompanycodeResource\Pages;
 
 use App\Filament\Submonitoring\Resources\CompanycodeResource;
 use App\Filament\Submonitoring\Resources\PlantResource;
+use App\Models\Plant;
 use Filament\Actions;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Pages\ManageRelatedRecords;
+use Filament\Support\Enums\ActionSize;
 use Filament\Tables;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
@@ -31,12 +34,12 @@ class ManagePlant extends ManageRelatedRecords
 
     public function getTitle(): string
     {
-        return __($this->getOwnerRecord()->company_code . ' Plant Assignment');
+        return __('Assignment ' . $this->getOwnerRecord()->company_code . ' to ' . $this->getNavigationLabel());
     }
 
     public static function getNavigationLabel(): string
     {
-        return 'Plant -> Company Code';
+        return 'Plant';
     }
 
     public function form(Form $form): Form
@@ -46,105 +49,21 @@ class ManagePlant extends ManageRelatedRecords
 
     public function table(Table $table): Table
     {
-        return $table
+        return PlantResource::table($table)
             ->recordTitleAttribute('plant')
             ->inverseRelationship('companycode')
-            ->columns([
-
-                TextColumn::make('companycode.company_code')
-                    ->label('Company Code')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
-
-                TextColumn::make('plant')
-                    ->label('Plant')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
-
-                TextColumn::make('plant_name')
-                    ->label('Description')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
-
-                ToggleColumn::make('is_active')
-                    ->label('Status')
-                    ->sortable(),
-
-                TextColumn::make('created_by')
-                    ->label('Created by')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
-
-                TextColumn::make('updated_by')
-                    ->label('Updated by')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
-
-                TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-            ])
-            ->recordUrl(null)
-            ->searchOnBlur()
-            ->filters([
-                QueryBuilder::make()
-                    ->constraints([
-
-                        TextConstraint::make('plant')
-                            ->label('Plant')
-                            ->nullable(),
-
-                        TextConstraint::make('plant_name')
-                            ->label('Description')
-                            ->nullable(),
-
-                        BooleanConstraint::make('is_active'),
-
-                    ])
-                    ->constraintPickerColumns(2),
-            ], layout: Tables\Enums\FiltersLayout::AboveContentCollapsible)
-            ->deferFilters()
             ->headerActions([
                 Tables\Actions\CreateAction::make()
-                    ->label('Create & Assign Plant')
+                    ->label('New ' . $this->getNavigationLabel())
                     ->modalCloseButton(false)
                     ->modalHeading(' ')
                     ->modalWidth('full')
                     ->button()
                     ->closeModalByClickingAway(false),
                 Tables\Actions\AssociateAction::make()
-                    ->recordSelectOptionsQuery(fn(Builder $query) => $query->where('companycode_id', null)),
+                    ->recordSelectOptionsQuery(fn(Builder $query) => $query->where('is_active', true)->where('companycode_id', null))
+                    ->preloadRecordSelect()
+                    ->multiple(),
             ])
             ->actions([
                 ActionGroup::make([
@@ -153,11 +72,27 @@ class ManagePlant extends ManageRelatedRecords
                         ->modalCloseButton(false)
                         ->modalHeading(' ')
                         ->modalWidth('full')
-                        ->button()
                         ->closeModalByClickingAway(false),
                     Tables\Actions\DissociateAction::make(),
                     Tables\Actions\DeleteAction::make(),
+                ]),
+                ActionGroup::make([
+                    Action::make('AssignSLoc')
+                        ->label('Assign S.Loc')
+                        ->icon('heroicon-m-arrow-right-end-on-rectangle')
+                        ->url(fn(Plant $record): string => route('filament.submonitoring.organizational-structures.resources.plants.managestoragelocation', $record)),
+
+                    Action::make('AssignCycleCounting')
+                        ->label('Assign Cycle Counting')
+                        ->icon('heroicon-m-arrow-right-end-on-rectangle')
+                        ->url(fn(Plant $record): string => route('filament.submonitoring.organizational-structures.resources.plants.managecyclecounting', $record)),
                 ])
+                    ->label('Assignment')
+                    ->icon('heroicon-m-arrow-right-end-on-rectangle')
+                    ->size(ActionSize::Small)
+                    ->outlined()
+                    ->button(),
+
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

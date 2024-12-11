@@ -30,6 +30,10 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Uom whereUomName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Uom whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Uom whereUpdatedBy($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Materialmaster> $materialmasters
+ * @property-read int|null $materialmasters_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Materialmaster> $materialmasters2
+ * @property-read int|null $materialmasters2_count
  * @mixin \Eloquent
  */
 class Uom extends Model
@@ -44,6 +48,11 @@ class Uom extends Model
     public function materialmasters2()
     {
         return $this->hasMany(Materialmaster::class, 'weight_unit');
+    }
+
+    public function materialdocumentitems()
+    {
+        return $this->hasMany(Materialdocumentitem::class);
     }
 
     public static function boot()

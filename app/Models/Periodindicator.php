@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- *
+ * 
  *
  * @property int $id
  * @property string|null $period_indicator
@@ -28,6 +28,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Periodindicator wherePeriodIndicatorDesc($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Periodindicator whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Periodindicator whereUpdatedBy($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Materialplant> $materialplants
+ * @property-read int|null $materialplants_count
  * @mixin \Eloquent
  */
 class Periodindicator extends Model

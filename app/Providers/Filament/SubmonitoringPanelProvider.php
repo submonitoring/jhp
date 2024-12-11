@@ -39,6 +39,7 @@ class SubmonitoringPanelProvider extends PanelProvider
                 'success' => Color::Emerald,
                 'warning' => Color::Orange,
             ])
+            ->font('SF Pro Display')
             ->discoverResources(in: app_path('Filament/Submonitoring/Resources'), for: 'App\\Filament\\Submonitoring\\Resources')
             ->discoverPages(in: app_path('Filament/Submonitoring/Pages'), for: 'App\\Filament\\Submonitoring\\Pages')
             ->discoverClusters(in: app_path('Filament/Submonitoring/Clusters'), for: 'App\\Filament\\Submonitoring\\Clusters')
@@ -116,6 +117,7 @@ class SubmonitoringPanelProvider extends PanelProvider
             ->unsavedChangesAlerts()
             ->databaseNotifications()
             // ->topNavigation()
+            // ->breadcrumbs(false)
             ->maxContentWidth(MaxWidth::Full)
             ->userMenuItems([
                 MenuItem::make()
@@ -132,6 +134,7 @@ class SubmonitoringPanelProvider extends PanelProvider
                         fn() => auth()->user()->id === 1
                     ),
                 ResourceLockPlugin::make()
-            ]);
+            ])
+            ->viteTheme('resources/css/filament/submonitoring/theme.css');
     }
 }

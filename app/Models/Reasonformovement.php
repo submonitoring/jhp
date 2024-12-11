@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string|null $reason_for_movement
@@ -35,6 +35,11 @@ use Illuminate\Database\Eloquent\Model;
 class Reasonformovement extends Model
 {
     use HasFactory;
+
+    public function materialdocumentitems()
+    {
+        return $this->hasMany(Materialdocumentitem::class);
+    }
 
     public function movementtypes()
     {

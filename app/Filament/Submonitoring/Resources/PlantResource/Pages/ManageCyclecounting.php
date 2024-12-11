@@ -9,6 +9,7 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Pages\ManageRelatedRecords;
 use Filament\Tables;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Filters\QueryBuilder;
@@ -28,9 +29,14 @@ class ManageCyclecounting extends ManageRelatedRecords
 
     protected static ?string $navigationIcon = 'heroicon-o-arrow-right-end-on-rectangle';
 
+    public function getTitle(): string
+    {
+        return __('Assignment ' . $this->getOwnerRecord()->plant . ' to ' . $this->getNavigationLabel());
+    }
+
     public static function getNavigationLabel(): string
     {
-        return 'Cycle Counting -> Plant';
+        return 'Cycle Counting';
     }
 
     public function form(Form $form): Form
@@ -40,116 +46,33 @@ class ManageCyclecounting extends ManageRelatedRecords
 
     public function table(Table $table): Table
     {
-        return $table
+        return CyclecountingResource::table($table)
             ->recordTitleAttribute('number_per_year')
-            ->columns([
-
-                TextColumn::make('plants.plant')
-                    ->label('Plant')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
-
-                TextColumn::make('cycle_counting')
-                    ->label('Cycle Counting')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
-
-                TextColumn::make('cycle_counting_desc')
-                    ->label('Name')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
-
-                TextColumn::make('number_per_year')
-                    ->label('Number per Year')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
-
-                ToggleColumn::make('is_active')
-                    ->label('Status')
-                    ->sortable(),
-
-                TextColumn::make('created_by')
-                    ->label('Created by')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
-
-                TextColumn::make('updated_by')
-                    ->label('Updated by')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
-
-                TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-            ])
-            ->recordUrl(null)
-            ->searchOnBlur()
-            ->filters([
-                QueryBuilder::make()
-                    ->constraints([
-
-                        TextConstraint::make('cycle_counting')
-                            ->label('Storage Locaton')
-                            ->nullable(),
-
-                        TextConstraint::make('cycle_counting_desc')
-                            ->label('Name')
-                            ->nullable(),
-
-                        TextConstraint::make('number_per_year')
-                            ->label('Number per Year')
-                            ->nullable(),
-
-                        BooleanConstraint::make('is_active'),
-
-                    ])
-                    ->constraintPickerColumns(2),
-            ], layout: Tables\Enums\FiltersLayout::AboveContentCollapsible)
-            ->deferFilters()
+            ->inverseRelationship('plants')
             ->headerActions([
-                Tables\Actions\CreateAction::make(),
-                Tables\Actions\AttachAction::make(),
+                Tables\Actions\CreateAction::make()
+                    ->label('New ' . $this->getNavigationLabel())
+                    ->modalCloseButton(false)
+                    ->modalHeading(' ')
+                    ->modalWidth('full')
+                    ->button()
+                    ->closeModalByClickingAway(false),
+                Tables\Actions\AttachAction::make()
+                    ->recordSelectOptionsQuery(fn(Builder $query) => $query->where('is_active', true))
+                    ->preloadRecordSelect()
+                    ->multiple(),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DetachAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                ActionGroup::make([
+                    Tables\Actions\EditAction::make()
+                        ->label('Edit')
+                        ->modalCloseButton(false)
+                        ->modalHeading(' ')
+                        ->modalWidth('full')
+                        ->closeModalByClickingAway(false),
+                    Tables\Actions\DetachAction::make(),
+                    Tables\Actions\DeleteAction::make(),
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

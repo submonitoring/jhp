@@ -18,6 +18,7 @@ use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\ToggleButtons;
 use Filament\Forms\Form;
 use Filament\Forms\Set;
 use Filament\Resources\Pages\ManageRelatedRecords;
@@ -70,7 +71,7 @@ class ManageMaterialstoragelocation extends ManageRelatedRecords
                 Section::make()
                     ->schema([
 
-                        Grid::make(2)
+                        Grid::make(4)
                             ->schema([
 
                                 Placeholder::make('')
@@ -135,29 +136,38 @@ class ManageMaterialstoragelocation extends ManageRelatedRecords
                                     ->label('Extend Material to Storage Location')
                                     ->required()
                                     ->live()
-                                    ->options(Storagelocation::whereIsActive(1)->wherePlantId($this->getOwnerRecord()->plant_id)->pluck('storage_location', 'id'))
                                     ->disabledOn('edit')
-                                    ->afterStateUpdated(function (Set $set, $state) {
+                                    ->options(function () {
 
-                                        $material = Materialmaster::whereId($this->getOwnerRecord()->materialmaster_id)->first();
+                                        $materialmaster = $this->getOwnerRecord()->materialmaster_id;
 
-                                        $plant = Plant::whereId($this->getOwnerRecord()->plant_id)->first();
+                                        $plant = $this->getOwnerRecord()->plant_id;
 
-                                        $storagelocation = Storagelocation::whereId($state)->first();
+                                        $query = Materialstoragelocation::where('materialmaster_id', $materialmaster)
+                                            ->where('plant_id', $plant)->pluck('storagelocation_id')->toArray();
 
-                                        if ($state === null) {
-                                            $set('slug', null);
-                                        } else {
+                                        // dd($query);
 
-                                            $set('slug', 'Extend ' . $material->material_number . ' to Plant: ' . $plant->plant . ' Strg. Loc: ' . $storagelocation->storage_location);
+
+                                        if ($query == null) {
+                                            return (Storagelocation::whereIsActive(1)->pluck('storage_location', 'id'));
+                                        } elseif ($query != null) {
+
+                                            return (Storagelocation::whereIsActive(1)
+                                                ->whereNotIn('id', $query)->pluck('storage_location', 'id'));
+                                        }
+                                    })
+                                    ->helperText(function ($state) {
+
+                                        $storagelocationname = Storagelocation::whereId($state)->first();
+
+                                        if ($storagelocationname == null) {
+                                            return;
+                                        } elseif ($storagelocationname != null) {
+
+                                            return ($storagelocationname->storage_location . ' - ' . $storagelocationname->storage_location_name);
                                         }
                                     }),
-
-                                TextInput::make('slug')
-                                    ->label('Extend Status')
-                                    ->unique(Materialstoragelocation::class, ignoreRecord: true)
-                                    ->disabled()
-                                    ->dehydrated(),
 
                             ]),
                     ])
@@ -186,18 +196,19 @@ class ManageMaterialstoragelocation extends ManageRelatedRecords
 
                 Section::make('Status')
                     ->schema([
+
                         Grid::make(4)
                             ->schema([
 
-                                Toggle::make('is_active')
-                                    ->label('Status')
+                                ToggleButtons::make('is_active')
+                                    ->label('Active?')
+                                    ->boolean()
+                                    ->grouped()
                                     ->default(true),
 
                             ]),
-
-                    ])
+                    ])->collapsible()
                     ->compact(),
-
 
             ]);
     }
@@ -366,7 +377,7 @@ class ManageMaterialstoragelocation extends ManageRelatedRecords
             ->deferFilters()
             ->headerActions([
                 Tables\Actions\CreateAction::make()
-                    ->label('Extend Material to Plant')
+                    ->label('Extend Material to Storage Location')
                     ->modalCloseButton(false)
                     ->modalHeading(' ')
                     ->modalWidth('full')

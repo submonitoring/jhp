@@ -7,9 +7,11 @@ use App\Filament\Submonitoring\Resources\StoragelocationResource\Pages;
 use App\Filament\Submonitoring\Resources\StoragelocationResource\RelationManagers;
 use App\Models\Storagelocation;
 use Filament\Forms;
+use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\ToggleButtons;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
@@ -17,10 +19,14 @@ use Filament\Pages\Page;
 use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Columns\CheckboxColumn;
+use Filament\Tables\Columns\ColumnGroup;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Filters\QueryBuilder;
 use Filament\Tables\Filters\QueryBuilder\Constraints\BooleanConstraint;
+use Filament\Tables\Filters\QueryBuilder\Constraints\DateConstraint;
 use Filament\Tables\Filters\QueryBuilder\Constraints\TextConstraint;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -51,32 +57,54 @@ class StoragelocationResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
-            ->schema([
 
-                Section::make('Input Data Storage Location')
-                    ->description('Silakan input data Storage Location')
-                    ->schema(static::StorageLocationFormSchema())
-                    ->columns(2)
-            ]);
+            ->schema(static::StorageLocationFormSchema());
     }
 
     public static function StorageLocationFormSchema(): array
     {
         return [
 
-            TextInput::make('storage_location')
-                ->label('Storage Location')
-                ->required()
-                ->maxLength(4)
-                ->unique(Storagelocation::class, ignoreRecord: true),
+            Section::make('Storage Location')
+                ->schema([
 
-            TextInput::make('storage_location_name')
-                ->label('Description')
-                ->required(),
+                    Grid::make(4)
+                        ->schema([
 
-            Toggle::make('is_active')
-                ->label('Status')
-                ->default(true),
+                            TextInput::make('storage_location')
+                                ->label('Storage Location')
+                                ->required()
+                                ->maxLength(4)
+                                ->unique(Storagelocation::class, ignoreRecord: true),
+
+                        ]),
+
+                    Grid::make(4)
+                        ->schema([
+
+                            TextInput::make('storage_location_name')
+                                ->label('Description')
+                                ->required(),
+
+                        ]),
+
+                ])->compact(),
+
+            Section::make('Status')
+                ->schema([
+
+                    Grid::make(4)
+                        ->schema([
+
+                            ToggleButtons::make('is_active')
+                                ->label('Active?')
+                                ->boolean()
+                                ->grouped()
+                                ->default(true),
+
+                        ]),
+                ])->collapsible()
+                ->compact(),
 
         ];
     }
@@ -86,74 +114,75 @@ class StoragelocationResource extends Resource
         return $table
             ->columns([
 
-                TextColumn::make('plant.plant')
-                    ->label('Plant')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
+                ColumnGroup::make('Storage Location', [
 
-                TextColumn::make('storage_location')
-                    ->label('Storage Location')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
+                    TextColumn::make('storage_location')
+                        ->label('Storage Location')
+                        ->searchable(isIndividual: true, isGlobal: false)
+                        ->copyable()
+                        ->copyableState(function ($state) {
+                            return ($state);
+                        })
+                        ->copyMessage('Tersalin')
+                        ->sortable(),
 
-                TextColumn::make('storage_location_name')
-                    ->label('Name')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
+                    TextColumn::make('storage_location_name')
+                        ->label('Name')
+                        ->searchable(isIndividual: true, isGlobal: false)
+                        ->copyable()
+                        ->copyableState(function ($state) {
+                            return ($state);
+                        })
+                        ->copyMessage('Tersalin')
+                        ->sortable(),
+                ]),
 
-                ToggleColumn::make('is_active')
-                    ->label('Status')
-                    ->sortable(),
+                ColumnGroup::make('Status', [
 
-                TextColumn::make('created_by')
-                    ->label('Created by')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
+                    CheckboxColumn::make('is_active')
+                        ->label('Status')
+                        ->sortable(),
 
-                TextColumn::make('updated_by')
-                    ->label('Updated by')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
+                ]),
 
-                TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                ColumnGroup::make('Logs', [
 
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    TextColumn::make('created_by')
+                        ->label('Created by')
+                        ->copyable()
+                        ->copyableState(function ($state) {
+                            return ($state);
+                        })
+                        ->copyMessage('Tersalin')
+                        ->sortable(),
+
+                    TextColumn::make('updated_by')
+                        ->label('Updated by')
+                        ->copyable()
+                        ->copyableState(function ($state) {
+                            return ($state);
+                        })
+                        ->copyMessage('Tersalin')
+                        ->sortable(),
+
+                    TextColumn::make('created_at')
+                        ->dateTime()
+                        ->sortable()
+                        ->toggleable(isToggledHiddenByDefault: true),
+
+                    TextColumn::make('updated_at')
+                        ->dateTime()
+                        ->sortable()
+                        ->toggleable(isToggledHiddenByDefault: true),
+
+                ]),
             ])
             ->recordUrl(null)
+            ->extremePaginationLinks()
             ->searchOnBlur()
             ->filters([
                 QueryBuilder::make()
+                    ->constraintPickerColumns(1)
                     ->constraints([
 
                         TextConstraint::make('storage_location')
@@ -164,15 +193,41 @@ class StoragelocationResource extends Resource
                             ->label('Name')
                             ->nullable(),
 
-                        BooleanConstraint::make('is_active'),
+                        BooleanConstraint::make('is_active')
+                            ->label('Status')
+                            ->icon(false)
+                            ->nullable(),
+
+                        TextConstraint::make('created_by')
+                            ->label('Created by')
+                            ->icon(false)
+                            ->nullable(),
+
+                        TextConstraint::make('updated_by')
+                            ->label('Updated by')
+                            ->icon(false)
+                            ->nullable(),
+
+                        DateConstraint::make('created_at')
+                            ->icon(false)
+                            ->nullable(),
+
+                        DateConstraint::make('updated_at')
+                            ->icon(false)
+                            ->nullable(),
 
                     ])
-                    ->constraintPickerColumns(2),
             ], layout: Tables\Enums\FiltersLayout::AboveContentCollapsible)
             ->deferFilters()
+            ->headerActions([
+                Tables\Actions\CreateAction::make(),
+            ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+                ActionGroup::make([
+                    Tables\Actions\ViewAction::make(),
+                    Tables\Actions\EditAction::make(),
+                ]),
+
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -197,6 +252,4 @@ class StoragelocationResource extends Resource
             'edit' => Pages\EditStoragelocation::route('/{record}/edit'),
         ];
     }
-
-    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 }

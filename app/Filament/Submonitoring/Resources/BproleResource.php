@@ -10,13 +10,16 @@ use Filament\Forms;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\ToggleButtons;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
+use Filament\Support\Enums\ActionSize;
 use Filament\Tables;
 use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Columns\CheckboxColumn;
 use Filament\Tables\Columns\ColumnGroup;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
@@ -74,14 +77,18 @@ class BproleResource extends Resource
                                 ->maxLength(6)
                                 ->unique(Bprole::class, ignoreRecord: true),
 
+                        ]),
+
+                    Grid::make(4)
+                        ->schema([
+
                             TextInput::make('bprole_desc')
                                 ->label('Description')
                                 ->required(),
 
                         ]),
 
-                ])->collapsible()
-                ->compact(),
+                ])->compact(),
 
             Section::make('Status')
                 ->schema([
@@ -89,8 +96,10 @@ class BproleResource extends Resource
                     Grid::make(4)
                         ->schema([
 
-                            Toggle::make('is_active')
-                                ->label('Is Active?')
+                            ToggleButtons::make('is_active')
+                                ->label('Active?')
+                                ->boolean()
+                                ->grouped()
                                 ->default(true),
 
                         ]),
@@ -127,9 +136,8 @@ class BproleResource extends Resource
 
                 ColumnGroup::make('Status', [
 
-                    IconColumn::make('is_active')
+                    CheckboxColumn::make('is_active')
                         ->label('Status')
-                        ->boolean()
                         ->sortable(),
 
                 ]),
@@ -167,6 +175,7 @@ class BproleResource extends Resource
                 ]),
             ])
             ->recordUrl(null)
+            ->extremePaginationLinks()
             ->searchOnBlur()
             ->filters([
                 QueryBuilder::make()
@@ -213,11 +222,10 @@ class BproleResource extends Resource
             ])
             ->actions([
                 ActionGroup::make([
-                    ActionGroup::make([
-                        Tables\Actions\ViewAction::make(),
-                        Tables\Actions\EditAction::make(),
-                    ])->dropdown(false),
+                    Tables\Actions\ViewAction::make(),
+                    Tables\Actions\EditAction::make(),
                 ]),
+
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

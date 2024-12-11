@@ -12,9 +12,11 @@ use App\Filament\Submonitoring\Resources\PlantResource\Pages\ViewPlant;
 use App\Filament\Submonitoring\Resources\PlantResource\RelationManagers;
 use App\Models\Plant;
 use Filament\Forms;
+use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\ToggleButtons;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
@@ -25,10 +27,13 @@ use Filament\Support\Enums\ActionSize;
 use Filament\Tables;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Columns\CheckboxColumn;
+use Filament\Tables\Columns\ColumnGroup;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Filters\QueryBuilder;
 use Filament\Tables\Filters\QueryBuilder\Constraints\BooleanConstraint;
+use Filament\Tables\Filters\QueryBuilder\Constraints\DateConstraint;
 use Filament\Tables\Filters\QueryBuilder\Constraints\TextConstraint;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -59,32 +64,54 @@ class PlantResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
-            ->schema([
 
-                Section::make('Input Data Plant')
-                    ->description('Silakan input data Plant')
-                    ->schema(static::PlantFormSchema())
-                    ->columns(2)
-            ]);
+            ->schema(static::PlantFormSchema());
     }
 
     public static function PlantFormSchema(): array
     {
         return [
 
-            TextInput::make('plant')
-                ->label('Plant')
-                ->required()
-                ->maxLength(4)
-                ->unique(Plant::class, ignoreRecord: true),
+            Section::make('Plant')
+                ->schema([
 
-            TextInput::make('plant_name')
-                ->label('Name')
-                ->required(),
+                    Grid::make(4)
+                        ->schema([
 
-            Toggle::make('is_active')
-                ->label('Status')
-                ->default(true),
+                            TextInput::make('plant')
+                                ->label('Plant')
+                                ->required()
+                                ->maxLength(4)
+                                ->unique(Plant::class, ignoreRecord: true),
+
+                        ]),
+
+                    Grid::make(4)
+                        ->schema([
+
+                            TextInput::make('plant_name')
+                                ->label('Name')
+                                ->required(),
+
+                        ]),
+
+                ])->compact(),
+
+            Section::make('Status')
+                ->schema([
+
+                    Grid::make(4)
+                        ->schema([
+
+                            ToggleButtons::make('is_active')
+                                ->label('Active?')
+                                ->boolean()
+                                ->grouped()
+                                ->default(true),
+
+                        ]),
+                ])->collapsible()
+                ->compact(),
 
         ];
     }
@@ -94,74 +121,75 @@ class PlantResource extends Resource
         return $table
             ->columns([
 
-                TextColumn::make('companycode.company_code')
-                    ->label('Company Code')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
 
-                TextColumn::make('plant')
-                    ->label('Plant')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
+                ColumnGroup::make('Plant', [
+                    TextColumn::make('plant')
+                        ->label('Plant')
+                        ->searchable(isIndividual: true, isGlobal: false)
+                        ->copyable()
+                        ->copyableState(function ($state) {
+                            return ($state);
+                        })
+                        ->copyMessage('Tersalin')
+                        ->sortable(),
 
-                TextColumn::make('plant_name')
-                    ->label('Name')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
+                    TextColumn::make('plant_name')
+                        ->label('Name')
+                        ->searchable(isIndividual: true, isGlobal: false)
+                        ->copyable()
+                        ->copyableState(function ($state) {
+                            return ($state);
+                        })
+                        ->copyMessage('Tersalin')
+                        ->sortable(),
+                ]),
 
-                ToggleColumn::make('is_active')
-                    ->label('Status')
-                    ->sortable(),
+                ColumnGroup::make('Status', [
 
-                TextColumn::make('created_by')
-                    ->label('Created by')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
+                    CheckboxColumn::make('is_active')
+                        ->label('Status')
+                        ->sortable(),
 
-                TextColumn::make('updated_by')
-                    ->label('Updated by')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
+                ]),
 
-                TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                ColumnGroup::make('Logs', [
 
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    TextColumn::make('created_by')
+                        ->label('Created by')
+                        ->copyable()
+                        ->copyableState(function ($state) {
+                            return ($state);
+                        })
+                        ->copyMessage('Tersalin')
+                        ->sortable(),
+
+                    TextColumn::make('updated_by')
+                        ->label('Updated by')
+                        ->copyable()
+                        ->copyableState(function ($state) {
+                            return ($state);
+                        })
+                        ->copyMessage('Tersalin')
+                        ->sortable(),
+
+                    TextColumn::make('created_at')
+                        ->dateTime()
+                        ->sortable()
+                        ->toggleable(isToggledHiddenByDefault: true),
+
+                    TextColumn::make('updated_at')
+                        ->dateTime()
+                        ->sortable()
+                        ->toggleable(isToggledHiddenByDefault: true),
+
+                ]),
             ])
             ->recordUrl(null)
+            ->extremePaginationLinks()
             ->searchOnBlur()
             ->filters([
                 QueryBuilder::make()
+                    ->constraintPickerColumns(1)
                     ->constraints([
 
                         TextConstraint::make('plant')
@@ -172,10 +200,30 @@ class PlantResource extends Resource
                             ->label('Name')
                             ->nullable(),
 
-                        BooleanConstraint::make('is_active'),
+                        BooleanConstraint::make('is_active')
+                            ->label('Status')
+                            ->icon(false)
+                            ->nullable(),
+
+                        TextConstraint::make('created_by')
+                            ->label('Created by')
+                            ->icon(false)
+                            ->nullable(),
+
+                        TextConstraint::make('updated_by')
+                            ->label('Updated by')
+                            ->icon(false)
+                            ->nullable(),
+
+                        DateConstraint::make('created_at')
+                            ->icon(false)
+                            ->nullable(),
+
+                        DateConstraint::make('updated_at')
+                            ->icon(false)
+                            ->nullable(),
 
                     ])
-                    ->constraintPickerColumns(2),
             ], layout: Tables\Enums\FiltersLayout::AboveContentCollapsible)
             ->deferFilters()
             ->headerActions([
@@ -233,12 +281,9 @@ class PlantResource extends Resource
     public static function getRecordSubNavigation(Page $page): array
     {
         return $page->generateNavigationItems([
-            ViewPlant::class,
-            EditPlant::class,
             ManageStoragelocation::class,
             ManageCyclecounting::class,
         ]);
     }
 
-    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 }

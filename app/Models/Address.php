@@ -110,6 +110,13 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Address whereTelephoneNumber2Ext($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Address whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Address whereUpdatedBy($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Businesspartner> $businesspartners
+ * @property-read int|null $businesspartners_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Companycode> $companycodes
+ * @property-read int|null $companycodes_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Plant> $plants
+ * @property-read int|null $plants_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Address whereKodepos($value)
  * @mixin \Eloquent
  */
 class Address extends Model
@@ -149,6 +156,16 @@ class Address extends Model
     public function kodepos()
     {
         return $this->belongsTo(Kodepos::class);
+    }
+
+    public function bpcategory()
+    {
+        return $this->belongsTo(Bpcategory::class);
+    }
+
+    public function title()
+    {
+        return $this->belongsTo(Title::class);
     }
 
     public function companycodes()

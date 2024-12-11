@@ -6,6 +6,8 @@ use App\Filament\Submonitoring\Clusters\Address as ClustersAddress;
 use App\Filament\Submonitoring\Resources\AddressResource\Pages;
 use App\Filament\Submonitoring\Resources\AddressResource\RelationManagers;
 use App\Models\Address;
+use App\Models\Bpcategory;
+use App\Models\Bpcategory_title;
 use App\Models\Country;
 use App\Models\Kabupaten;
 use App\Models\Kecamatan;
@@ -13,7 +15,9 @@ use App\Models\Kelurahan;
 use App\Models\Kodepos;
 use App\Models\Numberrange;
 use App\Models\Provinsi;
+use App\Models\Title;
 use Filament\Forms;
+use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Section;
@@ -21,6 +25,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Split;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\ToggleButtons;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
@@ -36,6 +41,7 @@ use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Enums\ActionsPosition;
 use Filament\Tables\Filters\QueryBuilder;
 use Filament\Tables\Filters\QueryBuilder\Constraints\BooleanConstraint;
+use Filament\Tables\Filters\QueryBuilder\Constraints\DateConstraint;
 use Filament\Tables\Filters\QueryBuilder\Constraints\TextConstraint;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -75,7 +81,7 @@ class AddressResource extends Resource
     {
         return [
 
-            Section::make()
+            Section::make('Address Data')
                 ->schema([
 
                     Hidden::make('numberrange_id')
@@ -92,282 +98,376 @@ class AddressResource extends Resource
 
                             TextInput::make('address_number')
                                 ->label('Address Number')
-                                ->disabled(),
-
-                        ]),
-                ]),
-
-
-            //address general data
-            Section::make('Address General Data')
-                ->schema([
-
-                    Grid::make(4)
-                        ->schema([
-
-                            TextInput::make('name_1')
-                                ->label('Name 1')
-                                ->required()
-                                ->characterLimit(40),
-
-                            TextInput::make('name_2')
-                                ->label('Name 2')
-                                ->characterLimit(40),
-
-                            TextInput::make('name_3')
-                                ->label('Name 3')
-                                ->characterLimit(40),
-
-                            TextInput::make('name_4')
-                                ->label('Name 4')
-                                ->characterLimit(40),
-                        ]),
-
-                ]),
-            //end of address general data
-
-            //address Communication Data
-            Section::make('Address Communication Data')
-                ->schema([
-
-                    Grid::make(2)
-                        ->schema([
-
-                            TextInput::make('telephone_number_1')
-                                ->label('Telephone Number 1')
-                                // ->required()
-                                ->tel()
-                                ->characterLimit(30),
-
-                            TextInput::make('telephone_number_1_ext')
-                                ->label('Telephone Number 1 Extension')
-                                // ->required()
-                                ->characterLimit(10),
-
-                            TextInput::make('telephone_number_2')
-                                ->label('Telephone Number 2')
-                                // ->required()
-                                ->tel()
-                                ->characterLimit(30),
-
-                            TextInput::make('telephone_number_2_ext')
-                                ->label('Telephone Number 2 Extension')
-                                // ->required()
-                                ->characterLimit(10),
-
-                            TextInput::make('fax_number_1')
-                                ->label('Fax Number 1')
-                                // ->required()
-                                ->tel()
-                                ->characterLimit(30),
-
-                            TextInput::make('fax_number_1_ext')
-                                ->label('Fax Number 1 Extension')
-                                // ->required()
-                                ->characterLimit(10),
-
-                            TextInput::make('fax_number_2')
-                                ->label('Fax Number 2')
-                                // ->required()
-                                ->tel()
-                                ->characterLimit(30),
-
-                            TextInput::make('fax_number_2_ext')
-                                ->label('Fax Number 2 Extension')
-                                // ->required()
-                                ->characterLimit(10),
-
-                            TextInput::make('handphone_number_1')
-                                ->label('Handphone Number 1')
-                                ->required()
-                                ->tel()
-                                ->characterLimit(30),
-
-                            TextInput::make('handphone_number_2')
-                                ->label('Handphone Number 2')
-                                // ->required()
-                                ->tel()
-                                ->characterLimit(30),
-
-                            TextInput::make('email')
-                                ->label('Email')
-                                // ->required()
-                                ->email(),
-
-                        ]),
-
-                ]),
-            //end of address Communication Data
-
-
-            Section::make('Address Data')
-                ->schema([
-                    Grid::make(4)
-                        ->schema([
-
-                            Select::make('country_id')
-                                ->label('Country')
-                                ->live()
-                                ->options(Country::whereIsActive(1)->pluck('country_name', 'id'))
-                                // ->default(105)
-                                // ->disabled()
+                                ->disabled()
                                 ->dehydrated(),
 
                         ]),
 
-                    //if country_id = 105
-                    Grid::make(4)
-                        ->schema([
+                ])
+                ->compact(),
 
-                            Select::make('provinsi_id')
-                                ->label('Provinsi')
-                                ->placeholder('Pilih Provinsi')
-                                ->options(Provinsi::whereIsActive(1)->pluck('provinsi', 'id'))
-                                ->searchable()
-                                ->required()
-                                ->live()
-                                ->native(false)
-                                ->hidden(fn(Get $get) =>
-                                $get('country_id') != 105)
-                                ->afterStateUpdated(function (Set $set) {
-                                    $set('kabupaten_id', null);
-                                    $set('kecamatan_id', null);
-                                    $set('kelurahan_id', null);
-                                    $set('kodepos', null);
-                                }),
+            Split::make([
+                Section::make('Address Category')
+                    ->schema([
 
-                            Select::make('kabupaten_id')
-                                ->label('Kabupaten')
-                                ->placeholder('Pilih Kabupaten')
-                                ->options(fn(Get $get): Collection => Kabupaten::query()
-                                    ->where('provinsi_id', $get('provinsi_id'))
-                                    ->pluck('kabupaten', 'id'))
-                                ->searchable()
-                                ->required()
-                                ->live()
-                                ->native(false)
-                                ->hidden(fn(Get $get) =>
-                                $get('country_id') != 105),
+                        ToggleButtons::make('bpcategory_id')
+                            ->label('')
+                            ->options(Bpcategory::all()->pluck('bpcategory_desc', 'id'))
+                            ->live()
+                            ->inline()
+                            ->afterStateUpdated(function (Set $set) {
+                                $set('title_id', null);
+                            }),
 
-                            Select::make('kecamatan_id')
-                                ->label('Kecamatan')
-                                ->placeholder('Pilih Kecamatan')
-                                ->options(fn(Get $get): Collection => Kecamatan::query()
-                                    ->where('kabupaten_id', $get('kabupaten_id'))
-                                    ->pluck('kecamatan', 'id'))
-                                ->searchable()
-                                ->required()
-                                ->live()
-                                ->native(false)
-                                ->hidden(fn(Get $get) =>
-                                $get('country_id') != 105),
+                    ])
+                    ->columnspan(4)
+                    ->compact(),
 
-                            Select::make('kelurahan_id')
-                                ->label('Kelurahan')
-                                ->placeholder('Pilih Kelurahan')
-                                ->options(fn(Get $get): Collection => Kelurahan::query()
-                                    ->where('kecamatan_id', $get('kecamatan_id'))
-                                    ->pluck('kelurahan', 'id'))
-                                ->searchable()
-                                ->required()
-                                ->live()
-                                ->native(false)
-                                ->hidden(fn(Get $get) =>
-                                $get('country_id') != 105)
-                                ->afterStateUpdated(function (Get $get, ?string $state, Set $set, ?string $old) {
+            ]),
 
-                                    if (($get('kodepos') ?? '') != Str::slug($old)) {
-                                        return;
-                                    }
+            Section::make('General Data')
+                // ->hidden(fn(Get $get) => $get('bpcategory_id') === null)
+                ->schema([
+                    Split::make([
+                        Fieldset::make('Nama')
+                            ->schema([
 
-                                    $kodepos = Kodepos::where('kelurahan_id', $state)->first();
+                                Grid::make(4)
+                                    ->schema([
+                                        Select::make('title_id')
+                                            ->label('Title')
+                                            ->options(function (Get $get) {
 
-                                    $set('kodepos_id', $kodepos->id);
-                                    $set('kodepos', $kodepos->kodepos);
-                                }),
+                                                $bpcategory = $get('bpcategory_id');
 
-                            Textarea::make('alamat')
-                                ->label('Alamat')
-                                ->required()
-                                ->columnSpanFull()
-                                ->hidden(fn(Get $get) =>
-                                $get('country_id') != 105),
+                                                $title = Bpcategory_title::all()->where('bpcategory_id', $bpcategory)->pluck('title_id');
 
-                            TextInput::make('rt')
-                                ->label('RT')
-                                ->numeric()
-                                ->required()
-                                ->hidden(fn(Get $get) =>
-                                $get('country_id') != 105),
+                                                return (Title::whereIn('id', $title)->pluck('title', 'id'));
+                                            })
+                                            ->native(false),
 
-                            TextInput::make('rw')
-                                ->label('RW')
-                                ->numeric()
-                                ->required()
-                                ->hidden(fn(Get $get) =>
-                                $get('country_id') != 105),
+                                    ]),
 
-                            TextInput::make('kodepos')
-                                ->label('Kodepos')
-                                ->disabled()
-                                ->required()
-                                ->dehydrated()
-                                ->hidden(fn(Get $get) =>
-                                $get('country_id') != 105),
+                                Grid::make()
+                                    ->schema([
 
-                            Hidden::make('kodepos_id'),
-                        ]),
-                    //end of if country_id = 105
+                                        TextInput::make('name_1')
+                                            ->label('Nama'),
 
-                    //if country_id != 105
-                    Grid::make(4)
-                        ->schema([
+                                    ]),
 
-                            TextArea::make('street')
-                                ->label('Street')
-                                ->required()
-                                ->columnSpanFull()
-                                ->hidden(fn(Get $get) =>
-                                $get('country_id') == 105),
+                                Grid::make()
+                                    ->schema([
 
-                            TextInput::make('building_number')
-                                ->label('Building Number')
-                                // ->required()
-                                ->hidden(fn(Get $get) =>
-                                $get('country_id') == 105),
+                                        TextInput::make('name_4')
+                                            ->label('Search Term'),
 
-                            TextInput::make('floor')
-                                ->label('Floor')
-                                // ->required()
-                                ->hidden(fn(Get $get) =>
-                                $get('country_id') == 105),
+                                    ])
 
-                            TextInput::make('room')
-                                ->label('Room')
-                                // ->required()
-                                ->hidden(fn(Get $get) =>
-                                $get('country_id') == 105),
+                            ])
 
-                            TextInput::make('city')
-                                ->label('City')
-                                // ->required()
-                                ->hidden(fn(Get $get) =>
-                                $get('country_id') == 105),
+                    ]),
 
-                            TextInput::make('district')
-                                ->label('District')
-                                // ->required()
-                                ->hidden(fn(Get $get) =>
-                                $get('country_id') == 105),
+                    Split::make([
+                        Fieldset::make('Communication')
+                            ->schema([
 
-                            TextInput::make('po_box')
-                                ->label('PO Box')
-                                ->numeric()
-                                // ->required()
-                                ->hidden(fn(Get $get) =>
-                                $get('country_id') == 105),
-                        ]),
-                    //end of if country_id != 105
+                                Grid::make(4)
+                                    ->schema([
+
+                                        TextInput::make('telephone_number_1')
+                                            ->tel()
+                                            ->label('Telp 1'),
+
+                                        TextInput::make('telephone_number_1_ext')
+                                            ->label('Telp 1 Extension'),
+
+                                    ]),
+
+                                Grid::make(4)
+                                    ->schema([
+
+                                        TextInput::make('telephone_number_2')
+                                            ->tel()
+                                            ->label('Telp 2'),
+
+                                        TextInput::make('telephone_number_2_ext')
+                                            ->label('Telp 2 Extension'),
+
+                                    ]),
+
+                                Grid::make(4)
+                                    ->schema([
+
+                                        TextInput::make('fax_number_1')
+                                            ->tel()
+                                            ->label('Fax 1'),
+
+                                        TextInput::make('fax_number_1_ext')
+                                            ->label('Fax 1 Extension'),
+
+                                    ]),
+
+                                Grid::make(4)
+                                    ->schema([
+
+                                        TextInput::make('fax_number_2')
+                                            ->tel()
+                                            ->label('Fax 2'),
+
+                                        TextInput::make('fax_number_2_ext')
+                                            ->label('Fax 2 Extension'),
+
+                                    ]),
+
+                                Grid::make(4)
+                                    ->schema([
+
+                                        TextInput::make('handphone_number_1')
+                                            ->tel()
+                                            ->label('Handphone 1'),
+
+                                    ]),
+
+                                Grid::make(4)
+                                    ->schema([
+
+                                        TextInput::make('handphone_number_2')
+                                            ->tel()
+                                            ->label('Handphone 2'),
+
+                                    ]),
+
+                                Grid::make(4)
+                                    ->schema([
+
+                                        TextInput::make('email')
+                                            ->label('Email')
+                                            ->email(),
+
+                                    ]),
+
+                            ])
+                            ->columnspan(4),
+
+                    ]),
+
+                    Split::make([
+                        Fieldset::make('Address')
+                            ->schema([
+
+                                Grid::make(4)
+                                    ->schema([
+
+                                        Select::make('country_id')
+                                            ->label('Country')
+                                            ->live()
+                                            ->options(Country::whereIsActive(1)->pluck('country_name', 'id'))
+                                            // ->native(false)
+                                            // ->default(105)
+                                            // ->disabled()
+                                            ->dehydrated(),
+
+                                    ]),
+
+                                //if country_id = 105
+                                Grid::make(4)
+                                    ->schema([
+
+                                        Select::make('provinsi_id')
+                                            ->label('Provinsi')
+                                            ->placeholder('Pilih Provinsi')
+                                            ->options(Provinsi::whereIsActive(1)->pluck('provinsi', 'id'))
+                                            ->searchable()
+                                            ->required()
+                                            ->live()
+                                            ->native(false)
+                                            ->hidden(fn(Get $get) =>
+                                            $get('country_id') != 105)
+                                            ->afterStateUpdated(function (Set $set) {
+                                                $set('kabupaten_id', null);
+                                                $set('kecamatan_id', null);
+                                                $set('kelurahan_id', null);
+                                                $set('kodepos', null);
+                                            }),
+
+                                        Select::make('kabupaten_id')
+                                            ->label('Kabupaten')
+                                            ->placeholder('Pilih Kabupaten')
+                                            ->options(fn(Get $get): Collection => Kabupaten::query()
+                                                ->where('provinsi_id', $get('provinsi_id'))
+                                                ->pluck('kabupaten', 'id'))
+                                            ->searchable()
+                                            ->required()
+                                            ->live()
+                                            ->native(false)
+                                            ->hidden(fn(Get $get) =>
+                                            $get('country_id') != 105),
+
+                                        Select::make('kecamatan_id')
+                                            ->label('Kecamatan')
+                                            ->placeholder('Pilih Kecamatan')
+                                            ->options(fn(Get $get): Collection => Kecamatan::query()
+                                                ->where('kabupaten_id', $get('kabupaten_id'))
+                                                ->pluck('kecamatan', 'id'))
+                                            ->searchable()
+                                            ->required()
+                                            ->live()
+                                            ->native(false)
+                                            ->hidden(fn(Get $get) =>
+                                            $get('country_id') != 105),
+
+                                        Select::make('kelurahan_id')
+                                            ->label('Kelurahan')
+                                            ->placeholder('Pilih Kelurahan')
+                                            ->options(fn(Get $get): Collection => Kelurahan::query()
+                                                ->where('kecamatan_id', $get('kecamatan_id'))
+                                                ->pluck('kelurahan', 'id'))
+                                            ->searchable()
+                                            ->required()
+                                            ->live()
+                                            ->native(false)
+                                            ->hidden(fn(Get $get) =>
+                                            $get('country_id') != 105)
+                                            ->afterStateUpdated(function (Get $get, ?string $state, Set $set, ?string $old) {
+
+                                                if (($get('kodepos') ?? '') != Str::slug($old)) {
+                                                    return;
+                                                }
+
+                                                $kodepos = Kodepos::where('kelurahan_id', $state)->first();
+
+                                                $set('kodepos_id', $kodepos->id);
+                                                $set('kodepos', $kodepos->kodepos);
+                                            }),
+
+                                        Textarea::make('alamat')
+                                            ->label('Alamat')
+                                            ->required()
+                                            ->columnSpanFull()
+                                            ->hidden(fn(Get $get) =>
+                                            $get('country_id') != 105),
+
+                                        TextInput::make('rt')
+                                            ->label('RT')
+                                            ->numeric()
+                                            ->required()
+                                            ->hidden(fn(Get $get) =>
+                                            $get('country_id') != 105),
+
+                                        TextInput::make('rw')
+                                            ->label('RW')
+                                            ->numeric()
+                                            ->required()
+                                            ->hidden(fn(Get $get) =>
+                                            $get('country_id') != 105),
+
+                                        TextInput::make('kodepos')
+                                            ->label('Kodepos')
+                                            ->disabled()
+                                            ->required()
+                                            ->dehydrated()
+                                            ->hidden(fn(Get $get) =>
+                                            $get('country_id') != 105),
+
+                                        Hidden::make('kodepos_id'),
+                                    ]),
+                                //end of if country_id = 105
+
+                                //if country_id != 105
+                                Grid::make(4)
+                                    ->schema([
+
+                                        Textarea::make('street')
+                                            ->label('Street')
+                                            ->required()
+                                            ->columnSpanFull()
+                                            ->hidden(fn(Get $get) =>
+                                            $get('country_id') == 105 ||
+                                                $get('country_id') == null),
+
+                                    ]),
+
+                                Grid::make(4)
+                                    ->schema([
+
+                                        TextInput::make('building_number')
+                                            ->label('Building Number')
+                                            // ->required()
+                                            ->hidden(fn(Get $get) =>
+                                            $get('country_id') == 105 ||
+                                                $get('country_id') == null),
+
+                                    ]),
+
+                                Grid::make(4)
+                                    ->schema([
+
+                                        TextInput::make('floor')
+                                            ->label('Floor')
+                                            // ->required()
+                                            ->hidden(fn(Get $get) =>
+                                            $get('country_id') == 105 ||
+                                                $get('country_id') == null),
+
+                                    ]),
+
+                                Grid::make(4)
+                                    ->schema([
+
+                                        TextInput::make('room')
+                                            ->label('Room')
+                                            // ->required()
+                                            ->hidden(fn(Get $get) =>
+                                            $get('country_id') == 105 ||
+                                                $get('country_id') == null),
+
+                                    ]),
+
+                                Grid::make(4)
+                                    ->schema([
+
+                                        TextInput::make('city')
+                                            ->label('City')
+                                            // ->required()
+                                            ->hidden(fn(Get $get) =>
+                                            $get('country_id') == 105 ||
+                                                $get('country_id') == null),
+
+                                    ]),
+
+                                Grid::make(4)
+                                    ->schema([
+
+                                        TextInput::make('district')
+                                            ->label('District')
+                                            // ->required()
+                                            ->hidden(fn(Get $get) =>
+                                            $get('country_id') == 105 ||
+                                                $get('country_id') == null),
+
+                                    ]),
+
+                                Grid::make(4)
+                                    ->schema([
+
+                                        TextInput::make('po_box')
+                                            ->label('PO Box')
+                                            ->numeric()
+                                            // ->required()
+                                            ->hidden(fn(Get $get) =>
+                                            $get('country_id') == 105 ||
+                                                $get('country_id') == null),
+                                    ]),
+                                //end of if country_id != 105
+
+
+                            ])
+                            ->columnspan(4),
+
+                    ]),
+
+
                 ]),
 
             Section::make('Status')
@@ -376,12 +476,18 @@ class AddressResource extends Resource
                     Grid::make(4)
                         ->schema([
 
-                            Toggle::make('is_active')
-                                ->label('Status')
+                            ToggleButtons::make('is_active')
+                                ->label('Active?')
+                                ->boolean()
+                                ->grouped()
                                 ->default(true),
 
                         ]),
-                ]),
+                ])->collapsible()
+                ->compact(),
+
+
+
 
         ];
     }
@@ -390,16 +496,6 @@ class AddressResource extends Resource
     {
         return $table
             ->columns([
-
-                TextColumn::make('numberrange.nr_interval')
-                    ->label('NR Interval')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
 
                 TextColumn::make('address_number')
                     ->label('Address Number')
@@ -413,38 +509,18 @@ class AddressResource extends Resource
 
                 ColumnGroup::make('General', [
 
+                    TextColumn::make('title.title_desc')
+                        ->label('Title')
+                        ->searchable(isIndividual: true, isGlobal: false)
+                        ->copyable()
+                        ->copyableState(function ($state) {
+                            return ($state);
+                        })
+                        ->copyMessage('Tersalin')
+                        ->sortable(),
+
                     TextColumn::make('name_1')
                         ->label('Name 1')
-                        ->searchable(isIndividual: true, isGlobal: false)
-                        ->copyable()
-                        ->copyableState(function ($state) {
-                            return ($state);
-                        })
-                        ->copyMessage('Tersalin')
-                        ->sortable(),
-
-                    TextColumn::make('name_2')
-                        ->label('Name 2')
-                        ->searchable(isIndividual: true, isGlobal: false)
-                        ->copyable()
-                        ->copyableState(function ($state) {
-                            return ($state);
-                        })
-                        ->copyMessage('Tersalin')
-                        ->sortable(),
-
-                    TextColumn::make('name_3')
-                        ->label('Name 3')
-                        ->searchable(isIndividual: true, isGlobal: false)
-                        ->copyable()
-                        ->copyableState(function ($state) {
-                            return ($state);
-                        })
-                        ->copyMessage('Tersalin')
-                        ->sortable(),
-
-                    TextColumn::make('name_4')
-                        ->label('Name 4')
                         ->searchable(isIndividual: true, isGlobal: false)
                         ->copyable()
                         ->copyableState(function ($state) {
@@ -913,20 +989,42 @@ class AddressResource extends Resource
                             ->label('PO Box')
                             ->nullable(),
 
-                        BooleanConstraint::make('is_active'),
+                        BooleanConstraint::make('is_active')
+                            ->label('Status')
+                            ->icon(false)
+                            ->nullable(),
+
+                        TextConstraint::make('created_by')
+                            ->label('Created by')
+                            ->icon(false)
+                            ->nullable(),
+
+                        TextConstraint::make('updated_by')
+                            ->label('Updated by')
+                            ->icon(false)
+                            ->nullable(),
+
+                        DateConstraint::make('created_at')
+                            ->icon(false)
+                            ->nullable(),
+
+                        DateConstraint::make('updated_at')
+                            ->icon(false)
+                            ->nullable(),
 
                     ])
-                    ->constraintPickerColumns(2),
-            ])
+            ], layout: Tables\Enums\FiltersLayout::AboveContentCollapsible)
             ->deferFilters()
             ->headerActions([
                 Tables\Actions\CreateAction::make(),
             ])
             ->actions([
                 ActionGroup::make([
-                    Tables\Actions\ViewAction::make(),
-                    Tables\Actions\EditAction::make(),
-                ])
+                    ActionGroup::make([
+                        Tables\Actions\ViewAction::make(),
+                        Tables\Actions\EditAction::make(),
+                    ])->dropdown(false),
+                ]),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

@@ -7,17 +7,23 @@ use App\Filament\Submonitoring\Resources\LoadinggroupResource\Pages;
 use App\Filament\Submonitoring\Resources\LoadinggroupResource\RelationManagers;
 use App\Models\Loadinggroup;
 use Filament\Forms;
+use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\ToggleButtons;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Columns\ColumnGroup;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Filters\QueryBuilder;
 use Filament\Tables\Filters\QueryBuilder\Constraints\BooleanConstraint;
+use Filament\Tables\Filters\QueryBuilder\Constraints\DateConstraint;
 use Filament\Tables\Filters\QueryBuilder\Constraints\TextConstraint;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -48,32 +54,55 @@ class LoadinggroupResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
-            ->schema([
 
-                Section::make('Input Data Loading Group')
-                    ->description('Silakan input data Loading Group')
-                    ->schema(static::LoadingGroupFormSchema())
-                    ->columns(2)
-            ]);
+            ->schema(static::LoadingGroupFormSchema());
     }
 
     public static function LoadingGroupFormSchema(): array
     {
         return [
 
-            TextInput::make('loading_group')
-                ->label('Loading Group')
-                ->required()
-                ->maxLength(4)
-                ->unique(Loadinggroup::class, ignoreRecord: true),
+            Section::make('Loading Group')
+                ->schema([
 
-            TextInput::make('loading_group_desc')
-                ->label('Description')
-                ->required(),
+                    Grid::make(4)
+                        ->schema([
 
-            Toggle::make('is_active')
-                ->label('Status')
-                ->default(true),
+                            TextInput::make('loading_group')
+                                ->label('Loading Group')
+                                ->required()
+                                ->maxLength(4)
+                                ->unique(Loadinggroup::class, ignoreRecord: true),
+
+                        ]),
+
+                    Grid::make(4)
+                        ->schema([
+
+                            TextInput::make('loading_group_desc')
+                                ->label('Description')
+                                ->required(),
+
+                        ]),
+
+                ])
+                ->compact(),
+
+            Section::make('Status')
+                ->schema([
+
+                    Grid::make(2)
+                        ->schema([
+
+                            ToggleButtons::make('is_active')
+                                ->label('Active?')
+                                ->boolean()
+                                ->grouped()
+                                ->default(true),
+
+                        ]),
+                ])->collapsible()
+                ->compact(),
 
         ];
     }
@@ -83,64 +112,76 @@ class LoadinggroupResource extends Resource
         return $table
             ->columns([
 
-                TextColumn::make('loading_group')
-                    ->label('Loading Group')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
+                ColumnGroup::make('Loading Group Data', [
 
-                TextColumn::make('loading_group_desc')
-                    ->label('Description')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
+                    TextColumn::make('loading_group')
+                        ->label('Loading Group')
+                        ->searchable(isIndividual: true, isGlobal: false)
+                        ->copyable()
+                        ->copyableState(function ($state) {
+                            return ($state);
+                        })
+                        ->copyMessage('Tersalin')
+                        ->sortable(),
 
-                ToggleColumn::make('is_active')
-                    ->label('Status')
-                    ->sortable(),
+                    TextColumn::make('loading_group_desc')
+                        ->label('Description')
+                        ->searchable(isIndividual: true, isGlobal: false)
+                        ->copyable()
+                        ->copyableState(function ($state) {
+                            return ($state);
+                        })
+                        ->copyMessage('Tersalin')
+                        ->sortable(),
 
-                TextColumn::make('created_by')
-                    ->label('Created by')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
+                ]),
 
-                TextColumn::make('updated_by')
-                    ->label('Updated by')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
+                ColumnGroup::make('Status', [
 
-                TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    IconColumn::make('is_active')
+                        ->label('Status')
+                        ->boolean()
+                        ->sortable(),
 
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                ]),
+
+                ColumnGroup::make('Logs', [
+
+                    TextColumn::make('created_by')
+                        ->label('Created by')
+                        ->copyable()
+                        ->copyableState(function ($state) {
+                            return ($state);
+                        })
+                        ->copyMessage('Tersalin')
+                        ->sortable(),
+
+                    TextColumn::make('updated_by')
+                        ->label('Updated by')
+                        ->copyable()
+                        ->copyableState(function ($state) {
+                            return ($state);
+                        })
+                        ->copyMessage('Tersalin')
+                        ->sortable(),
+
+                    TextColumn::make('created_at')
+                        ->dateTime()
+                        ->sortable()
+                        ->toggleable(isToggledHiddenByDefault: true),
+
+                    TextColumn::make('updated_at')
+                        ->dateTime()
+                        ->sortable()
+                        ->toggleable(isToggledHiddenByDefault: true),
+
+                ]),
             ])
             ->recordUrl(null)
             ->searchOnBlur()
             ->filters([
                 QueryBuilder::make()
+                    ->constraintPickerColumns(1)
                     ->constraints([
 
                         TextConstraint::make('loading_group')
@@ -151,15 +192,41 @@ class LoadinggroupResource extends Resource
                             ->label('Description')
                             ->nullable(),
 
-                        BooleanConstraint::make('is_active'),
+                        BooleanConstraint::make('is_active')
+                            ->label('Status')
+                            ->icon(false)
+                            ->nullable(),
 
-                    ])
-                    ->constraintPickerColumns(2),
-            ], layout: Tables\Enums\FiltersLayout::AboveContentCollapsible)
-            ->deferFilters()
+                        TextConstraint::make('created_by')
+                            ->label('Created by')
+                            ->icon(false)
+                            ->nullable(),
+
+                        TextConstraint::make('updated_by')
+                            ->label('Updated by')
+                            ->icon(false)
+                            ->nullable(),
+
+                        DateConstraint::make('created_at')
+                            ->icon(false)
+                            ->nullable(),
+
+                        DateConstraint::make('updated_at')
+                            ->icon(false)
+                            ->nullable(),
+
+                    ]),
+            ])
+            ->headerActions([
+                Tables\Actions\CreateAction::make(),
+            ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+                ActionGroup::make([
+                    Tables\Actions\ViewAction::make(),
+                    Tables\Actions\EditAction::make(),
+                ]),
+
+
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

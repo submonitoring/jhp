@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- *
+ * 
  *
  * @property int $id
  * @property string|null $material_group
@@ -28,6 +28,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Materialgroup whereMaterialGroupDesc($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Materialgroup whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Materialgroup whereUpdatedBy($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Materialmaster> $materialmasters
+ * @property-read int|null $materialmasters_count
  * @mixin \Eloquent
  */
 class Materialgroup extends Model

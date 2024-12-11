@@ -45,6 +45,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property-read int|null $documenttypes_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
  * @property-read int|null $addresses_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Businesspartner> $businesspartners
+ * @property-read int|null $businesspartners_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Materialmaster> $materialmasters
+ * @property-read int|null $materialmasters_count
  * @mixin \Eloquent
  */
 class Numberrange extends Model
@@ -74,6 +78,26 @@ class Numberrange extends Model
     public function materialmasters()
     {
         return $this->hasMany(Materialmaster::class);
+    }
+
+    public function businesspartners()
+    {
+        return $this->hasMany(Businesspartner::class);
+    }
+
+    public function batchsources()
+    {
+        return $this->hasMany(Batchsource::class);
+    }
+
+    public function batchmasters()
+    {
+        return $this->hasMany(Batchmaster::class);
+    }
+
+    public function materialdocumentheaders()
+    {
+        return $this->hasMany(Materialdocumentheader::class);
     }
 
     public static function boot()

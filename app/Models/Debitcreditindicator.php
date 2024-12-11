@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string|null $debit_credit_indicator
@@ -39,6 +39,11 @@ class Debitcreditindicator extends Model
     public function movementtypes()
     {
         return $this->hasMany(Movementtype::class);
+    }
+
+    public function materialdocumentitems()
+    {
+        return $this->hasMany(Materialdocumentitem::class);
     }
 
     public static function boot()

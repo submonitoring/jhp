@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- *
+ * 
  *
  * @property int $id
  * @property string|null $provinsi_code
@@ -37,6 +37,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Provinsi whereUpdatedBy($value)
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
  * @property-read int|null $addresses_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Businesspartner> $businesspartners
+ * @property-read int|null $businesspartners_count
  * @mixin \Eloquent
  */
 class Provinsi extends Model
@@ -61,6 +63,11 @@ class Provinsi extends Model
     public function addresses()
     {
         return $this->hasMany(Address::class);
+    }
+
+    public function businesspartners()
+    {
+        return $this->hasMany(Businesspartner::class);
     }
 
     public static function boot()

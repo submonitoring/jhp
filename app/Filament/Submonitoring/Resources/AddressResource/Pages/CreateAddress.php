@@ -30,6 +30,8 @@ class CreateAddress extends CreateRecord
 
         $currentnriid = $this->data['numberrange_id'];
 
+        dd($currentnriid);
+
         $getcurrentnr = Numberrange::whereId($currentnriid)->first();
 
         if ($getcurrentnr->current_number === null) {

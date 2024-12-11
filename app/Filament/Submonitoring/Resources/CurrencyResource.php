@@ -9,17 +9,23 @@ use App\Filament\Submonitoring\Resources\CurrencyResource\Pages;
 use App\Filament\Submonitoring\Resources\CurrencyResource\RelationManagers;
 use App\Models\Currency;
 use Filament\Forms;
+use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\ToggleButtons;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Actions\ExportBulkAction;
 use Filament\Tables\Actions\ImportAction;
+use Filament\Tables\Columns\ColumnGroup;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Filters\QueryBuilder;
 use Filament\Tables\Filters\QueryBuilder\Constraints\BooleanConstraint;
+use Filament\Tables\Filters\QueryBuilder\Constraints\DateConstraint;
 use Filament\Tables\Filters\QueryBuilder\Constraints\TextConstraint;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -50,48 +56,87 @@ class CurrencyResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
-            ->schema([
 
-                Section::make('Input Data Currency')
-                    ->description('Silakan input data Currency')
-                    ->schema(static::CurrencyFormSchema())
-                    ->columns(2)
-            ]);
+            ->schema(static::CurrencyFormSchema());
     }
 
     public static function CurrencyFormSchema(): array
     {
         return [
 
-            TextInput::make('currency')
-                ->label('Currency')
-                ->required(),
+            Section::make('Currency')
+                ->schema([
 
-            TextInput::make('symbol')
-                ->label('Symbol')
-                ->required(),
+                    Grid::make(4)
+                        ->schema([
 
-            TextInput::make('currency_code')
-                ->label('Kode Currency')
-                ->required()
-                ->maxLength(3)
-                ->characterLimit(3),
+                            TextInput::make('currency')
+                                ->label('Currency')
+                                ->required(),
 
-            TextInput::make('numeric')
-                ->label('Numeric')
-                ->required()
-                ->maxLength(3)
-                ->characterLimit(3),
+                        ]),
 
-            TextInput::make('decimal')
-                ->label('Decimal')
-                ->required()
-                ->maxLength(4)
-                ->characterLimit(4),
+                    Grid::make(4)
+                        ->schema([
 
-            Toggle::make('is_active')
-                ->label('Status')
-                ->default(true),
+                            TextInput::make('symbol')
+                                ->label('Symbol')
+                                ->required(),
+
+                        ]),
+
+                    Grid::make(4)
+                        ->schema([
+
+                            TextInput::make('currency_code')
+                                ->label('Kode Currency')
+                                ->required()
+                                ->maxLength(3)
+                                ->characterLimit(3),
+
+                        ]),
+
+                    Grid::make(4)
+                        ->schema([
+
+                            TextInput::make('numeric')
+                                ->label('Numeric')
+                                ->required()
+                                ->maxLength(3)
+                                ->characterLimit(3),
+
+                        ]),
+
+                    Grid::make(4)
+                        ->schema([
+
+                            TextInput::make('decimal')
+                                ->label('Decimal')
+                                ->required()
+                                ->maxLength(4)
+                                ->characterLimit(4),
+
+                        ]),
+
+
+                ])
+                ->compact(),
+
+            Section::make('Status')
+                ->schema([
+
+                    Grid::make(2)
+                        ->schema([
+
+                            ToggleButtons::make('is_active')
+                                ->label('Active?')
+                                ->boolean()
+                                ->grouped()
+                                ->default(true),
+
+                        ]),
+                ])->collapsible()
+                ->compact(),
 
         ];
     }
@@ -101,94 +146,106 @@ class CurrencyResource extends Resource
         return $table
             ->columns([
 
-                TextColumn::make('currency')
-                    ->label('Currency')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
+                ColumnGroup::make('Currency Data', [
 
-                TextColumn::make('symbol')
-                    ->label('Symbol')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
+                    TextColumn::make('currency')
+                        ->label('Currency')
+                        ->searchable(isIndividual: true, isGlobal: false)
+                        ->copyable()
+                        ->copyableState(function ($state) {
+                            return ($state);
+                        })
+                        ->copyMessage('Tersalin')
+                        ->sortable(),
 
-                TextColumn::make('currency_code')
-                    ->label('Kode Currency')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
+                    TextColumn::make('symbol')
+                        ->label('Symbol')
+                        ->searchable(isIndividual: true, isGlobal: false)
+                        ->copyable()
+                        ->copyableState(function ($state) {
+                            return ($state);
+                        })
+                        ->copyMessage('Tersalin')
+                        ->sortable(),
 
-                TextColumn::make('numeric')
-                    ->label('Numeric')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
+                    TextColumn::make('currency_code')
+                        ->label('Kode Currency')
+                        ->searchable(isIndividual: true, isGlobal: false)
+                        ->copyable()
+                        ->copyableState(function ($state) {
+                            return ($state);
+                        })
+                        ->copyMessage('Tersalin')
+                        ->sortable(),
 
-                TextColumn::make('decimal')
-                    ->label('Decimal')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
+                    TextColumn::make('numeric')
+                        ->label('Numeric')
+                        ->searchable(isIndividual: true, isGlobal: false)
+                        ->copyable()
+                        ->copyableState(function ($state) {
+                            return ($state);
+                        })
+                        ->copyMessage('Tersalin')
+                        ->sortable(),
 
-                ToggleColumn::make('is_active')
-                    ->label('Status')
-                    ->sortable(),
+                    TextColumn::make('decimal')
+                        ->label('Decimal')
+                        ->searchable(isIndividual: true, isGlobal: false)
+                        ->copyable()
+                        ->copyableState(function ($state) {
+                            return ($state);
+                        })
+                        ->copyMessage('Tersalin')
+                        ->sortable(),
 
-                TextColumn::make('created_by')
-                    ->label('Created by')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
+                ]),
 
-                TextColumn::make('updated_by')
-                    ->label('Updated by')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
+                ColumnGroup::make('Status', [
 
-                TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    IconColumn::make('is_active')
+                        ->label('Status')
+                        ->boolean()
+                        ->sortable(),
 
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                ]),
+
+                ColumnGroup::make('Logs', [
+
+                    TextColumn::make('created_by')
+                        ->label('Created by')
+                        ->copyable()
+                        ->copyableState(function ($state) {
+                            return ($state);
+                        })
+                        ->copyMessage('Tersalin')
+                        ->sortable(),
+
+                    TextColumn::make('updated_by')
+                        ->label('Updated by')
+                        ->copyable()
+                        ->copyableState(function ($state) {
+                            return ($state);
+                        })
+                        ->copyMessage('Tersalin')
+                        ->sortable(),
+
+                    TextColumn::make('created_at')
+                        ->dateTime()
+                        ->sortable()
+                        ->toggleable(isToggledHiddenByDefault: true),
+
+                    TextColumn::make('updated_at')
+                        ->dateTime()
+                        ->sortable()
+                        ->toggleable(isToggledHiddenByDefault: true),
+
+                ]),
             ])
             ->recordUrl(null)
             ->searchOnBlur()
             ->filters([
                 QueryBuilder::make()
+                    ->constraintPickerColumns(1)
                     ->constraints([
 
                         TextConstraint::make('currency')
@@ -211,27 +268,46 @@ class CurrencyResource extends Resource
                             ->label('Decimal')
                             ->nullable(),
 
-                        BooleanConstraint::make('is_active'),
+                        BooleanConstraint::make('is_active')
+                            ->label('Status')
+                            ->icon(false)
+                            ->nullable(),
 
-                    ])
-                    ->constraintPickerColumns(2),
-            ], layout: Tables\Enums\FiltersLayout::AboveContentCollapsible)
-            ->deferFilters()
+                        TextConstraint::make('created_by')
+                            ->label('Created by')
+                            ->icon(false)
+                            ->nullable(),
+
+                        TextConstraint::make('updated_by')
+                            ->label('Updated by')
+                            ->icon(false)
+                            ->nullable(),
+
+                        DateConstraint::make('created_at')
+                            ->icon(false)
+                            ->nullable(),
+
+                        DateConstraint::make('updated_at')
+                            ->icon(false)
+                            ->nullable(),
+
+                    ]),
+            ])
             ->headerActions([
-                ImportAction::make()
-                ->label('Import')
-                ->importer(CurrencyImporter::class),
+                Tables\Actions\CreateAction::make(),
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+                ActionGroup::make([
+                    Tables\Actions\ViewAction::make(),
+                    Tables\Actions\EditAction::make(),
+                ]),
+
+
             ])
             ->bulkActions([
-                // Tables\Actions\BulkActionGroup::make([
-                //     Tables\Actions\DeleteBulkAction::make(),
-                // ]),
-                ExportBulkAction::make()
-                    ->exporter(CurrencyExporter::class)
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make(),
+                ]),
             ]);
     }
 

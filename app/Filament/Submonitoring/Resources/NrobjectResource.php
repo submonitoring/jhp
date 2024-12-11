@@ -11,9 +11,11 @@ use App\Filament\Submonitoring\Resources\NrobjectResource\Pages\ViewNrobject;
 use App\Filament\Submonitoring\Resources\NrobjectResource\RelationManagers;
 use App\Models\Nrobject;
 use Filament\Forms;
+use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\ToggleButtons;
 use Filament\Forms\Form;
 use Filament\Pages\Page;
 use Filament\Pages\SubNavigationPosition;
@@ -23,10 +25,13 @@ use Filament\Tables;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Actions\ExportBulkAction;
+use Filament\Tables\Columns\CheckboxColumn;
+use Filament\Tables\Columns\ColumnGroup;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Filters\QueryBuilder;
 use Filament\Tables\Filters\QueryBuilder\Constraints\BooleanConstraint;
+use Filament\Tables\Filters\QueryBuilder\Constraints\DateConstraint;
 use Filament\Tables\Filters\QueryBuilder\Constraints\TextConstraint;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -56,35 +61,56 @@ class NrobjectResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
-            ->schema([
-
-                Section::make('Input Data NR Object')
-                    ->description('Silakan input data NR Object')
-                    ->schema(static::NRObjectFormSchema())
-                    ->columns(2)
-            ]);
+            ->schema(static::NRObjectFormSchema());
     }
 
     public static function NRObjectFormSchema(): array
     {
         return [
 
-            TextInput::make('nrobject')
-                ->label('NR Object')
-                ->unique(Nrobject::class, ignoreRecord: true)
-                ->required()
-                ->maxLength(10),
-            // ->characterLimit(10),
+            Section::make('NR Object')
+                ->schema([
 
-            TextInput::make('nrobject_name')
-                ->label('Name')
-                ->required(),
+                    Grid::make(2)
+                        ->schema([
 
-            Toggle::make('is_active')
-                ->label('Status')
-                ->default(true),
+                            TextInput::make('nrobject')
+                                ->label('NR Object')
+                                ->unique(Nrobject::class, ignoreRecord: true)
+                                ->required()
+                                ->inlineLabel()
+                                ->maxLength(10),
+
+                        ]),
+
+                    Grid::make(2)
+                        ->schema([
+
+                            TextInput::make('nrobject_name')
+                                ->label('Name')
+                                ->required()
+                                ->inlineLabel(),
+
+                        ]),
+                ])
+                ->compact(),
 
 
+            Section::make('Status')
+                ->schema([
+
+                    Grid::make(2)
+                        ->schema([
+
+                            ToggleButtons::make('is_active')
+                                ->label('Active?')
+                                ->boolean()
+                                ->grouped()
+                                ->default(true),
+
+                        ]),
+                ])->collapsible()
+                ->compact(),
 
         ];
     }
@@ -94,64 +120,76 @@ class NrobjectResource extends Resource
         return $table
             ->columns([
 
-                TextColumn::make('nrobject')
-                    ->label('NR Object')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
+                ColumnGroup::make('NR Object', [
 
-                TextColumn::make('nrobject_name')
-                    ->label('Name')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
+                    TextColumn::make('nrobject')
+                        ->label('NR Object')
+                        ->searchable(isIndividual: true, isGlobal: false)
+                        ->copyable()
+                        ->copyableState(function ($state) {
+                            return ($state);
+                        })
+                        ->copyMessage('Tersalin')
+                        ->sortable(),
 
-                ToggleColumn::make('is_active')
-                    ->label('Status')
-                    ->sortable(),
+                    TextColumn::make('nrobject_name')
+                        ->label('Name')
+                        ->searchable(isIndividual: true, isGlobal: false)
+                        ->copyable()
+                        ->copyableState(function ($state) {
+                            return ($state);
+                        })
+                        ->copyMessage('Tersalin')
+                        ->sortable(),
 
-                TextColumn::make('created_by')
-                    ->label('Created by')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
+                ]),
 
-                TextColumn::make('updated_by')
-                    ->label('Updated by')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
+                ColumnGroup::make('Status', [
 
-                TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    CheckboxColumn::make('is_active')
+                        ->label('Status')
+                        ->sortable(),
 
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                ]),
+
+                ColumnGroup::make('Logs', [
+
+                    TextColumn::make('created_by')
+                        ->label('Created by')
+                        ->copyable()
+                        ->copyableState(function ($state) {
+                            return ($state);
+                        })
+                        ->copyMessage('Tersalin')
+                        ->sortable(),
+
+                    TextColumn::make('updated_by')
+                        ->label('Updated by')
+                        ->copyable()
+                        ->copyableState(function ($state) {
+                            return ($state);
+                        })
+                        ->copyMessage('Tersalin')
+                        ->sortable(),
+
+                    TextColumn::make('created_at')
+                        ->dateTime()
+                        ->sortable()
+                        ->toggleable(isToggledHiddenByDefault: true),
+
+                    TextColumn::make('updated_at')
+                        ->dateTime()
+                        ->sortable()
+                        ->toggleable(isToggledHiddenByDefault: true),
+
+                ]),
             ])
             ->recordUrl(null)
+            ->extremePaginationLinks()
             ->searchOnBlur()
             ->filters([
                 QueryBuilder::make()
+                    ->constraintPickerColumns(1)
                     ->constraints([
 
                         TextConstraint::make('nrobject')
@@ -164,8 +202,25 @@ class NrobjectResource extends Resource
 
                         BooleanConstraint::make('is_active'),
 
+                        TextConstraint::make('created_by')
+                            ->label('Created by')
+                            ->icon(false)
+                            ->nullable(),
+
+                        TextConstraint::make('updated_by')
+                            ->label('Updated by')
+                            ->icon(false)
+                            ->nullable(),
+
+                        DateConstraint::make('created_at')
+                            ->icon(false)
+                            ->nullable(),
+
+                        DateConstraint::make('updated_at')
+                            ->icon(false)
+                            ->nullable(),
+
                     ])
-                    ->constraintPickerColumns(2),
             ], layout: Tables\Enums\FiltersLayout::AboveContentCollapsible)
             ->deferFilters()
             ->headerActions([
@@ -176,17 +231,14 @@ class NrobjectResource extends Resource
                     Tables\Actions\ViewAction::make(),
                     Tables\Actions\EditAction::make(),
                 ]),
-                ActionGroup::make([
-                    Action::make('Assign')
-                        ->label('Assign Number Range')
-                        ->icon('heroicon-m-arrow-right-end-on-rectangle')
-                        ->url(fn(Nrobject $record): string => route('filament.submonitoring.number-range.resources.nrobjects.managenumberranges', $record)),
-                ])
-                    ->label('Assignment')
+                Action::make('Assign')
+                    ->label('New Number Range')
                     ->icon('heroicon-m-arrow-right-end-on-rectangle')
                     ->size(ActionSize::Small)
                     ->outlined()
-                    ->button(),
+                    ->button()
+                    ->url(fn(Nrobject $record): string => route('filament.submonitoring.number-range.resources.nrobjects.managenumberranges', $record)),
+
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -218,8 +270,6 @@ class NrobjectResource extends Resource
     public static function getRecordSubNavigation(Page $page): array
     {
         return $page->generateNavigationItems([
-            ViewNrobject::class,
-            EditNrobject::class,
             ManageNumberranges::class,
         ]);
     }

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- *
+ * 
  *
  * @property int $id
  * @property string|null $material_type
@@ -31,6 +31,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Materialtype whereNumberrangeId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Materialtype whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Materialtype whereUpdatedBy($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Materialmaster> $materialmasters
+ * @property-read int|null $materialmasters_count
  * @mixin \Eloquent
  */
 class Materialtype extends Model

@@ -33,6 +33,10 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Kelurahan whereKelurahanCode($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Kelurahan whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Kelurahan whereUpdatedBy($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
+ * @property-read int|null $addresses_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Businesspartner> $businesspartners
+ * @property-read int|null $businesspartners_count
  * @mixin \Eloquent
  */
 class Kelurahan extends Model
@@ -47,6 +51,16 @@ class Kelurahan extends Model
     public function allKodepos()
     {
         return $this->hasMany(Kodepos::class);
+    }
+
+    public function addresses()
+    {
+        return $this->hasMany(Address::class);
+    }
+
+    public function businesspartners()
+    {
+        return $this->hasMany(Businesspartner::class);
     }
 
     public static function boot()

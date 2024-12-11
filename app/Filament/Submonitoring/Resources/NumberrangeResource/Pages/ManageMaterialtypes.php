@@ -4,11 +4,13 @@ namespace App\Filament\Submonitoring\Resources\NumberrangeResource\Pages;
 
 use App\Filament\Submonitoring\Resources\MaterialtypeResource;
 use App\Filament\Submonitoring\Resources\NumberrangeResource;
+use App\Models\Materialtype;
 use Filament\Actions;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Pages\ManageRelatedRecords;
 use Filament\Tables;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Filters\QueryBuilder;
@@ -28,9 +30,14 @@ class ManageMaterialtypes extends ManageRelatedRecords
 
     protected static ?string $navigationIcon = 'heroicon-o-arrow-right-end-on-rectangle';
 
+    public function getTitle(): string
+    {
+        return __('Number range: ' . $this->getOwnerRecord()->nr_interval . ' ' . $this->getOwnerRecord()->nr_name . '-Material Type');
+    }
+
     public static function getNavigationLabel(): string
     {
-        return 'Material Types -> Number Range';
+        return 'Material Types';
     }
 
     public function form(Form $form): Form
@@ -40,113 +47,33 @@ class ManageMaterialtypes extends ManageRelatedRecords
 
     public function table(Table $table): Table
     {
-        return $table
+        return MaterialtypeResource::table($table)
             ->recordTitleAttribute('material_type')
             ->inverseRelationship('numberrange')
-            ->columns([
-
-                TextColumn::make('numberrange.nr_interval')
-                    ->label('Number Interval')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
-
-                TextColumn::make('material_type')
-                    ->label('Material Type')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
-
-                TextColumn::make('material_type_desc')
-                    ->label('Description')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
-
-                ToggleColumn::make('is_active')
-                    ->label('Status')
-                    ->sortable(),
-
-                TextColumn::make('created_by')
-                    ->label('Created by')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
-
-                TextColumn::make('updated_by')
-                    ->label('Updated by')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
-
-                TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-            ])
-            ->recordUrl(null)
-            ->searchOnBlur()
-            ->filters([
-                QueryBuilder::make()
-                    ->constraints([
-
-                        TextConstraint::make('numberrange.nr_interval')
-                            ->label('NR Interval')
-                            ->nullable(),
-
-                        TextConstraint::make('material_type')
-                            ->label('Material Type')
-                            ->nullable(),
-
-                        TextConstraint::make('material_type_desc')
-                            ->label('Description')
-                            ->nullable(),
-
-                        BooleanConstraint::make('is_active'),
-
-                    ])
-                    ->constraintPickerColumns(2),
-            ], layout: Tables\Enums\FiltersLayout::AboveContentCollapsible)
-            ->deferFilters()
             ->headerActions([
-                Tables\Actions\CreateAction::make(),
+                Tables\Actions\CreateAction::make()
+                    ->label('New Material Type')
+                    ->modalCloseButton(false)
+                    ->modalHeading(' ')
+                    ->modalWidth('full')
+                    ->button()
+                    ->closeModalByClickingAway(false),
                 Tables\Actions\AssociateAction::make()
-                    ->recordSelectOptionsQuery(fn(Builder $query) => $query->where('numberrange_id', null)),
+                    ->recordSelectOptionsQuery(fn(Builder $query) => $query->where('is_active', true)->where('numberrange_id', null))
+                    ->preloadRecordSelect()
+                    ->multiple(),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DissociateAction::make(),
-                Tables\Actions\DeleteAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DissociateBulkAction::make(),
-                    Tables\Actions\DeleteBulkAction::make(),
+                ActionGroup::make([
+                    Tables\Actions\EditAction::make()
+                        ->label('Edit')
+                        ->modalCloseButton(false)
+                        ->modalHeading(' ')
+                        ->modalWidth('full')
+                        // ->button()
+                        ->closeModalByClickingAway(false),
+                    Tables\Actions\DissociateAction::make(),
+                    Tables\Actions\DeleteAction::make(),
                 ]),
             ]);
     }

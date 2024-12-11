@@ -50,6 +50,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Country whereUpdatedBy($value)
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
  * @property-read int|null $addresses_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Businesspartner> $businesspartners
+ * @property-read int|null $businesspartners_count
  * @mixin \Eloquent
  */
 class Country extends Model
@@ -69,6 +71,11 @@ class Country extends Model
     public function addresses()
     {
         return $this->hasMany(Address::class);
+    }
+
+    public function businesspartners()
+    {
+        return $this->hasMany(Businesspartner::class);
     }
 
     public static function boot()

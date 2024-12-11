@@ -10,6 +10,7 @@ use Filament\Forms;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\ToggleButtons;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
@@ -17,6 +18,7 @@ use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Columns\CheckboxColumn;
 use Filament\Tables\Columns\ColumnGroup;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
@@ -73,14 +75,18 @@ class TitleResource extends Resource
                                 ->required()
                                 ->unique(Title::class, ignoreRecord: true),
 
+                        ]),
+
+                    Grid::make(4)
+                        ->schema([
+
                             TextInput::make('title_desc')
                                 ->label('Description')
                                 ->required(),
 
                         ]),
 
-                ])->collapsible()
-                ->compact(),
+                ])->compact(),
 
             Section::make('Status')
                 ->schema([
@@ -88,8 +94,10 @@ class TitleResource extends Resource
                     Grid::make(4)
                         ->schema([
 
-                            Toggle::make('is_active')
-                                ->label('Is Active?')
+                            ToggleButtons::make('is_active')
+                                ->label('Active?')
+                                ->boolean()
+                                ->grouped()
                                 ->default(true),
 
                         ]),
@@ -102,8 +110,71 @@ class TitleResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->columns(static::TitleTableColumns())
+            ->columns([
+
+                ColumnGroup::make('Title', [
+
+                    TextColumn::make('title')
+                        ->label('Title')
+                        ->copyable()
+                        ->copyableState(function ($state) {
+                            return ($state);
+                        })
+                        ->copyMessage('Tersalin')
+                        ->sortable(),
+
+                    TextColumn::make('title_desc')
+                        ->label('Description')
+                        ->copyable()
+                        ->copyableState(function ($state) {
+                            return ($state);
+                        })
+                        ->copyMessage('Tersalin')
+                        ->sortable(),
+                ]),
+
+                ColumnGroup::make('Status', [
+
+                    CheckboxColumn::make('is_active')
+                        ->label('Status')
+                        ->sortable(),
+
+                ]),
+
+                ColumnGroup::make('Logs', [
+
+                    TextColumn::make('created_by')
+                        ->label('Created by')
+                        ->copyable()
+                        ->copyableState(function ($state) {
+                            return ($state);
+                        })
+                        ->copyMessage('Tersalin')
+                        ->sortable(),
+
+                    TextColumn::make('updated_by')
+                        ->label('Updated by')
+                        ->copyable()
+                        ->copyableState(function ($state) {
+                            return ($state);
+                        })
+                        ->copyMessage('Tersalin')
+                        ->sortable(),
+
+                    TextColumn::make('created_at')
+                        ->dateTime()
+                        ->sortable()
+                        ->toggleable(isToggledHiddenByDefault: true),
+
+                    TextColumn::make('updated_at')
+                        ->dateTime()
+                        ->sortable()
+                        ->toggleable(isToggledHiddenByDefault: true),
+
+                ]),
+            ])
             ->recordUrl(null)
+            ->extremePaginationLinks()
             ->searchOnBlur()
             ->filters([
                 QueryBuilder::make()
@@ -150,85 +221,16 @@ class TitleResource extends Resource
             ])
             ->actions([
                 ActionGroup::make([
-                    ActionGroup::make([
-                        Tables\Actions\ViewAction::make(),
-                        Tables\Actions\EditAction::make(),
-                    ])->dropdown(false),
+                    Tables\Actions\ViewAction::make(),
+                    Tables\Actions\EditAction::make(),
                 ]),
+
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
-    }
-
-    public static function TitleTableColumns(): array
-    {
-        return
-            [
-
-                ColumnGroup::make('Title', [
-                    TextColumn::make('title')
-                        ->label('Title')
-                        ->copyable()
-                        ->copyableState(function ($state) {
-                            return ($state);
-                        })
-                        ->copyMessage('Tersalin')
-                        ->sortable(),
-
-                    TextColumn::make('title_desc')
-                        ->label('Description')
-                        ->copyable()
-                        ->copyableState(function ($state) {
-                            return ($state);
-                        })
-                        ->copyMessage('Tersalin')
-                        ->sortable(),
-                ]),
-
-                ColumnGroup::make('Status', [
-
-                    IconColumn::make('is_active')
-                        ->label('Status')
-                        ->boolean()
-                        ->sortable(),
-
-                ]),
-
-                ColumnGroup::make('Logs', [
-
-                    TextColumn::make('created_by')
-                        ->label('Created by')
-                        ->copyable()
-                        ->copyableState(function ($state) {
-                            return ($state);
-                        })
-                        ->copyMessage('Tersalin')
-                        ->sortable(),
-
-                    TextColumn::make('updated_by')
-                        ->label('Updated by')
-                        ->copyable()
-                        ->copyableState(function ($state) {
-                            return ($state);
-                        })
-                        ->copyMessage('Tersalin')
-                        ->sortable(),
-
-                    TextColumn::make('created_at')
-                        ->dateTime()
-                        ->sortable()
-                        ->toggleable(isToggledHiddenByDefault: true),
-
-                    TextColumn::make('updated_at')
-                        ->dateTime()
-                        ->sortable()
-                        ->toggleable(isToggledHiddenByDefault: true),
-
-                ]),
-            ];
     }
 
     public static function getRelations(): array

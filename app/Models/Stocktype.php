@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string|null $stock_type
@@ -33,6 +33,16 @@ use Illuminate\Database\Eloquent\Model;
 class Stocktype extends Model
 {
     use HasFactory;
+
+    public function materialdocumentitems()
+    {
+        return $this->hasMany(Materialdocumentitem::class);
+    }
+
+    public function movementtypes()
+    {
+        return $this->hasMany(Movementtype::class);
+    }
 
     public static function boot()
     {

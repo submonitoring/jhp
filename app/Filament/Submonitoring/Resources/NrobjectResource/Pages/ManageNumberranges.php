@@ -4,11 +4,15 @@ namespace App\Filament\Submonitoring\Resources\NrobjectResource\Pages;
 
 use App\Filament\Submonitoring\Resources\NrobjectResource;
 use App\Filament\Submonitoring\Resources\NumberrangeResource;
+use App\Models\Numberrange;
 use Filament\Actions;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Pages\ManageRelatedRecords;
+use Filament\Support\Enums\ActionSize;
 use Filament\Tables;
+use Filament\Tables\Actions\Action;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Filters\QueryBuilder;
@@ -28,9 +32,14 @@ class ManageNumberranges extends ManageRelatedRecords
 
     protected static ?string $navigationIcon = 'heroicon-o-arrow-right-end-on-rectangle';
 
+    public function getTitle(): string
+    {
+        return __('NR Object: ' . $this->getOwnerRecord()->nrobject . ' ' . $this->getOwnerRecord()->nrobject_name . '-Number ranges');
+    }
+
     public static function getNavigationLabel(): string
     {
-        return 'Number Ranges -> NR Object';
+        return 'Number Ranges';
     }
 
     public function form(Form $form): Form
@@ -40,134 +49,56 @@ class ManageNumberranges extends ManageRelatedRecords
 
     public function table(Table $table): Table
     {
-        return $table
+        return NumberrangeResource::table($table)
             ->recordTitleAttribute('nr_interval')
-            ->columns([
-
-                TextColumn::make('nrobject.nrobject_name')
-                    ->label('NR Object')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
-
-                TextColumn::make('nr_interval')
-                    ->label('NR Interval')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
-
-                TextColumn::make('year')
-                    ->label('Year')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
-
-                TextColumn::make('number')
-                    ->label('Number Range')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
-
-                TextColumn::make('current_number')
-                    ->label('Current Number')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
-
-                ToggleColumn::make('is_external')
-                    ->label('External?')
-                    ->sortable(),
-
-                ToggleColumn::make('is_active')
-                    ->label('Status')
-                    ->sortable(),
-
-                TextColumn::make('created_by')
-                    ->label('Created by')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
-
-                TextColumn::make('updated_by')
-                    ->label('Updated by')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->copyable()
-                    ->copyableState(function ($state) {
-                        return ($state);
-                    })
-                    ->copyMessage('Tersalin')
-                    ->sortable(),
-
-                TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-            ])
-            ->recordUrl(null)
-            ->searchOnBlur()
             ->inverseRelationship('nrobject')
-            ->filters([
-                QueryBuilder::make()
-                    ->constraints([
-
-                        TextConstraint::make('nrobject.nrobject_name')
-                            ->label('NR Object')
-                            ->nullable(),
-
-                        TextConstraint::make('nr_interval')
-                            ->label('NR Interval')
-                            ->nullable(),
-
-                        BooleanConstraint::make('is_active'),
-
-                    ])
-                    ->constraintPickerColumns(2),
-            ], layout: Tables\Enums\FiltersLayout::AboveContentCollapsible)
-            ->deferFilters()
             ->headerActions([
-                Tables\Actions\CreateAction::make(),
+                Tables\Actions\CreateAction::make()
+                    ->label('New Number Range')
+                    ->modalCloseButton(false)
+                    ->modalHeading(' ')
+                    ->modalWidth('full')
+                    ->button()
+                    ->closeModalByClickingAway(false),
                 Tables\Actions\AssociateAction::make()
-                    ->recordSelectOptionsQuery(fn(Builder $query) => $query->where('nrobject_id', null)),
+                    ->recordSelectOptionsQuery(fn(Builder $query) => $query->where('is_active', true)->where('nrobject_id', null))
+                    ->preloadRecordSelect()
+                    ->multiple(),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DissociateAction::make(),
-                Tables\Actions\DeleteAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DissociateBulkAction::make(),
-                    Tables\Actions\DeleteBulkAction::make(),
+                ActionGroup::make([
+                    Tables\Actions\EditAction::make()
+                        ->label('Edit')
+                        ->modalCloseButton(false)
+                        ->modalHeading(' ')
+                        ->modalWidth('full')
+                        // ->button()
+                        ->closeModalByClickingAway(false),
+                    Tables\Actions\DissociateAction::make(),
+                    Tables\Actions\DeleteAction::make(),
                 ]),
+                ActionGroup::make([
+                    Action::make('AssignMatTypes')
+                        ->label('Assign Material Types')
+                        ->icon('heroicon-m-arrow-right-end-on-rectangle')
+                        ->url(fn(Numberrange $record): string => route('filament.submonitoring.number-range.resources.numberranges.managematerialtypes', $record)),
+
+                    Action::make('AssignDocTypes')
+                        ->label('Assign Document Types')
+                        ->icon('heroicon-m-arrow-right-end-on-rectangle')
+                        ->url(fn(Numberrange $record): string => route('filament.submonitoring.number-range.resources.numberranges.managedocumenttypes', $record)),
+
+                    Action::make('AssignBatchSource')
+                        ->label('Assign Batch Source')
+                        ->icon('heroicon-m-arrow-right-end-on-rectangle')
+                        ->url(fn(Numberrange $record): string => route('filament.submonitoring.number-range.resources.numberranges.managebatchsources', $record)),
+                ])
+                    ->label('Assignment')
+                    ->icon('heroicon-m-arrow-right-end-on-rectangle')
+                    ->size(ActionSize::Small)
+                    ->outlined()
+                    ->button(),
+
             ]);
     }
 }
