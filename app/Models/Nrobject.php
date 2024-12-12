@@ -5,10 +5,13 @@ namespace App\Models;
 use Auth;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Kenepa\ResourceLock\Models\Concerns\HasLocks;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Wildside\Userstamps\Userstamps;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string|null $nrobject
@@ -37,6 +40,14 @@ use Wildside\Userstamps\Userstamps;
 class Nrobject extends Model
 {
     use HasFactory;
+    use LogsActivity;
+    use HasLocks;
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll();
+    }
 
     public function user()
     {

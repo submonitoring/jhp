@@ -15,30 +15,14 @@ class PeriodindicatorImporter extends Importer
     {
         return [
             ImportColumn::make('period_indicator')
-                ->label('PeriodIndicator')
-                ->exampleHeader('PeriodIndicator')
+                ->label('Period Indicator')
                 ->rules(['max:1']),
-
             ImportColumn::make('period_indicator_desc')
                 ->label('Desc')
-                ->exampleHeader('Desc')
                 ->rules(['max:255']),
-
             ImportColumn::make('is_active')
-                ->label('Active?')
-                ->exampleHeader('Active?')
                 ->boolean()
                 ->rules(['boolean']),
-
-            ImportColumn::make('created_by')
-                ->label('Createdby')
-                ->exampleHeader('Createdby')
-                ->rules(['max:255']),
-
-            ImportColumn::make('updated_by')
-                ->label('Updatedby')
-                ->exampleHeader('Updatedby')
-                ->rules(['max:255']),
         ];
     }
 

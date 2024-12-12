@@ -15,30 +15,14 @@ class MaterialgroupImporter extends Importer
     {
         return [
             ImportColumn::make('material_group')
-                ->label('MaterialGroup')
-                ->exampleHeader('MaterialGroup')
+                ->label('Mat Group')
                 ->rules(['max:9']),
-
             ImportColumn::make('material_group_desc')
                 ->label('Desc')
-                ->exampleHeader('Desc')
                 ->rules(['max:255']),
-
             ImportColumn::make('is_active')
-                ->label('Active?')
-                ->exampleHeader('Active?')
                 ->boolean()
                 ->rules(['boolean']),
-
-            ImportColumn::make('created_by')
-                ->label('Createdby')
-                ->exampleHeader('Createdby')
-                ->rules(['max:255']),
-
-            ImportColumn::make('updated_by')
-                ->label('Updatedby')
-                ->exampleHeader('Updatedby')
-                ->rules(['max:255']),
         ];
     }
 

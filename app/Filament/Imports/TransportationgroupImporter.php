@@ -15,30 +15,14 @@ class TransportationgroupImporter extends Importer
     {
         return [
             ImportColumn::make('transportation_group')
-                ->label('TransportationGroup')
-                ->exampleHeader('TransportationGroup')
+                ->label('Transportation Group')
                 ->rules(['max:4']),
-
             ImportColumn::make('transportation_group_desc')
                 ->label('Desc')
-                ->exampleHeader('Desc')
                 ->rules(['max:255']),
-
             ImportColumn::make('is_active')
-                ->label('Active?')
-                ->exampleHeader('Active?')
                 ->boolean()
                 ->rules(['boolean']),
-
-            ImportColumn::make('created_by')
-                ->label('Createdby')
-                ->exampleHeader('Createdby')
-                ->rules(['max:255']),
-
-            ImportColumn::make('updated_by')
-                ->label('Updatedby')
-                ->exampleHeader('Updatedby')
-                ->rules(['max:255']),
         ];
     }
 

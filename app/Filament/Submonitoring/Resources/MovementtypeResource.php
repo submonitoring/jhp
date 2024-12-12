@@ -2,6 +2,7 @@
 
 namespace App\Filament\Submonitoring\Resources;
 
+use App\Filament\Imports\MovementtypeImporter;
 use App\Filament\Submonitoring\Clusters\Document;
 use App\Filament\Submonitoring\Resources\MaterialtypeResource\Pages\ViewMaterialtype;
 use App\Filament\Submonitoring\Resources\MovementtypeResource\Pages;
@@ -26,6 +27,7 @@ use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Actions\ImportAction;
 use Filament\Tables\Columns\CheckboxColumn;
 use Filament\Tables\Columns\ColumnGroup;
 use Filament\Tables\Columns\TextColumn;
@@ -292,6 +294,10 @@ class MovementtypeResource extends Resource
             ->deferFilters()
             ->headerActions([
                 Tables\Actions\CreateAction::make(),
+
+                ImportAction::make()
+                    ->label('Import')
+                    ->importer(MovementtypeImporter::class),
             ])
             ->actions([
                 ActionGroup::make([

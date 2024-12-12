@@ -15,54 +15,28 @@ class NumberrangeImporter extends Importer
     {
         return [
             ImportColumn::make('nrobject_id')
-                ->label('NRObjectID')
-                ->exampleHeader('NRObjectID')
+                ->label('NR Object ID')
                 ->numeric()
                 ->rules(['integer']),
-
             ImportColumn::make('nr_interval')
-                ->label('NRInterval')
-                ->exampleHeader('NRInterval')
+                ->label('NR Interval')
                 ->rules(['max:4']),
-
+            ImportColumn::make('nr_name')
+                ->label('Name')
+                ->rules(['max:255']),
             ImportColumn::make('year')
                 ->label('Year')
-                ->exampleHeader('Year')
                 ->rules(['max:4']),
-
             ImportColumn::make('number')
-                ->label('Number')
-                ->exampleHeader('Number')
+                ->label('Number from')
                 ->numeric()
                 ->rules(['integer']),
-
-            ImportColumn::make('current_number')
-                ->label('CurrentNumber')
-                ->exampleHeader('CurrentNumber')
-                ->numeric()
-                ->rules(['integer']),
-
             ImportColumn::make('is_external')
-                ->label('External?')
-                ->exampleHeader('External?')
                 ->boolean()
                 ->rules(['boolean']),
-
             ImportColumn::make('is_active')
-                ->label('Active?')
-                ->exampleHeader('Active?')
                 ->boolean()
                 ->rules(['boolean']),
-
-            ImportColumn::make('created_by')
-                ->label('Createdby')
-                ->exampleHeader('Createdby')
-                ->rules(['max:255']),
-
-            ImportColumn::make('updated_by')
-                ->label('Updatedby')
-                ->exampleHeader('Updatedby')
-                ->rules(['max:255']),
         ];
     }
 

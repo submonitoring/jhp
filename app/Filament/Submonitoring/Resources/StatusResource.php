@@ -2,6 +2,7 @@
 
 namespace App\Filament\Submonitoring\Resources;
 
+use App\Filament\Imports\StatusImporter;
 use App\Filament\Submonitoring\Clusters\General;
 use App\Filament\Submonitoring\Resources\StatusResource\Pages;
 use App\Filament\Submonitoring\Resources\StatusResource\RelationManagers;
@@ -21,6 +22,7 @@ use Filament\Support\Enums\ActionSize;
 use Filament\Tables;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Actions\ImportAction;
 use Filament\Tables\Columns\CheckboxColumn;
 use Filament\Tables\Columns\ColumnGroup;
 use Filament\Tables\Columns\IconColumn;
@@ -217,6 +219,10 @@ class StatusResource extends Resource
             ->deferFilters()
             ->headerActions([
                 Tables\Actions\CreateAction::make(),
+
+                ImportAction::make()
+                    ->label('Import')
+                    ->importer(StatusImporter::class),
             ])
             ->actions([
                 ActionGroup::make([

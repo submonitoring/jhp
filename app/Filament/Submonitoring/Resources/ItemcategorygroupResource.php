@@ -2,6 +2,7 @@
 
 namespace App\Filament\Submonitoring\Resources;
 
+use App\Filament\Imports\ItemcategorygroupImporter;
 use App\Filament\Submonitoring\Clusters\MaterialMaster;
 use App\Filament\Submonitoring\Resources\ItemcategorygroupResource\Pages;
 use App\Filament\Submonitoring\Resources\ItemcategorygroupResource\RelationManagers;
@@ -17,6 +18,7 @@ use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Actions\ImportAction;
 use Filament\Tables\Columns\ColumnGroup;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
@@ -219,6 +221,10 @@ class ItemcategorygroupResource extends Resource
             ])
             ->headerActions([
                 Tables\Actions\CreateAction::make(),
+
+                ImportAction::make()
+                ->label('Import')
+                ->importer(ItemcategorygroupImporter::class),
             ])
             ->actions([
                 ActionGroup::make([

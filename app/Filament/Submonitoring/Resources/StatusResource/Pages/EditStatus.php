@@ -6,9 +6,12 @@ use App\Filament\Submonitoring\Resources\StatusResource;
 use Filament\Actions;
 use Filament\Actions\Action;
 use Filament\Resources\Pages\EditRecord;
+use Kenepa\ResourceLock\Resources\Pages\Concerns\UsesResourceLock;
 
 class EditStatus extends EditRecord
 {
+    use UsesResourceLock;
+
     protected static string $resource = StatusResource::class;
 
     protected function getHeaderActions(): array

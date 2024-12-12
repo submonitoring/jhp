@@ -2,6 +2,7 @@
 
 namespace App\Filament\Submonitoring\Resources;
 
+use App\Filament\Imports\ProcurementtypeImporter;
 use App\Filament\Submonitoring\Clusters\MaterialMaster;
 use App\Filament\Submonitoring\Resources\ProcurementtypeResource\Pages;
 use App\Filament\Submonitoring\Resources\ProcurementtypeResource\RelationManagers;
@@ -17,6 +18,7 @@ use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Actions\ImportAction;
 use Filament\Tables\Columns\CheckboxColumn;
 use Filament\Tables\Columns\ColumnGroup;
 use Filament\Tables\Columns\TextColumn;
@@ -217,6 +219,10 @@ class ProcurementtypeResource extends Resource
             ->deferFilters()
             ->headerActions([
                 Tables\Actions\CreateAction::make(),
+
+                ImportAction::make()
+                ->label('Import')
+                ->importer(ProcurementtypeImporter::class),
             ])
             ->actions([
                 ActionGroup::make([

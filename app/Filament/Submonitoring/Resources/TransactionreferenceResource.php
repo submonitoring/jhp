@@ -2,6 +2,7 @@
 
 namespace App\Filament\Submonitoring\Resources;
 
+use App\Filament\Imports\TransactionreferenceImporter;
 use App\Filament\Submonitoring\Clusters\Document;
 use App\Filament\Submonitoring\Resources\TransactionreferenceResource\Pages;
 use App\Filament\Submonitoring\Resources\TransactionreferenceResource\RelationManagers;
@@ -17,6 +18,7 @@ use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Actions\ImportAction;
 use Filament\Tables\Columns\CheckboxColumn;
 use Filament\Tables\Columns\ColumnGroup;
 use Filament\Tables\Columns\TextColumn;
@@ -218,6 +220,10 @@ class TransactionreferenceResource extends Resource
             ->deferFilters()
             ->headerActions([
                 Tables\Actions\CreateAction::make(),
+
+                ImportAction::make()
+                    ->label('Import')
+                    ->importer(TransactionreferenceImporter::class),
             ])
             ->actions([
                 ActionGroup::make([

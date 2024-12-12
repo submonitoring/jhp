@@ -14,37 +14,19 @@ class MaterialtypeImporter extends Importer
     public static function getColumns(): array
     {
         return [
-            ImportColumn::make('material_type')
-                ->label('MaterialType')
-                ->exampleHeader('MaterialType')
-                ->rules(['max:4']),
-
-            ImportColumn::make('material_type_desc')
-                ->label('Description')
-                ->exampleHeader('Description')
-                ->rules(['max:255']),
-
             ImportColumn::make('numberrange_id')
-                ->label('NumberRangeID')
-                ->exampleHeader('NumberRangeID')
+                ->label('Number Range ID')
                 ->numeric()
                 ->rules(['integer']),
-
+            ImportColumn::make('material_type')
+                ->label('Mat Type')
+                ->rules(['max:4']),
+            ImportColumn::make('material_type_desc')
+                ->label('Desc')
+                ->rules(['max:255']),
             ImportColumn::make('is_active')
-                ->label('Active?')
-                ->exampleHeader('Active?')
                 ->boolean()
                 ->rules(['boolean']),
-
-            ImportColumn::make('created_by')
-                ->label('Createdby')
-                ->exampleHeader('Createdby')
-                ->rules(['max:255']),
-
-            ImportColumn::make('updated_by')
-                ->label('Updatedby')
-                ->exampleHeader('Updatedby')
-                ->rules(['max:255']),
         ];
     }
 

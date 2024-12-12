@@ -6,6 +6,7 @@ use App\Filament\Submonitoring\Resources\MaterialplantResource;
 use Filament\Actions;
 use Filament\Actions\Action;
 use Filament\Resources\Pages\EditRecord;
+use Kenepa\ResourceLock\Resources\Pages\Concerns\UsesResourceLock;
 
 class EditMaterialplant extends EditRecord
 {
@@ -19,4 +20,6 @@ class EditMaterialplant extends EditRecord
                 ->url($this->getResource()::getUrl('index')),
         ];
     }
+
+    use UsesResourceLock;
 }

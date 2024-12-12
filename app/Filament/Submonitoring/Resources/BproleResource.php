@@ -2,6 +2,7 @@
 
 namespace App\Filament\Submonitoring\Resources;
 
+use App\Filament\Imports\BproleImporter;
 use App\Filament\Submonitoring\Clusters\Businesspartnercustm;
 use App\Filament\Submonitoring\Resources\BproleResource\Pages;
 use App\Filament\Submonitoring\Resources\BproleResource\RelationManagers;
@@ -19,6 +20,7 @@ use Filament\Resources\Resource;
 use Filament\Support\Enums\ActionSize;
 use Filament\Tables;
 use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Actions\ImportAction;
 use Filament\Tables\Columns\CheckboxColumn;
 use Filament\Tables\Columns\ColumnGroup;
 use Filament\Tables\Columns\IconColumn;
@@ -219,6 +221,10 @@ class BproleResource extends Resource
             ->deferFilters()
             ->headerActions([
                 Tables\Actions\CreateAction::make(),
+
+                ImportAction::make()
+                ->label('Import')
+                ->importer(BproleImporter::class),
             ])
             ->actions([
                 ActionGroup::make([

@@ -126,10 +126,13 @@ namespace App\Models{
  * @mixin \Eloquent
  * @property int|null $bpcategory_id
  * @property int|null $title_id
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
+ * @property-read int|null $activities_count
  * @property-read \App\Models\Bpcategory|null $bpcategory
+ * @property-read \Kenepa\ResourceLock\Models\ResourceLock|null $resourceLock
  * @property-read \App\Models\Title|null $title
- * @method static \Illuminate\Database\Eloquent\Builder|Address whereBpcategoryId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Address whereTitleId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Address whereBpcategoryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Address whereTitleId($value)
  */
 	class Address extends \Eloquent {}
 }
@@ -151,27 +154,30 @@ namespace App\Models{
  * @property string|null $updated_by
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
+ * @property-read int|null $activities_count
  * @property-read \App\Models\Batchsource|null $batchsource
  * @property-read \App\Models\Businesspartner|null $businesspartner
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Materialdocumentitem> $materialdocumentitems
  * @property-read int|null $materialdocumentitems_count
  * @property-read \App\Models\Numberrange|null $numberrange
- * @method static \Illuminate\Database\Eloquent\Builder|Batchmaster newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Batchmaster newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Batchmaster query()
- * @method static \Illuminate\Database\Eloquent\Builder|Batchmaster whereBatchNumber($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Batchmaster whereBatchsourceId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Batchmaster whereBusinesspartnerId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Batchmaster whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Batchmaster whereCreatedBy($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Batchmaster whereExpirationDate($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Batchmaster whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Batchmaster whereIsActive($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Batchmaster whereIsExternal($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Batchmaster whereNumberrangeId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Batchmaster whereProductionDate($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Batchmaster whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Batchmaster whereUpdatedBy($value)
+ * @property-read \Kenepa\ResourceLock\Models\ResourceLock|null $resourceLock
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Batchmaster newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Batchmaster newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Batchmaster query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Batchmaster whereBatchNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Batchmaster whereBatchsourceId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Batchmaster whereBusinesspartnerId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Batchmaster whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Batchmaster whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Batchmaster whereExpirationDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Batchmaster whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Batchmaster whereIsActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Batchmaster whereIsExternal($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Batchmaster whereNumberrangeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Batchmaster whereProductionDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Batchmaster whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Batchmaster whereUpdatedBy($value)
  */
 	class Batchmaster extends \Eloquent {}
 }
@@ -201,10 +207,13 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Batchsource whereUpdatedBy($value)
  * @mixin \Eloquent
  * @property int|null $numberrange_id
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
+ * @property-read int|null $activities_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Batchmaster> $batchmasters
  * @property-read int|null $batchmasters_count
  * @property-read \App\Models\Numberrange|null $numberrange
- * @method static \Illuminate\Database\Eloquent\Builder|Batchsource whereNumberrangeId($value)
+ * @property-read \Kenepa\ResourceLock\Models\ResourceLock|null $resourceLock
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Batchsource whereNumberrangeId($value)
  */
 	class Batchsource extends \Eloquent {}
 }
@@ -237,8 +246,11 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Bpcategory whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Bpcategory whereUpdatedBy($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
+ * @property-read int|null $activities_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
  * @property-read int|null $addresses_count
+ * @property-read \Kenepa\ResourceLock\Models\ResourceLock|null $resourceLock
  */
 	class Bpcategory extends \Eloquent {}
 }
@@ -257,6 +269,9 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Bpcategory_title whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Bpcategory_title whereTitleId($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
+ * @property-read int|null $activities_count
+ * @property-read \Kenepa\ResourceLock\Models\ResourceLock|null $resourceLock
  */
 	class Bpcategory_title extends \Eloquent {}
 }
@@ -287,6 +302,9 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Bprole whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Bprole whereUpdatedBy($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
+ * @property-read int|null $activities_count
+ * @property-read \Kenepa\ResourceLock\Models\ResourceLock|null $resourceLock
  */
 	class Bprole extends \Eloquent {}
 }
@@ -410,10 +428,13 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Businesspartner whereUpdatedBy($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Businesspartner whereVatNumber($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
+ * @property-read int|null $activities_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Batchmaster> $batchmasters
  * @property-read int|null $batchmasters_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Materialdocumentheader> $materialdocumentheaders
  * @property-read int|null $materialdocumentheaders_count
+ * @property-read \Kenepa\ResourceLock\Models\ResourceLock|null $resourceLock
  */
 	class Businesspartner extends \Eloquent {}
 }
@@ -451,6 +472,9 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Companycode whereUpdatedBy($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Companycode whereVatNumber($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
+ * @property-read int|null $activities_count
+ * @property-read \Kenepa\ResourceLock\Models\ResourceLock|null $resourceLock
  */
 	class Companycode extends \Eloquent {}
 }
@@ -503,6 +527,9 @@ namespace App\Models{
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Businesspartner> $businesspartners
  * @property-read int|null $businesspartners_count
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
+ * @property-read int|null $activities_count
+ * @property-read \Kenepa\ResourceLock\Models\ResourceLock|null $resourceLock
  */
 	class Country extends \Eloquent {}
 }
@@ -539,6 +566,9 @@ namespace App\Models{
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Companycode> $companycodes
  * @property-read int|null $companycodes_count
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
+ * @property-read int|null $activities_count
+ * @property-read \Kenepa\ResourceLock\Models\ResourceLock|null $resourceLock
  */
 	class Currency extends \Eloquent {}
 }
@@ -573,6 +603,9 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Cyclecounting whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Cyclecounting whereUpdatedBy($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
+ * @property-read int|null $activities_count
+ * @property-read \Kenepa\ResourceLock\Models\ResourceLock|null $resourceLock
  */
 	class Cyclecounting extends \Eloquent {}
 }
@@ -603,8 +636,11 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Debitcreditindicator whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Debitcreditindicator whereUpdatedBy($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
+ * @property-read int|null $activities_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Materialdocumentitem> $materialdocumentitems
  * @property-read int|null $materialdocumentitems_count
+ * @property-read \Kenepa\ResourceLock\Models\ResourceLock|null $resourceLock
  */
 	class Debitcreditindicator extends \Eloquent {}
 }
@@ -641,8 +677,11 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Documenttype whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Documenttype whereUpdatedBy($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
+ * @property-read int|null $activities_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Materialdocumentheader> $materialdocumentheaders
  * @property-read int|null $materialdocumentheaders_count
+ * @property-read \Kenepa\ResourceLock\Models\ResourceLock|null $resourceLock
  */
 	class Documenttype extends \Eloquent {}
 }
@@ -673,6 +712,9 @@ namespace App\Models{
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Materialmaster> $materialmasters
  * @property-read int|null $materialmasters_count
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
+ * @property-read int|null $activities_count
+ * @property-read \Kenepa\ResourceLock\Models\ResourceLock|null $resourceLock
  */
 	class Industrysector extends \Eloquent {}
 }
@@ -703,6 +745,9 @@ namespace App\Models{
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Materialmaster> $materialmasters
  * @property-read int|null $materialmasters_count
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
+ * @property-read int|null $activities_count
+ * @property-read \Kenepa\ResourceLock\Models\ResourceLock|null $resourceLock
  */
 	class Itemcategorygroup extends \Eloquent {}
 }
@@ -742,6 +787,9 @@ namespace App\Models{
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Businesspartner> $businesspartners
  * @property-read int|null $businesspartners_count
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
+ * @property-read int|null $activities_count
+ * @property-read \Kenepa\ResourceLock\Models\ResourceLock|null $resourceLock
  */
 	class Kabupaten extends \Eloquent {}
 }
@@ -781,6 +829,9 @@ namespace App\Models{
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Businesspartner> $businesspartners
  * @property-read int|null $businesspartners_count
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
+ * @property-read int|null $activities_count
+ * @property-read \Kenepa\ResourceLock\Models\ResourceLock|null $resourceLock
  */
 	class Kecamatan extends \Eloquent {}
 }
@@ -818,6 +869,9 @@ namespace App\Models{
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Businesspartner> $businesspartners
  * @property-read int|null $businesspartners_count
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
+ * @property-read int|null $activities_count
+ * @property-read \Kenepa\ResourceLock\Models\ResourceLock|null $resourceLock
  */
 	class Kelurahan extends \Eloquent {}
 }
@@ -863,6 +917,9 @@ namespace App\Models{
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Businesspartner> $businesspartners
  * @property-read int|null $businesspartners_count
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
+ * @property-read int|null $activities_count
+ * @property-read \Kenepa\ResourceLock\Models\ResourceLock|null $resourceLock
  */
 	class Kodepos extends \Eloquent {}
 }
@@ -893,6 +950,9 @@ namespace App\Models{
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Materialplant> $materialplants
  * @property-read int|null $materialplants_count
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
+ * @property-read int|null $activities_count
+ * @property-read \Kenepa\ResourceLock\Models\ResourceLock|null $resourceLock
  */
 	class Loadinggroup extends \Eloquent {}
 }
@@ -923,37 +983,40 @@ namespace App\Models{
  * @property string|null $updated_by
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
+ * @property-read int|null $activities_count
  * @property-read \App\Models\Businesspartner|null $businesspartner
  * @property-read \App\Models\Documenttype|null $documenttype
  * @property-read int|null $materialdocumentitems_count
  * @property-read \App\Models\Numberrange|null $numberrange
+ * @property-read \Kenepa\ResourceLock\Models\ResourceLock|null $resourceLock
  * @property-read \App\Models\Transactionreference|null $transactionreference
  * @property-read \App\Models\Transactiontype|null $transactiontype
- * @method static \Illuminate\Database\Eloquent\Builder|Materialdocumentheader newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Materialdocumentheader newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Materialdocumentheader query()
- * @method static \Illuminate\Database\Eloquent\Builder|Materialdocumentheader whereBusinesspartnerId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Materialdocumentheader whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Materialdocumentheader whereCreatedBy($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Materialdocumentheader whereDocumentDate($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Materialdocumentheader whereDocumentNumber($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Materialdocumentheader whereDocumenttypeId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Materialdocumentheader whereExecuted($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Materialdocumentheader whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Materialdocumentheader whereIsActive($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Materialdocumentheader whereIsExternal($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Materialdocumentheader whereMatdocHeaderText($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Materialdocumentheader whereMaterialDocumentYear($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Materialdocumentheader whereMaterialdocumentitems($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Materialdocumentheader whereNumberrangeId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Materialdocumentheader wherePostingDate($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Materialdocumentheader whereReferenceDocumentNumber($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Materialdocumentheader whereStatus($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Materialdocumentheader whereStatusId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Materialdocumentheader whereTransactionreferenceId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Materialdocumentheader whereTransactiontypeId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Materialdocumentheader whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Materialdocumentheader whereUpdatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Materialdocumentheader newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Materialdocumentheader newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Materialdocumentheader query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Materialdocumentheader whereBusinesspartnerId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Materialdocumentheader whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Materialdocumentheader whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Materialdocumentheader whereDocumentDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Materialdocumentheader whereDocumentNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Materialdocumentheader whereDocumenttypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Materialdocumentheader whereExecuted($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Materialdocumentheader whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Materialdocumentheader whereIsActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Materialdocumentheader whereIsExternal($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Materialdocumentheader whereMatdocHeaderText($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Materialdocumentheader whereMaterialDocumentYear($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Materialdocumentheader whereMaterialdocumentitems($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Materialdocumentheader whereNumberrangeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Materialdocumentheader wherePostingDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Materialdocumentheader whereReferenceDocumentNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Materialdocumentheader whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Materialdocumentheader whereStatusId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Materialdocumentheader whereTransactionreferenceId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Materialdocumentheader whereTransactiontypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Materialdocumentheader whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Materialdocumentheader whereUpdatedBy($value)
  */
 	class Materialdocumentheader extends \Eloquent {}
 }
@@ -981,6 +1044,8 @@ namespace App\Models{
  * @property string|null $updated_by
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
+ * @property-read int|null $activities_count
  * @property-read \App\Models\Batchmaster|null $batchmaster
  * @property-read \App\Models\Debitcreditindicator|null $debitcreditindicator
  * @property-read \App\Models\Materialdocumentheader|null $materialdocumentheader
@@ -988,31 +1053,32 @@ namespace App\Models{
  * @property-read \App\Models\Movementtype|null $movementtype
  * @property-read \App\Models\Plant|null $plant
  * @property-read \App\Models\Reasonformovement|null $reasonformovement
+ * @property-read \Kenepa\ResourceLock\Models\ResourceLock|null $resourceLock
  * @property-read \App\Models\Stocktype|null $stocktype
  * @property-read \App\Models\Storagelocation|null $storagelocation
  * @property-read \App\Models\Uom|null $uom
- * @method static \Illuminate\Database\Eloquent\Builder|Materialdocumentitem newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Materialdocumentitem newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Materialdocumentitem query()
- * @method static \Illuminate\Database\Eloquent\Builder|Materialdocumentitem whereBatchmasterId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Materialdocumentitem whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Materialdocumentitem whereCreatedBy($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Materialdocumentitem whereDebitcreditindicatorId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Materialdocumentitem whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Materialdocumentitem whereIsActive($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Materialdocumentitem whereMatdocItemText($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Materialdocumentitem whereMaterialdocumentheaderId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Materialdocumentitem whereMaterialmasterId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Materialdocumentitem whereMovementtypeId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Materialdocumentitem wherePlantId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Materialdocumentitem whereQuantity($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Materialdocumentitem whereReasonformovementId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Materialdocumentitem whereSort($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Materialdocumentitem whereStocktypeId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Materialdocumentitem whereStoragelocationId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Materialdocumentitem whereUomId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Materialdocumentitem whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Materialdocumentitem whereUpdatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Materialdocumentitem newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Materialdocumentitem newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Materialdocumentitem query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Materialdocumentitem whereBatchmasterId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Materialdocumentitem whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Materialdocumentitem whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Materialdocumentitem whereDebitcreditindicatorId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Materialdocumentitem whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Materialdocumentitem whereIsActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Materialdocumentitem whereMatdocItemText($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Materialdocumentitem whereMaterialdocumentheaderId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Materialdocumentitem whereMaterialmasterId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Materialdocumentitem whereMovementtypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Materialdocumentitem wherePlantId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Materialdocumentitem whereQuantity($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Materialdocumentitem whereReasonformovementId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Materialdocumentitem whereSort($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Materialdocumentitem whereStocktypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Materialdocumentitem whereStoragelocationId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Materialdocumentitem whereUomId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Materialdocumentitem whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Materialdocumentitem whereUpdatedBy($value)
  */
 	class Materialdocumentitem extends \Eloquent {}
 }
@@ -1043,6 +1109,9 @@ namespace App\Models{
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Materialmaster> $materialmasters
  * @property-read int|null $materialmasters_count
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
+ * @property-read int|null $activities_count
+ * @property-read \Kenepa\ResourceLock\Models\ResourceLock|null $resourceLock
  */
 	class Materialgroup extends \Eloquent {}
 }
@@ -1110,8 +1179,11 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Materialmaster whereUpdatedBy($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Materialmaster whereWeightUnit($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
+ * @property-read int|null $activities_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Materialdocumentitem> $materialdocumentitems
  * @property-read int|null $materialdocumentitems_count
+ * @property-read \Kenepa\ResourceLock\Models\ResourceLock|null $resourceLock
  */
 	class Materialmaster extends \Eloquent {}
 }
@@ -1170,6 +1242,9 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Materialplant whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Materialplant whereUpdatedBy($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
+ * @property-read int|null $activities_count
+ * @property-read \Kenepa\ResourceLock\Models\ResourceLock|null $resourceLock
  */
 	class Materialplant extends \Eloquent {}
 }
@@ -1213,6 +1288,9 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Materialstoragelocation whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Materialstoragelocation whereUpdatedBy($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
+ * @property-read int|null $activities_count
+ * @property-read \Kenepa\ResourceLock\Models\ResourceLock|null $resourceLock
  */
 	class Materialstoragelocation extends \Eloquent {}
 }
@@ -1246,6 +1324,9 @@ namespace App\Models{
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Materialmaster> $materialmasters
  * @property-read int|null $materialmasters_count
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
+ * @property-read int|null $activities_count
+ * @property-read \Kenepa\ResourceLock\Models\ResourceLock|null $resourceLock
  */
 	class Materialtype extends \Eloquent {}
 }
@@ -1309,10 +1390,13 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Movementtype whereIsReversal($value)
  * @mixin \Eloquent
  * @property int|null $stocktype_id
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
+ * @property-read int|null $activities_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Materialdocumentitem> $materialdocumentitems
  * @property-read int|null $materialdocumentitems_count
+ * @property-read \Kenepa\ResourceLock\Models\ResourceLock|null $resourceLock
  * @property-read \App\Models\Stocktype|null $stocktype
- * @method static \Illuminate\Database\Eloquent\Builder|Movementtype whereStocktypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Movementtype whereStocktypeId($value)
  */
 	class Movementtype extends \Eloquent {}
 }
@@ -1344,6 +1428,9 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Nrobject whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Nrobject whereUpdatedBy($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
+ * @property-read int|null $activities_count
+ * @property-read \Kenepa\ResourceLock\Models\ResourceLock|null $resourceLock
  */
 	class Nrobject extends \Eloquent {}
 }
@@ -1394,13 +1481,16 @@ namespace App\Models{
  * @property-read int|null $materialmasters_count
  * @mixin \Eloquent
  * @property string|null $nr_name
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
+ * @property-read int|null $activities_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Batchmaster> $batchmasters
  * @property-read int|null $batchmasters_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Batchsource> $batchsources
  * @property-read int|null $batchsources_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Materialdocumentheader> $materialdocumentheaders
  * @property-read int|null $materialdocumentheaders_count
- * @method static \Illuminate\Database\Eloquent\Builder|Numberrange whereNrName($value)
+ * @property-read \Kenepa\ResourceLock\Models\ResourceLock|null $resourceLock
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Numberrange whereNrName($value)
  */
 	class Numberrange extends \Eloquent {}
 }
@@ -1431,6 +1521,9 @@ namespace App\Models{
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Materialplant> $materialplants
  * @property-read int|null $materialplants_count
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
+ * @property-read int|null $activities_count
+ * @property-read \Kenepa\ResourceLock\Models\ResourceLock|null $resourceLock
  */
 	class Periodindicator extends \Eloquent {}
 }
@@ -1472,8 +1565,11 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Plant whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Plant whereUpdatedBy($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
+ * @property-read int|null $activities_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Materialdocumentitem> $materialdocumentitems
  * @property-read int|null $materialdocumentitems_count
+ * @property-read \Kenepa\ResourceLock\Models\ResourceLock|null $resourceLock
  */
 	class Plant extends \Eloquent {}
 }
@@ -1504,6 +1600,9 @@ namespace App\Models{
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Materialplant> $materialplants
  * @property-read int|null $materialplants_count
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
+ * @property-read int|null $activities_count
+ * @property-read \Kenepa\ResourceLock\Models\ResourceLock|null $resourceLock
  */
 	class Procurementtype extends \Eloquent {}
 }
@@ -1543,6 +1642,9 @@ namespace App\Models{
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Businesspartner> $businesspartners
  * @property-read int|null $businesspartners_count
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
+ * @property-read int|null $activities_count
+ * @property-read \Kenepa\ResourceLock\Models\ResourceLock|null $resourceLock
  */
 	class Provinsi extends \Eloquent {}
 }
@@ -1573,8 +1675,11 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Reasonformovement whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Reasonformovement whereUpdatedBy($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
+ * @property-read int|null $activities_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Materialdocumentitem> $materialdocumentitems
  * @property-read int|null $materialdocumentitems_count
+ * @property-read \Kenepa\ResourceLock\Models\ResourceLock|null $resourceLock
  */
 	class Reasonformovement extends \Eloquent {}
 }
@@ -1605,6 +1710,9 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Reasonformovementcontrol whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Reasonformovementcontrol whereUpdatedBy($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
+ * @property-read int|null $activities_count
+ * @property-read \Kenepa\ResourceLock\Models\ResourceLock|null $resourceLock
  */
 	class Reasonformovementcontrol extends \Eloquent {}
 }
@@ -1635,6 +1743,9 @@ namespace App\Models{
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Materialplant> $materialplants
  * @property-read int|null $materialplants_count
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
+ * @property-read int|null $activities_count
+ * @property-read \Kenepa\ResourceLock\Models\ResourceLock|null $resourceLock
  */
 	class Specialprocurementtype extends \Eloquent {}
 }
@@ -1651,19 +1762,22 @@ namespace App\Models{
  * @property string|null $updated_by
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
+ * @property-read int|null $activities_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Materialdocumentheader> $materialdocumentheaders
  * @property-read int|null $materialdocumentheaders_count
- * @method static \Illuminate\Database\Eloquent\Builder|Status newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Status newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Status query()
- * @method static \Illuminate\Database\Eloquent\Builder|Status whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Status whereCreatedBy($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Status whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Status whereIsActive($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Status whereStatus($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Status whereStatusDesc($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Status whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Status whereUpdatedBy($value)
+ * @property-read \Kenepa\ResourceLock\Models\ResourceLock|null $resourceLock
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Status newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Status newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Status query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Status whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Status whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Status whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Status whereIsActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Status whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Status whereStatusDesc($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Status whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Status whereUpdatedBy($value)
  */
 	class Status extends \Eloquent {}
 }
@@ -1692,10 +1806,13 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Stocktype whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Stocktype whereUpdatedBy($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
+ * @property-read int|null $activities_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Materialdocumentitem> $materialdocumentitems
  * @property-read int|null $materialdocumentitems_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Movementtype> $movementtypes
  * @property-read int|null $movementtypes_count
+ * @property-read \Kenepa\ResourceLock\Models\ResourceLock|null $resourceLock
  */
 	class Stocktype extends \Eloquent {}
 }
@@ -1726,6 +1843,9 @@ namespace App\Models{
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Materialstoragelocation> $materialstoragelocations
  * @property-read int|null $materialstoragelocations_count
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
+ * @property-read int|null $activities_count
+ * @property-read \Kenepa\ResourceLock\Models\ResourceLock|null $resourceLock
  */
 	class Storagecondition extends \Eloquent {}
 }
@@ -1759,8 +1879,11 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Storagelocation whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Storagelocation whereUpdatedBy($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
+ * @property-read int|null $activities_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Materialdocumentitem> $materialdocumentitems
  * @property-read int|null $materialdocumentitems_count
+ * @property-read \Kenepa\ResourceLock\Models\ResourceLock|null $resourceLock
  */
 	class Storagelocation extends \Eloquent {}
 }
@@ -1805,6 +1928,9 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Sysobject whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Sysobject whereUpdatedBy($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
+ * @property-read int|null $activities_count
+ * @property-read \Kenepa\ResourceLock\Models\ResourceLock|null $resourceLock
  */
 	class Sysobject extends \Eloquent {}
 }
@@ -1891,6 +2017,9 @@ namespace App\Models{
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Materialstoragelocation> $materialstoragelocations
  * @property-read int|null $materialstoragelocations_count
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
+ * @property-read int|null $activities_count
+ * @property-read \Kenepa\ResourceLock\Models\ResourceLock|null $resourceLock
  */
 	class Temperaturecondition extends \Eloquent {}
 }
@@ -1923,8 +2052,11 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Title whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Title whereUpdatedBy($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
+ * @property-read int|null $activities_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
  * @property-read int|null $addresses_count
+ * @property-read \Kenepa\ResourceLock\Models\ResourceLock|null $resourceLock
  */
 	class Title extends \Eloquent {}
 }
@@ -1953,8 +2085,11 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Transactionreference whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Transactionreference whereUpdatedBy($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
+ * @property-read int|null $activities_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Materialdocumentheader> $materialdocumentheaders
  * @property-read int|null $materialdocumentheaders_count
+ * @property-read \Kenepa\ResourceLock\Models\ResourceLock|null $resourceLock
  */
 	class Transactionreference extends \Eloquent {}
 }
@@ -1983,8 +2118,11 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Transactiontype whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Transactiontype whereUpdatedBy($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
+ * @property-read int|null $activities_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Materialdocumentheader> $materialdocumentheaders
  * @property-read int|null $materialdocumentheaders_count
+ * @property-read \Kenepa\ResourceLock\Models\ResourceLock|null $resourceLock
  */
 	class Transactiontype extends \Eloquent {}
 }
@@ -2015,6 +2153,9 @@ namespace App\Models{
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Materialplant> $materialplants
  * @property-read int|null $materialplants_count
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
+ * @property-read int|null $activities_count
+ * @property-read \Kenepa\ResourceLock\Models\ResourceLock|null $resourceLock
  */
 	class Transportationgroup extends \Eloquent {}
 }
@@ -2049,8 +2190,11 @@ namespace App\Models{
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Materialmaster> $materialmasters2
  * @property-read int|null $materialmasters2_count
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
+ * @property-read int|null $activities_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Materialdocumentitem> $materialdocumentitems
  * @property-read int|null $materialdocumentitems_count
+ * @property-read \Kenepa\ResourceLock\Models\ResourceLock|null $resourceLock
  */
 	class Uom extends \Eloquent {}
 }

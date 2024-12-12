@@ -16,44 +16,22 @@ class CurrencyImporter extends Importer
         return [
             ImportColumn::make('currency')
                 ->label('Currency')
-                ->exampleHeader('Currency')
                 ->rules(['max:255']),
-
             ImportColumn::make('symbol')
                 ->label('Symbol')
-                ->exampleHeader('Symbol')
                 ->rules(['max:255']),
-
             ImportColumn::make('currency_code')
-                ->label('CurrencyCode')
-                ->exampleHeader('CurrencyCode')
+                ->label('ISO Currency Code')
                 ->rules(['max:3']),
-
             ImportColumn::make('numeric')
-                ->label('Numeric')
-                ->exampleHeader('Numeric')
+                ->label('ISO Numberic')
                 ->rules(['max:3']),
-
             ImportColumn::make('decimal')
                 ->label('Decimal')
-                ->exampleHeader('Decimal')
                 ->rules(['max:4']),
-
             ImportColumn::make('is_active')
-                ->label('Active?')
-                ->exampleHeader('Active?')
                 ->boolean()
                 ->rules(['boolean']),
-
-            ImportColumn::make('created_by')
-                ->label('Createdby')
-                ->exampleHeader('Createdby')
-                ->rules(['max:255']),
-
-            ImportColumn::make('updated_by')
-                ->label('Updatedby')
-                ->exampleHeader('Updatedby')
-                ->rules(['max:255']),
         ];
     }
 

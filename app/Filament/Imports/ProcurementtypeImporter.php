@@ -15,30 +15,14 @@ class ProcurementtypeImporter extends Importer
     {
         return [
             ImportColumn::make('procurement_type')
-                ->label('ProcurementType')
-                ->exampleHeader('ProcurementType')
+                ->label('Procurement Type')
                 ->rules(['max:1']),
-
             ImportColumn::make('procurement_type_desc')
                 ->label('Desc')
-                ->exampleHeader('Desc')
                 ->rules(['max:255']),
-
             ImportColumn::make('is_active')
-                ->label('Active?')
-                ->exampleHeader('Active?')
                 ->boolean()
                 ->rules(['boolean']),
-
-            ImportColumn::make('created_by')
-                ->label('Createdby')
-                ->exampleHeader('Createdby')
-                ->rules(['max:255']),
-
-            ImportColumn::make('updated_by')
-                ->label('Updatedby')
-                ->exampleHeader('Updatedby')
-                ->rules(['max:255']),
         ];
     }
 

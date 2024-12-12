@@ -295,6 +295,10 @@ class CurrencyResource extends Resource
             ])
             ->headerActions([
                 Tables\Actions\CreateAction::make(),
+
+                ImportAction::make()
+                ->label('Import')
+                ->importer(CurrencyImporter::class),
             ])
             ->actions([
                 ActionGroup::make([

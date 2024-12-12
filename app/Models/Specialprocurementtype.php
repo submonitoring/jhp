@@ -5,9 +5,12 @@ namespace App\Models;
 use Auth;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Kenepa\ResourceLock\Models\Concerns\HasLocks;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string|null $special_procurement_type
@@ -35,6 +38,14 @@ use Illuminate\Database\Eloquent\Model;
 class Specialprocurementtype extends Model
 {
     use HasFactory;
+    use LogsActivity;
+    use HasLocks;
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll();
+    }
 
     public function materialplants()
     {

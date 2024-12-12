@@ -24,10 +24,7 @@ return new class extends Migration
                 ->constrained()
                 ->cascadeOnUpdate()
                 ->nullOnDelete();
-            $table->foreignId('bprole_id')->nullable()
-                ->constrained()
-                ->cascadeOnUpdate()
-                ->nullOnDelete();
+            $table->string('bprole_id')->nullable();
             $table->string('vat_number')->nullable();
             $table->foreignId('title_id')->nullable()
                 ->constrained()

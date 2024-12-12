@@ -15,30 +15,14 @@ class IndustrysectorImporter extends Importer
     {
         return [
             ImportColumn::make('industry_sector')
-                ->label('IndustrySector')
-                ->exampleHeader('IndustrySector')
+                ->label('Industry Sector')
                 ->rules(['max:2']),
-
             ImportColumn::make('industry_sector_desc')
-                ->label('Desription')
-                ->exampleHeader('Desription')
+                ->label('Desc')
                 ->rules(['max:255']),
-
             ImportColumn::make('is_active')
-                ->label('Active?')
-                ->exampleHeader('Active?')
                 ->boolean()
                 ->rules(['boolean']),
-
-            ImportColumn::make('created_by')
-                ->label('Createdby')
-                ->exampleHeader('Createdby')
-                ->rules(['max:255']),
-
-            ImportColumn::make('updated_by')
-                ->label('Updatedby')
-                ->exampleHeader('Updatedby')
-                ->rules(['max:255']),
         ];
     }
 

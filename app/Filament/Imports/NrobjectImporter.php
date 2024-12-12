@@ -15,30 +15,14 @@ class NrobjectImporter extends Importer
     {
         return [
             ImportColumn::make('nrobject')
-                ->label('NRObject')
-                ->exampleHeader('NRObject')
+                ->label('NR Object')
                 ->rules(['max:10']),
-
             ImportColumn::make('nrobject_name')
                 ->label('Name')
-                ->exampleHeader('Name')
                 ->rules(['max:255']),
-
             ImportColumn::make('is_active')
-                ->label('Active?')
-                ->exampleHeader('Active?')
                 ->boolean()
                 ->rules(['boolean']),
-
-            ImportColumn::make('created_by')
-                ->label('Createdby')
-                ->exampleHeader('Createdby')
-                ->rules(['max:255']),
-
-            ImportColumn::make('updated_by')
-                ->label('Updatedby')
-                ->exampleHeader('Updatedby')
-                ->rules(['max:255']),
         ];
     }
 

@@ -6,6 +6,7 @@ use App\Filament\Submonitoring\Resources\DocumenttypeResource;
 use Filament\Actions;
 use Filament\Actions\Action;
 use Filament\Resources\Pages\EditRecord;
+use Kenepa\ResourceLock\Resources\Pages\Concerns\UsesResourceLock;
 
 class EditDocumenttype extends EditRecord
 {
@@ -20,4 +21,6 @@ class EditDocumenttype extends EditRecord
                 ->url($this->getResource()::getUrl('index')),
         ];
     }
+
+    use UsesResourceLock;
 }

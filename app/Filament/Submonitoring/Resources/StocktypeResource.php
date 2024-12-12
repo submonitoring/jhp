@@ -2,6 +2,7 @@
 
 namespace App\Filament\Submonitoring\Resources;
 
+use App\Filament\Imports\StocktypeImporter;
 use App\Filament\Submonitoring\Clusters\Document;
 use App\Filament\Submonitoring\Resources\StocktypeResource\Pages;
 use App\Filament\Submonitoring\Resources\StocktypeResource\Pages\ManageMovementtype;
@@ -20,6 +21,7 @@ use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Actions\ImportAction;
 use Filament\Tables\Columns\CheckboxColumn;
 use Filament\Tables\Columns\ColumnGroup;
 use Filament\Tables\Columns\TextColumn;
@@ -221,6 +223,10 @@ class StocktypeResource extends Resource
             ->deferFilters()
             ->headerActions([
                 Tables\Actions\CreateAction::make(),
+
+                ImportAction::make()
+                    ->label('Import')
+                    ->importer(StocktypeImporter::class),
             ])
             ->actions([
                 ActionGroup::make([

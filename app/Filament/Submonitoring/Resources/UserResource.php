@@ -2,6 +2,7 @@
 
 namespace App\Filament\Submonitoring\Resources;
 
+use App\Filament\Imports\UserImporter;
 use App\Filament\Submonitoring\Clusters\ManageUser;
 use App\Filament\Submonitoring\Resources\UserResource\Pages;
 use App\Filament\Submonitoring\Resources\UserResource\RelationManagers;
@@ -15,6 +16,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Actions\ImportAction;
 use Filament\Tables\Columns\CheckboxColumn;
 use Filament\Tables\Columns\ColumnGroup;
 use Filament\Tables\Columns\TextColumn;
@@ -264,6 +266,10 @@ class UserResource extends Resource
             ->deferFilters()
             ->headerActions([
                 Tables\Actions\CreateAction::make(),
+
+                ImportAction::make()
+                    ->label('Import')
+                    ->importer(UserImporter::class),
             ])
             ->actions([
                 ActionGroup::make([

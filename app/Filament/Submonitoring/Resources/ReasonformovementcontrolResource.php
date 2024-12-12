@@ -2,6 +2,7 @@
 
 namespace App\Filament\Submonitoring\Resources;
 
+use App\Filament\Imports\ReasonformovementcontrolImporter;
 use App\Filament\Submonitoring\Clusters\General;
 use App\Filament\Submonitoring\Resources\ReasonformovementcontrolResource\Pages;
 use App\Filament\Submonitoring\Resources\ReasonformovementcontrolResource\RelationManagers;
@@ -17,6 +18,7 @@ use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Actions\ImportAction;
 use Filament\Tables\Columns\CheckboxColumn;
 use Filament\Tables\Columns\ColumnGroup;
 use Filament\Tables\Columns\TextColumn;
@@ -215,6 +217,10 @@ class ReasonformovementcontrolResource extends Resource
             ->deferFilters()
             ->headerActions([
                 Tables\Actions\CreateAction::make(),
+
+                ImportAction::make()
+                    ->label('Import')
+                    ->importer(ReasonformovementcontrolImporter::class),
             ])
             ->actions([
                 ActionGroup::make([

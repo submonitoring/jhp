@@ -6,6 +6,7 @@ use App\Filament\Submonitoring\Resources\ReasonformovementResource;
 use Filament\Actions;
 use Filament\Actions\Action;
 use Filament\Resources\Pages\EditRecord;
+use Kenepa\ResourceLock\Resources\Pages\Concerns\UsesResourceLock;
 
 class EditReasonformovement extends EditRecord
 {
@@ -20,4 +21,6 @@ class EditReasonformovement extends EditRecord
                 ->url($this->getResource()::getUrl('index')),
         ];
     }
+
+    use UsesResourceLock;
 }

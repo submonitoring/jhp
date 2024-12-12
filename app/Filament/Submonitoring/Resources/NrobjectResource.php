@@ -3,6 +3,7 @@
 namespace App\Filament\Submonitoring\Resources;
 
 use App\Filament\Exports\NrobjectExporter;
+use App\Filament\Imports\NrobjectImporter;
 use App\Filament\Submonitoring\Clusters\NumberRange;
 use App\Filament\Submonitoring\Resources\NrobjectResource\Pages;
 use App\Filament\Submonitoring\Resources\NrobjectResource\Pages\EditNrobject;
@@ -25,6 +26,7 @@ use Filament\Tables;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Actions\ExportBulkAction;
+use Filament\Tables\Actions\ImportAction;
 use Filament\Tables\Columns\CheckboxColumn;
 use Filament\Tables\Columns\ColumnGroup;
 use Filament\Tables\Columns\TextColumn;
@@ -225,6 +227,10 @@ class NrobjectResource extends Resource
             ->deferFilters()
             ->headerActions([
                 Tables\Actions\CreateAction::make(),
+
+                ImportAction::make()
+                    ->label('Import')
+                    ->importer(NrobjectImporter::class),
             ])
             ->actions([
                 ActionGroup::make([

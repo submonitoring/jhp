@@ -15,30 +15,14 @@ class LoadinggroupImporter extends Importer
     {
         return [
             ImportColumn::make('loading_group')
-                ->label('LoadingGroup')
-                ->exampleHeader('LoadingGroup')
+                ->label('Loading Group')
                 ->rules(['max:4']),
-
             ImportColumn::make('loading_group_desc')
                 ->label('Desc')
-                ->exampleHeader('Desc')
                 ->rules(['max:255']),
-
             ImportColumn::make('is_active')
-                ->label('Active?')
-                ->exampleHeader('Active?')
                 ->boolean()
                 ->rules(['boolean']),
-
-            ImportColumn::make('created_by')
-                ->label('Createdby')
-                ->exampleHeader('Createdby')
-                ->rules(['max:255']),
-
-            ImportColumn::make('updated_by')
-                ->label('Updatedby')
-                ->exampleHeader('Updatedby')
-                ->rules(['max:255']),
         ];
     }
 

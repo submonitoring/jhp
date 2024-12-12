@@ -6,6 +6,7 @@ use App\Filament\Submonitoring\Resources\PlantResource;
 use Filament\Actions;
 use Filament\Actions\Action;
 use Filament\Resources\Pages\EditRecord;
+use Kenepa\ResourceLock\Resources\Pages\Concerns\UsesResourceLock;
 
 class EditPlant extends EditRecord
 {
@@ -20,4 +21,6 @@ class EditPlant extends EditRecord
                 ->url($this->getResource()::getUrl('index')),
         ];
     }
+
+    use UsesResourceLock;
 }

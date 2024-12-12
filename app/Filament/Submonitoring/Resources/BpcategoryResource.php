@@ -2,6 +2,7 @@
 
 namespace App\Filament\Submonitoring\Resources;
 
+use App\Filament\Imports\BpcategoryImporter;
 use App\Filament\Submonitoring\Clusters\Businesspartnercustm;
 use App\Filament\Submonitoring\Resources\BpcategoryResource\Pages;
 use App\Filament\Submonitoring\Resources\BpcategoryResource\Pages\ManageTitles;
@@ -22,6 +23,7 @@ use Filament\Support\Enums\ActionSize;
 use Filament\Tables;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Actions\ImportAction;
 use Filament\Tables\Columns\CheckboxColumn;
 use Filament\Tables\Columns\ColumnGroup;
 use Filament\Tables\Columns\IconColumn;
@@ -223,6 +225,10 @@ class BpcategoryResource extends Resource
             ->deferFilters()
             ->headerActions([
                 Tables\Actions\CreateAction::make(),
+
+                ImportAction::make()
+                    ->label('Import')
+                    ->importer(BpcategoryImporter::class),
             ])
             ->actions([
                 ActionGroup::make([

@@ -6,6 +6,7 @@ use App\Filament\Submonitoring\Resources\BpcategoryResource;
 use Filament\Actions;
 use Filament\Actions\Action;
 use Filament\Resources\Pages\EditRecord;
+use Kenepa\ResourceLock\Resources\Pages\Concerns\UsesResourceLock;
 
 class EditBpcategory extends EditRecord
 {
@@ -20,4 +21,6 @@ class EditBpcategory extends EditRecord
                 ->url($this->getResource()::getUrl('index')),
         ];
     }
+
+    use UsesResourceLock;
 }

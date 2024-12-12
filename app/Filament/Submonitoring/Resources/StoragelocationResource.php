@@ -2,6 +2,7 @@
 
 namespace App\Filament\Submonitoring\Resources;
 
+use App\Filament\Imports\StoragelocationImporter;
 use App\Filament\Submonitoring\Clusters\OrganizationalStructures;
 use App\Filament\Submonitoring\Resources\StoragelocationResource\Pages;
 use App\Filament\Submonitoring\Resources\StoragelocationResource\RelationManagers;
@@ -20,6 +21,7 @@ use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Actions\ImportAction;
 use Filament\Tables\Columns\CheckboxColumn;
 use Filament\Tables\Columns\ColumnGroup;
 use Filament\Tables\Columns\TextColumn;
@@ -221,6 +223,10 @@ class StoragelocationResource extends Resource
             ->deferFilters()
             ->headerActions([
                 Tables\Actions\CreateAction::make(),
+
+                ImportAction::make()
+                    ->label('Import')
+                    ->importer(StoragelocationImporter::class),
             ])
             ->actions([
                 ActionGroup::make([

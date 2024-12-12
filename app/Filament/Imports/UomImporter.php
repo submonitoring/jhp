@@ -16,34 +16,16 @@ class UomImporter extends Importer
         return [
             ImportColumn::make('uom')
                 ->label('UoM')
-                ->exampleHeader('UoM')
                 ->rules(['max:255']),
-
             ImportColumn::make('uom_name')
-                ->label('UoMName')
-                ->exampleHeader('UoMName')
+                ->label('Name')
                 ->rules(['max:255']),
-
             ImportColumn::make('iso_uom')
-                ->label('ISOUoM')
-                ->exampleHeader('ISOUoM')
+                ->label('ISO UoM')
                 ->rules(['max:255']),
-
             ImportColumn::make('is_active')
-                ->label('Active?')
-                ->exampleHeader('Active?')
                 ->boolean()
                 ->rules(['boolean']),
-
-            ImportColumn::make('created_by')
-                ->label('Createdby')
-                ->exampleHeader('Createdby')
-                ->rules(['max:255']),
-
-            ImportColumn::make('updated_by')
-                ->label('Updatedby')
-                ->exampleHeader('Updatedby')
-                ->rules(['max:255']),
         ];
     }
 
