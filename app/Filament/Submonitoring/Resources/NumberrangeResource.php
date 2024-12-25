@@ -114,8 +114,9 @@ class NumberrangeResource extends Resource
                     Grid::make(2)
                         ->schema([
 
-                            Checkbox::make('is_external')
+                            ToggleButtons::make('is_external')
                                 ->label('External?')
+                                ->boolean()
                                 ->inline()
                                 ->live()
                                 ->required(),
@@ -341,7 +342,7 @@ class NumberrangeResource extends Resource
             ->headerActions([
                 Tables\Actions\CreateAction::make(),
 
-                    ImportAction::make()
+                ImportAction::make()
                     ->label('Import')
                     ->importer(NumberrangeImporter::class),
             ])
@@ -349,6 +350,7 @@ class NumberrangeResource extends Resource
                 ActionGroup::make([
                     Tables\Actions\ViewAction::make(),
                     Tables\Actions\EditAction::make(),
+                    Tables\Actions\DeleteAction::make(),
                 ]),
                 ActionGroup::make([
                     Action::make('AssignMatTypes')
@@ -376,6 +378,10 @@ class NumberrangeResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
+
+                ExportBulkAction::make()
+                    ->label('Export')
+                    ->exporter(NumberrangeExporter::class)
             ]);
     }
 

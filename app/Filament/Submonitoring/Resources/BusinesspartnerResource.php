@@ -2,6 +2,8 @@
 
 namespace App\Filament\Submonitoring\Resources;
 
+use App\Filament\Exports\BusinesspartnerExporter;
+use App\Filament\Imports\BusinesspartnerImporter;
 use App\Filament\Submonitoring\Clusters\BusinessPartner as ClustersBusinessPartner;
 use App\Filament\Submonitoring\Resources\BusinesspartnerResource\Pages;
 use App\Filament\Submonitoring\Resources\BusinesspartnerResource\RelationManagers;
@@ -37,6 +39,8 @@ use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Actions\ExportBulkAction;
+use Filament\Tables\Actions\ImportAction;
 use Filament\Tables\Columns\ColumnGroup;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
@@ -157,6 +161,7 @@ class BusinesspartnerResource extends Resource
                                                     ->schema([
                                                         Select::make('title_id')
                                                             ->label('Title')
+                                                            ->required()
                                                             ->options(function (Get $get) {
 
                                                                 $bpcategory = $get('bpcategory_id');
@@ -173,6 +178,7 @@ class BusinesspartnerResource extends Resource
                                                     ->schema([
 
                                                         TextInput::make('name_1')
+                                                            ->required()
                                                             ->label('Nama'),
 
                                                     ])
@@ -277,7 +283,7 @@ class BusinesspartnerResource extends Resource
                                                             ->live()
                                                             ->options(Country::whereIsActive(1)->pluck('country_name', 'id'))
                                                             // ->native(false)
-                                                            // ->default(105)
+                                                            ->default(105)
                                                             // ->disabled()
                                                             ->dehydrated(),
 
@@ -625,12 +631,17 @@ class BusinesspartnerResource extends Resource
             ->deferFilters()
             ->headerActions([
                 Tables\Actions\CreateAction::make(),
+
+                ImportAction::make()
+                    ->label('Import')
+                    ->importer(BusinesspartnerImporter::class),
             ])
             ->actions([
                 ActionGroup::make([
                     ActionGroup::make([
                         Tables\Actions\ViewAction::make(),
                         Tables\Actions\EditAction::make(),
+                        Tables\Actions\DeleteAction::make(),
                     ])->dropdown(false),
                 ]),
             ])
@@ -638,6 +649,10 @@ class BusinesspartnerResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
+
+                ExportBulkAction::make()
+                    ->label('Export')
+                    ->exporter(BusinesspartnerExporter::class)
             ]);
     }
 

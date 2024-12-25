@@ -22,5 +22,10 @@ class EditCyclecounting extends EditRecord
         ];
     }
 
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
+
     use UsesResourceLock;
 }

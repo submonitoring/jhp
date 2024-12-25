@@ -64,6 +64,11 @@ class Companycode extends Model
         return $this->hasMany(Plant::class);
     }
 
+    public function salesorganizations()
+    {
+        return $this->hasMany(Salesorganization::class);
+    }
+
     public function addresses()
     {
         return $this->morphToMany(Address::class, 'addressable');

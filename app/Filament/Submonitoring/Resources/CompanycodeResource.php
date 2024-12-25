@@ -2,6 +2,7 @@
 
 namespace App\Filament\Submonitoring\Resources;
 
+use App\Filament\Exports\CompanycodeExporter;
 use App\Filament\Imports\CompanycodeImporter;
 use App\Filament\Submonitoring\Clusters\OrganizationalStructures;
 use App\Filament\Submonitoring\Resources\CompanycodeResource\Pages;
@@ -31,6 +32,7 @@ use Filament\Support\Enums\ActionSize;
 use Filament\Tables;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Actions\ExportBulkAction;
 use Filament\Tables\Actions\ImportAction;
 use Filament\Tables\Columns\ColumnGroup;
 use Filament\Tables\Columns\IconColumn;
@@ -301,13 +303,14 @@ class CompanycodeResource extends Resource
                 Tables\Actions\CreateAction::make(),
 
                 ImportAction::make()
-                ->label('Import')
-                ->importer(CompanycodeImporter::class),
+                    ->label('Import')
+                    ->importer(CompanycodeImporter::class),
             ])
             ->actions([
                 ActionGroup::make([
                     Tables\Actions\ViewAction::make(),
                     Tables\Actions\EditAction::make(),
+                    Tables\Actions\DeleteAction::make(),
                 ]),
                 ActionGroup::make([
                     Action::make('assign_plant')
@@ -327,12 +330,15 @@ class CompanycodeResource extends Resource
                     ->outlined()
                     ->button(),
 
-
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
+
+                ExportBulkAction::make()
+                    ->label('Export')
+                    ->exporter(CompanycodeExporter::class)
             ]);
     }
 

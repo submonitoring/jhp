@@ -2,6 +2,8 @@
 
 namespace App\Filament\Submonitoring\Resources;
 
+use App\Filament\Exports\BatchmasterExporter;
+use App\Filament\Imports\BatchmasterImporter;
 use App\Filament\Submonitoring\Clusters\BatchMaster as ClustersBatchMaster;
 use App\Filament\Submonitoring\Resources\BatchmasterResource\Pages;
 use App\Filament\Submonitoring\Resources\BatchmasterResource\RelationManagers;
@@ -9,6 +11,7 @@ use App\Models\Batchmaster;
 use App\Models\Batchsource;
 use App\Models\Businesspartner;
 use App\Models\Numberrange;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Grid;
@@ -19,6 +22,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Tabs;
 use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\ToggleButtons;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
@@ -30,7 +34,9 @@ use Filament\Tables;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Actions\CreateAction;
+use Filament\Tables\Actions\ExportBulkAction;
 use Filament\Tables\Actions\HeaderActionsPosition;
+use Filament\Tables\Actions\ImportAction;
 use Filament\Tables\Actions\ReplicateAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
@@ -43,6 +49,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Validation\Rules\Unique;
 use Schmeits\FilamentCharacterCounter\Forms\Components\TextInput;
 
@@ -155,7 +162,8 @@ class BatchmasterResource extends Resource
                                 ->label('Vendor')
                                 ->required()
                                 ->live()
-                                ->options(Businesspartner::whereIsActive(1)->pluck('bp_number', 'id'))
+                                ->searchable(['name_1', 'name_4'])
+                                ->options(Businesspartner::whereIsActive(1)->pluck('name_1', 'id'))
                                 ->afterStateUpdated(function (Set $set, $state) {
 
                                     $bp = Businesspartner::whereId($state)->first();
@@ -166,16 +174,18 @@ class BatchmasterResource extends Resource
 
                                         $set('bpname', $bp->name_1);
                                     }
+                                })
+                                ->helperText(function ($state) {
+
+                                    $bp = Businesspartner::whereId($state)->first();
+
+                                    if ($bp == null) {
+                                        return;
+                                    } elseif ($bp != null) {
+
+                                        return ($bp->title->title_desc . ' ' . $bp->name_1);
+                                    }
                                 }),
-
-                        ]),
-
-                    Grid::make(4)
-                        ->schema([
-
-                            TextInput::make('bpname')
-                                ->label('')
-                                ->disabled(),
 
                         ]),
                 ]),
@@ -189,8 +199,10 @@ class BatchmasterResource extends Resource
                     Grid::make(4)
                         ->schema([
 
-                            Toggle::make('is_active')
-                                ->label('Active')
+                            ToggleButtons::make('is_active')
+                                ->label('Active?')
+                                ->boolean()
+                                ->grouped()
                                 ->default(true),
 
                         ]),
@@ -271,12 +283,17 @@ class BatchmasterResource extends Resource
             ->deferFilters()
             ->headerActions([
                 Tables\Actions\CreateAction::make(),
+
+                ImportAction::make()
+                    ->label('Import')
+                    ->importer(BatchmasterImporter::class),
             ])
             ->actions([
                 ActionGroup::make([
                     ActionGroup::make([
                         Tables\Actions\ViewAction::make(),
                         Tables\Actions\EditAction::make(),
+                        Tables\Actions\DeleteAction::make(),
                     ])->dropdown(false),
                     ReplicateAction::make()
                         ->form([
@@ -310,6 +327,17 @@ class BatchmasterResource extends Resource
                         })
                         ->successRedirectUrl(fn(Model $replica): string => route('filament.submonitoring.batch-master.resources.batchmasters.edit', $replica)),
 
+                    Tables\Actions\Action::make('pdf')
+                        ->label('PDF')
+                        ->color('success')
+                        ->icon('heroicon-o-cloud-arrow-down')
+                        ->action(function (Model $record) {
+                            return response()->streamDownload(function () use ($record) {
+                                echo Pdf::loadHtml(
+                                    Blade::render('pdf', ['record' => $record])
+                                )->stream();
+                            }, $record->batch_number . '.pdf');
+                        }),
 
                 ]),
 
@@ -319,6 +347,10 @@ class BatchmasterResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
+
+                ExportBulkAction::make()
+                    ->label('Export')
+                    ->exporter(BatchmasterExporter::class)
             ]);
     }
 

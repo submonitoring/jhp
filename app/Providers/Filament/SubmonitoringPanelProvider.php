@@ -21,6 +21,7 @@ use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Kenepa\ResourceLock\ResourceLockPlugin;
+use pxlrbt\FilamentSpotlight\SpotlightPlugin;
 use Rmsramos\Activitylog\ActivitylogPlugin;
 
 class SubmonitoringPanelProvider extends PanelProvider
@@ -133,7 +134,8 @@ class SubmonitoringPanelProvider extends PanelProvider
                     ->authorize(
                         fn() => auth()->user()->id === 1
                     ),
-                ResourceLockPlugin::make()
+                ResourceLockPlugin::make(),
+                SpotlightPlugin::make(),
             ])
             ->viteTheme('resources/css/filament/submonitoring/theme.css');
     }

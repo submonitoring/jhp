@@ -2,6 +2,8 @@
 
 namespace App\Filament\Submonitoring\Resources;
 
+use App\Filament\Exports\MaterialdocumentheaderExporter;
+use App\Filament\Imports\MaterialdocumentheaderImporter;
 use App\Filament\Submonitoring\Clusters\Materialdocument;
 use App\Filament\Submonitoring\Resources\MaterialdocumentheaderResource\Pages;
 use App\Filament\Submonitoring\Resources\MaterialdocumentheaderResource\RelationManagers;
@@ -39,7 +41,9 @@ use Filament\Tables;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Actions\CreateAction;
+use Filament\Tables\Actions\ExportBulkAction;
 use Filament\Tables\Actions\HeaderActionsPosition;
+use Filament\Tables\Actions\ImportAction;
 use Filament\Tables\Actions\ReplicateAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
@@ -515,23 +519,30 @@ class MaterialdocumentheaderResource extends Resource
             ->deferFilters()
             ->headerActions([
                 Tables\Actions\CreateAction::make(),
+
+                ImportAction::make()
+                    ->label('Import')
+                    ->importer(MaterialdocumentheaderImporter::class),
             ])
             ->actions([
                 ActionGroup::make([
                     ActionGroup::make([
                         Tables\Actions\ViewAction::make(),
                         Tables\Actions\EditAction::make(),
+                        Tables\Actions\DeleteAction::make(),
                     ])->dropdown(false),
-
-
                 ]),
-
 
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
+
+                ExportBulkAction::make()
+                    ->label('Export')
+                    ->exporter(MaterialdocumentheaderExporter::class)
+
             ]);
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Submonitoring\Resources;
 
+use App\Filament\Exports\BproleExporter;
 use App\Filament\Imports\BproleImporter;
 use App\Filament\Submonitoring\Clusters\Businesspartnercustm;
 use App\Filament\Submonitoring\Resources\BproleResource\Pages;
@@ -20,6 +21,7 @@ use Filament\Resources\Resource;
 use Filament\Support\Enums\ActionSize;
 use Filament\Tables;
 use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Actions\ExportBulkAction;
 use Filament\Tables\Actions\ImportAction;
 use Filament\Tables\Columns\CheckboxColumn;
 use Filament\Tables\Columns\ColumnGroup;
@@ -223,13 +225,14 @@ class BproleResource extends Resource
                 Tables\Actions\CreateAction::make(),
 
                 ImportAction::make()
-                ->label('Import')
-                ->importer(BproleImporter::class),
+                    ->label('Import')
+                    ->importer(BproleImporter::class),
             ])
             ->actions([
                 ActionGroup::make([
                     Tables\Actions\ViewAction::make(),
                     Tables\Actions\EditAction::make(),
+                    Tables\Actions\DeleteAction::make(),
                 ]),
 
             ])
@@ -237,6 +240,10 @@ class BproleResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
+
+                ExportBulkAction::make()
+                    ->label('Export')
+                    ->exporter(BproleExporter::class)
             ]);
     }
 

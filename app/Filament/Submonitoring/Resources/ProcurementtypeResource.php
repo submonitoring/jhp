@@ -2,6 +2,7 @@
 
 namespace App\Filament\Submonitoring\Resources;
 
+use App\Filament\Exports\ProcurementtypeExporter;
 use App\Filament\Imports\ProcurementtypeImporter;
 use App\Filament\Submonitoring\Clusters\MaterialMaster;
 use App\Filament\Submonitoring\Resources\ProcurementtypeResource\Pages;
@@ -18,6 +19,7 @@ use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Actions\ExportBulkAction;
 use Filament\Tables\Actions\ImportAction;
 use Filament\Tables\Columns\CheckboxColumn;
 use Filament\Tables\Columns\ColumnGroup;
@@ -221,13 +223,14 @@ class ProcurementtypeResource extends Resource
                 Tables\Actions\CreateAction::make(),
 
                 ImportAction::make()
-                ->label('Import')
-                ->importer(ProcurementtypeImporter::class),
+                    ->label('Import')
+                    ->importer(ProcurementtypeImporter::class),
             ])
             ->actions([
                 ActionGroup::make([
                     Tables\Actions\ViewAction::make(),
                     Tables\Actions\EditAction::make(),
+                    Tables\Actions\DeleteAction::make(),
                 ]),
 
             ])
@@ -235,6 +238,10 @@ class ProcurementtypeResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
+
+                ExportBulkAction::make()
+                    ->label('Export')
+                    ->exporter(ProcurementtypeExporter::class)
             ]);
     }
 

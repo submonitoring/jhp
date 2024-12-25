@@ -29,6 +29,8 @@ class ManageStoragelocation extends ManageRelatedRecords
 
     protected static ?string $navigationIcon = 'heroicon-o-arrow-right-end-on-rectangle';
 
+    protected static ?string $recordTitleAttribute = 'name_1';
+
     public function getTitle(): string
     {
         return __('Assignment ' . $this->getOwnerRecord()->plant . ' to ' . $this->getNavigationLabel());

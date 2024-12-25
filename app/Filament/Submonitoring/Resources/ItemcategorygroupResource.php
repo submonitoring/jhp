@@ -2,6 +2,7 @@
 
 namespace App\Filament\Submonitoring\Resources;
 
+use App\Filament\Exports\ItemcategorygroupExporter;
 use App\Filament\Imports\ItemcategorygroupImporter;
 use App\Filament\Submonitoring\Clusters\MaterialMaster;
 use App\Filament\Submonitoring\Resources\ItemcategorygroupResource\Pages;
@@ -18,6 +19,7 @@ use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Actions\ExportBulkAction;
 use Filament\Tables\Actions\ImportAction;
 use Filament\Tables\Columns\ColumnGroup;
 use Filament\Tables\Columns\IconColumn;
@@ -223,13 +225,14 @@ class ItemcategorygroupResource extends Resource
                 Tables\Actions\CreateAction::make(),
 
                 ImportAction::make()
-                ->label('Import')
-                ->importer(ItemcategorygroupImporter::class),
+                    ->label('Import')
+                    ->importer(ItemcategorygroupImporter::class),
             ])
             ->actions([
                 ActionGroup::make([
                     Tables\Actions\ViewAction::make(),
                     Tables\Actions\EditAction::make(),
+                    Tables\Actions\DeleteAction::make(),
                 ]),
 
 
@@ -238,6 +241,10 @@ class ItemcategorygroupResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
+
+                ExportBulkAction::make()
+                    ->label('Export')
+                    ->exporter(ItemcategorygroupExporter::class)
             ]);
     }
 

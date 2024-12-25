@@ -2,6 +2,8 @@
 
 namespace App\Filament\Submonitoring\Resources;
 
+use App\Filament\Exports\AddressExporter;
+use App\Filament\Imports\AddressImporter;
 use App\Filament\Submonitoring\Clusters\Address as ClustersAddress;
 use App\Filament\Submonitoring\Resources\AddressResource\Pages;
 use App\Filament\Submonitoring\Resources\AddressResource\RelationManagers;
@@ -34,7 +36,10 @@ use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Actions\ExportAction;
+use Filament\Tables\Actions\ExportBulkAction;
 use Filament\Tables\Actions\HeaderActionsPosition;
+use Filament\Tables\Actions\ImportAction;
 use Filament\Tables\Columns\ColumnGroup;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
@@ -1017,12 +1022,17 @@ class AddressResource extends Resource
             ->deferFilters()
             ->headerActions([
                 Tables\Actions\CreateAction::make(),
+
+                ImportAction::make()
+                    ->label('Import')
+                    ->importer(AddressImporter::class),
             ])
             ->actions([
                 ActionGroup::make([
                     ActionGroup::make([
                         Tables\Actions\ViewAction::make(),
                         Tables\Actions\EditAction::make(),
+                        Tables\Actions\DeleteAction::make(),
                     ])->dropdown(false),
                 ]),
             ])
@@ -1030,6 +1040,10 @@ class AddressResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
+
+                ExportBulkAction::make()
+                    ->label('Export')
+                    ->exporter(AddressExporter::class)
             ]);
     }
 

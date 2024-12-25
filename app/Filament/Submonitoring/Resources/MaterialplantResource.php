@@ -2,6 +2,8 @@
 
 namespace App\Filament\Submonitoring\Resources;
 
+use App\Filament\Exports\MaterialplantExporter;
+use App\Filament\Imports\MaterialplantImporter;
 use App\Filament\Submonitoring\Clusters\MasterData;
 use App\Filament\Submonitoring\Clusters\MaterialMasterData;
 use App\Filament\Submonitoring\Resources\MaterialplantResource\Pages;
@@ -31,6 +33,8 @@ use Filament\Support\Enums\ActionSize;
 use Filament\Tables;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Actions\ExportBulkAction;
+use Filament\Tables\Actions\ImportAction;
 use Filament\Tables\Actions\ReplicateAction;
 use Filament\Tables\Columns\ColumnGroup;
 use Filament\Tables\Columns\TextColumn;
@@ -426,12 +430,17 @@ class MaterialplantResource extends Resource
             ->deferFilters()
             ->headerActions([
                 Tables\Actions\CreateAction::make(),
+
+                ImportAction::make()
+                    ->label('Import')
+                    ->importer(MaterialplantImporter::class),
             ])
             ->actions([
                 ActionGroup::make([
                     ActionGroup::make([
                         Tables\Actions\ViewAction::make(),
                         Tables\Actions\EditAction::make(),
+                        Tables\Actions\DeleteAction::make(),
                     ])->dropdown(false),
 
                 ]),
@@ -450,7 +459,15 @@ class MaterialplantResource extends Resource
 
 
             ])
-            ->bulkActions([]);
+            ->bulkActions([
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make(),
+                ]),
+
+                ExportBulkAction::make()
+                    ->label('Export')
+                    ->exporter(MaterialplantExporter::class)
+            ]);
     }
 
     public static function getRelations(): array

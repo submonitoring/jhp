@@ -236,6 +236,7 @@ class NrobjectResource extends Resource
                 ActionGroup::make([
                     Tables\Actions\ViewAction::make(),
                     Tables\Actions\EditAction::make(),
+                    Tables\Actions\DeleteAction::make(),
                 ]),
                 Action::make('Assign')
                     ->label('New Number Range')
@@ -250,7 +251,9 @@ class NrobjectResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
+
                 ExportBulkAction::make()
+                    ->label('Export')
                     ->exporter(NrobjectExporter::class)
             ]);
     }

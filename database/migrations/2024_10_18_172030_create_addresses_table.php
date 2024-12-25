@@ -52,6 +52,7 @@ return new class extends Migration
                 ->constrained()
                 ->cascadeOnUpdate()
                 ->nullOnDelete();
+            $table->string('kodepos')->nullable();
             $table->text('alamat')->nullable();
             $table->string('rt')->nullable();
             $table->string('rw')->nullable();

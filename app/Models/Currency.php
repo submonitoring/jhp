@@ -58,6 +58,11 @@ class Currency extends Model
         return $this->hasMany(Companycode::class);
     }
 
+    public function salesorganizations()
+    {
+        return $this->hasMany(Salesorganization::class);
+    }
+
     public static function boot()
     {
         parent::boot();

@@ -475,6 +475,8 @@ namespace App\Models{
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
  * @property-read int|null $activities_count
  * @property-read \Kenepa\ResourceLock\Models\ResourceLock|null $resourceLock
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Salesorganization> $salesorganizations
+ * @property-read int|null $salesorganizations_count
  */
 	class Companycode extends \Eloquent {}
 }
@@ -569,6 +571,8 @@ namespace App\Models{
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
  * @property-read int|null $activities_count
  * @property-read \Kenepa\ResourceLock\Models\ResourceLock|null $resourceLock
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Salesorganization> $salesorganizations
+ * @property-read int|null $salesorganizations_count
  */
 	class Currency extends \Eloquent {}
 }
@@ -643,6 +647,38 @@ namespace App\Models{
  * @property-read \Kenepa\ResourceLock\Models\ResourceLock|null $resourceLock
  */
 	class Debitcreditindicator extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Division> $divisions
+ * @property-read int|null $divisions_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Salesarea> $salesareas
+ * @property-read int|null $salesareas_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Salesorganization> $salesorganizations
+ * @property-read int|null $salesorganizations_count
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Distributionchannel newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Distributionchannel newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Distributionchannel query()
+ */
+	class Distributionchannel extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Distributionchannel> $distributionchannels
+ * @property-read int|null $distributionchannels_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Salesarea> $salesareas
+ * @property-read int|null $salesareas_count
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Division newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Division newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Division query()
+ */
+	class Division extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -1715,6 +1751,67 @@ namespace App\Models{
  * @property-read \Kenepa\ResourceLock\Models\ResourceLock|null $resourceLock
  */
 	class Reasonformovementcontrol extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property-read \App\Models\Distributionchannel|null $distributionchannel
+ * @property-read \App\Models\Division|null $division
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Salesoffice> $salesoffices
+ * @property-read int|null $salesoffices_count
+ * @property-read \App\Models\Salesorganization|null $salesorganization
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Salesarea newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Salesarea newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Salesarea query()
+ */
+	class Salesarea extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Salesoffice> $salesoffices
+ * @property-read int|null $salesoffices_count
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Salesgroup newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Salesgroup newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Salesgroup query()
+ */
+	class Salesgroup extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Salesarea> $salesareas
+ * @property-read int|null $salesareas_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Salesgroup> $salesgroups
+ * @property-read int|null $salesgroups_count
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Salesoffice newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Salesoffice newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Salesoffice query()
+ */
+	class Salesoffice extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property-read \App\Models\Companycode|null $companycode
+ * @property-read \App\Models\Currency|null $currency
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Distributionchannel> $distributionchannels
+ * @property-read int|null $distributionchannels_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Salesarea> $salesareas
+ * @property-read int|null $salesareas_count
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Salesorganization newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Salesorganization newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Salesorganization query()
+ */
+	class Salesorganization extends \Eloquent {}
 }
 
 namespace App\Models{
