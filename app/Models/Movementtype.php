@@ -75,6 +75,11 @@ class Movementtype extends Model
         return $this->belongsTo(Stocktype::class);
     }
 
+    public function glaccountMovementtypes()
+    {
+        return $this->hasMany(GlaccountMovementtype::class);
+    }
+
     public function reasonformovements()
     {
         return $this->belongsToMany(Reasonformovement::class);

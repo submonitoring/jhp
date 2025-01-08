@@ -7,5 +7,6 @@ export default {
         './resources/views/filament/c:\laragon\www\jhp\app\-filament\-submonitoring\-clusters\-address\**/*.blade.php',
         './vendor/filament/**/*.blade.php',
         './vendor/awcodes/filament-table-repeater/resources/**/*.blade.php',
+        './vendor/guava/filament-modal-relation-managers/resources/**/*.blade.php',
     ],
 }

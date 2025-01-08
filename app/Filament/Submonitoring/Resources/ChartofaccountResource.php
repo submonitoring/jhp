@@ -2,18 +2,12 @@
 
 namespace App\Filament\Submonitoring\Resources;
 
-use App\Filament\Exports\CompanycodeExporter;
-use App\Filament\Imports\CompanycodeImporter;
-use App\Filament\Submonitoring\Clusters\OrganizationalStructures;
-use App\Filament\Submonitoring\Resources\CompanycodeResource\Pages;
-use App\Filament\Submonitoring\Resources\CompanycodeResource\Pages\EditCompanycode;
-use App\Filament\Submonitoring\Resources\CompanycodeResource\Pages\ListCompanycodes;
-use App\Filament\Submonitoring\Resources\CompanycodeResource\Pages\ManagePlant;
-use App\Filament\Submonitoring\Resources\CompanycodeResource\Pages\ViewCompanycode;
-use App\Filament\Submonitoring\Resources\CompanycodeResource\RelationManagers;
-use App\Filament\Submonitoring\Resources\CompanycodeResource\RelationManagers\AddressesRelationManager;
-use App\Models\Companycode;
-use App\Models\Currency;
+use App\Filament\Exports\ChartofaccountExporter;
+use App\Filament\Imports\ChartofaccountImporter;
+use App\Filament\Submonitoring\Clusters\General;
+use App\Filament\Submonitoring\Resources\ChartofaccountResource\Pages;
+use App\Filament\Submonitoring\Resources\ChartofaccountResource\RelationManagers;
+use App\Models\Chartofaccount;
 use Filament\Forms;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
@@ -49,24 +43,24 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Schmeits\FilamentCharacterCounter\Forms\Components\TextInput;
 
-class CompanycodeResource extends Resource
+class ChartofaccountResource extends Resource
 {
-    protected static ?string $model = Companycode::class;
+    protected static ?string $model = Chartofaccount::class;
 
     public static function canViewAny(): bool
     {
         return auth()->user()->id == 1;
     }
 
-    protected static ?string $modelLabel = 'Company Code';
+    protected static ?string $modelLabel = 'Chart of Account';
 
-    protected static ?string $pluralModelLabel = 'Company Code';
+    protected static ?string $pluralModelLabel = 'Chart of Account';
 
-    protected static ?string $navigationLabel = 'Company Code';
+    protected static ?string $navigationLabel = 'Chart of Account';
 
-    protected static ?int $navigationSort = 825000000;
+    protected static ?int $navigationSort = 805000200;
 
-    protected static ?string $cluster = OrganizationalStructures::class;
+    protected static ?string $cluster = General::class;
 
     // protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -74,58 +68,33 @@ class CompanycodeResource extends Resource
     {
         return $form
 
-            ->schema(static::CompanyCodeFormSchema());
+            ->schema(static::ChartofaccountFormSchema());
     }
 
-    public static function CompanyCodeFormSchema(): array
+    public static function ChartofaccountFormSchema(): array
     {
         return [
 
-            Section::make('Company Code')
+            Section::make('Chart of Account')
                 ->schema([
 
                     Grid::make(4)
                         ->schema([
 
-                            TextInput::make('company_code')
-                                ->label('Company Code')
+                            TextInput::make('chartofaccount')
+                                ->label('Chart of Account')
                                 ->required()
                                 ->maxLength(4)
-                                ->unique(Companycode::class, ignoreRecord: true),
+                                ->unique(Chartofaccount::class, ignoreRecord: true),
 
                         ]),
 
                     Grid::make(4)
                         ->schema([
 
-                            TextInput::make('company_code_name')
+                            TextInput::make('chartofaccount_name')
                                 ->label('Name')
                                 ->required(),
-
-                        ]),
-
-                ])
-                ->compact(),
-
-            Section::make('Data')
-                ->schema([
-
-                    Grid::make(4)
-                        ->schema([
-
-                            TextInput::make('vat_number')
-                                ->label('VAT Number')
-                                ->numeric()
-                                ->required(),
-
-                        ]),
-
-                    Grid::make(4)
-                        ->schema([
-
-                            Select::make('currency_id')
-                                ->label('Currency')
-                                ->options(Currency::whereIsActive(1)->pluck('currency', 'id')),
 
                         ]),
 
@@ -156,10 +125,10 @@ class CompanycodeResource extends Resource
         return $table
             ->columns([
 
-                ColumnGroup::make('Company Code', [
+                ColumnGroup::make('Chart of Account', [
 
-                    TextColumn::make('company_code')
-                        ->label('Company Code')
+                    TextColumn::make('chartofaccount')
+                        ->label('Chart of Account')
                         ->copyable()
                         ->copyableState(function ($state) {
                             return ($state);
@@ -167,7 +136,7 @@ class CompanycodeResource extends Resource
                         ->copyMessage('Tersalin')
                         ->sortable(),
 
-                    TextColumn::make('company_code_name')
+                    TextColumn::make('chartofaccount_name')
                         ->label('Name')
                         ->copyable()
                         ->copyableState(function ($state) {
@@ -176,27 +145,6 @@ class CompanycodeResource extends Resource
                         ->copyMessage('Tersalin')
                         ->sortable(),
 
-                ]),
-
-                ColumnGroup::make('Data', [
-
-                    TextColumn::make('currency.currency')
-                        ->label('Currency')
-                        ->copyable()
-                        ->copyableState(function ($state) {
-                            return ($state);
-                        })
-                        ->copyMessage('Tersalin')
-                        ->sortable(),
-
-                    TextColumn::make('vat_number')
-                        ->label('VAT Number')
-                        ->copyable()
-                        ->copyableState(function ($state) {
-                            return ($state);
-                        })
-                        ->copyMessage('Tersalin')
-                        ->sortable(),
                 ]),
 
                 ColumnGroup::make('Status', [
@@ -247,33 +195,15 @@ class CompanycodeResource extends Resource
                     ->constraintPickerColumns(1)
                     ->constraints([
 
-                        SelectConstraint::make('id')
-                            ->label('Company Code (Options)')
-                            ->options(Companycode::whereIsActive(1)->pluck('company_code', 'id'))
+                        TextConstraint::make('chartofaccount')
+                            ->label('Chart of Account')
                             ->icon(false)
                             ->nullable(),
 
-                        TextConstraint::make('company_code')
-                            ->label('Company Code (Text)')
-                            ->icon(false)
-                            ->nullable(),
-
-                        TextConstraint::make('company_code_name')
+                        TextConstraint::make('chartofaccount_name')
                             ->label('Name')
                             ->icon(false)
                             ->nullable(),
-
-                        SelectConstraint::make('currency_id')
-                            ->label('Currency')
-                            ->options(Currency::whereIsActive(1)->pluck('currency', 'id'))
-                            ->icon(false)
-                            ->nullable(),
-
-                        TextConstraint::make('vat_number')
-                            ->label('VAT Number')
-                            ->icon(false)
-                            ->nullable(),
-
 
                         BooleanConstraint::make('is_active')
                             ->label('Status')
@@ -305,7 +235,7 @@ class CompanycodeResource extends Resource
 
                 ImportAction::make()
                     ->label('Import')
-                    ->importer(CompanycodeImporter::class),
+                    ->importer(ChartofaccountImporter::class),
             ])
             ->actions([
                 ActionGroup::make([
@@ -313,28 +243,6 @@ class CompanycodeResource extends Resource
                     Tables\Actions\EditAction::make(),
                     Tables\Actions\DeleteAction::make(),
                 ]),
-
-                RelationManagerAction::make('lesson-relation-manager')
-                    ->label('View lessons')
-                    ->relationManager(AddressesRelationManager::make()),
-
-                ActionGroup::make([
-                    Action::make('assign_plant')
-                        ->label('Assign Plant')
-                        ->icon('heroicon-m-arrow-right-end-on-rectangle')
-                        ->url(fn(Companycode $record): string => route('filament.submonitoring.organizational-structures.resources.companycodes.manageplant', $record)),
-
-                    Action::make('assign_address')
-                        ->label('Assign Address')
-                        ->icon('heroicon-m-arrow-right-end-on-rectangle')
-                        ->url(fn(Companycode $record): string => route('filament.submonitoring.organizational-structures.resources.companycodes.edit', $record)),
-
-                ])
-                    ->label('Assignment')
-                    ->icon('heroicon-m-arrow-right-end-on-rectangle')
-                    ->size(ActionSize::Small)
-                    ->outlined()
-                    ->button(),
 
             ])
             ->bulkActions([
@@ -344,32 +252,24 @@ class CompanycodeResource extends Resource
 
                 ExportBulkAction::make()
                     ->label('Export')
-                    ->exporter(CompanycodeExporter::class)
+                    ->exporter(ChartofaccountExporter::class)
             ]);
     }
 
     public static function getRelations(): array
     {
         return [
-            AddressesRelationManager::class,
+            //
         ];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListCompanycodes::route('/'),
-            'create' => Pages\CreateCompanycode::route('/create'),
-            'view' => Pages\ViewCompanycode::route('/{record}'),
-            'edit' => Pages\EditCompanycode::route('/{record}/edit'),
-            'manageplant' => Pages\ManagePlant::route('/{record}/plant'),
+            'index' => Pages\ListChartofaccounts::route('/'),
+            'create' => Pages\CreateChartofaccount::route('/create'),
+            'view' => Pages\ViewChartofaccount::route('/{record}'),
+            'edit' => Pages\EditChartofaccount::route('/{record}/edit'),
         ];
-    }
-
-    public static function getRecordSubNavigation(Page $page): array
-    {
-        return $page->generateNavigationItems([
-            ManagePlant::class,
-        ]);
     }
 }

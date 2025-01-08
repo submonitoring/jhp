@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\log;
 use Auth;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -37,10 +38,6 @@ use Spatie\Activitylog\Traits\LogsActivity;
  */
 class Industrysector extends Model
 {
-    use HasFactory;
-    use LogsActivity;
-    use HasLocks;
-
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
@@ -52,24 +49,8 @@ class Industrysector extends Model
         return $this->hasMany(Materialmaster::class);
     }
 
-    public static function boot()
-    {
-        parent::boot();
-        $user = Auth::user();
-
-        if ($user === null) {
-            return;
-        } else {
-
-            static::creating(function ($model) {
-                $user = Auth::user();
-                $model->created_by = $user->username;
-                $model->updated_by = $user->username;
-            });
-            static::updating(function ($model) {
-                $user = Auth::user();
-                $model->updated_by = $user->username;
-            });
-        }
-    }
+    use log;
+    use HasFactory;
+    use LogsActivity;
+    use HasLocks;
 }

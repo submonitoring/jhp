@@ -17,11 +17,14 @@ use Filament\Tables\Filters\QueryBuilder;
 use Filament\Tables\Filters\QueryBuilder\Constraints\BooleanConstraint;
 use Filament\Tables\Filters\QueryBuilder\Constraints\TextConstraint;
 use Filament\Tables\Table;
+use Guava\FilamentModalRelationManagers\Concerns\CanBeEmbeddedInModals;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class AddressesRelationManager extends RelationManager
 {
+    use CanBeEmbeddedInModals;
+
     protected static string $relationship = 'addresses';
 
     public static function getNavigationLabel(): string

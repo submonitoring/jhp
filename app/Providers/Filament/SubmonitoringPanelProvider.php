@@ -69,6 +69,11 @@ class SubmonitoringPanelProvider extends PanelProvider
             ->navigationGroups([
 
                 NavigationGroup::make()
+                    ->label('Sales Order')
+                    ->icon('heroicon-o-shopping-bag')
+                    ->collapsed(),
+
+                NavigationGroup::make()
                     ->label('Material Document')
                     ->icon('heroicon-o-document')
                     ->collapsed(),
